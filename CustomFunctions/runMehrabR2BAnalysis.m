@@ -48,6 +48,7 @@ elseif non_ov_trials == 1
     k_tr_list = pk_behav_trial:2:no_trials;
     
     kernels = nanmean(dff_data_mat(:, cell_list, k_tr_list), 3); %2D matrix: (values, cells)
+    %kernels = mean(dff_data_mat(:, cell_list, k_tr_list), 3); %2D matrix: (values, cells)
     dff_data_mat(:, :, k_tr_list) = nan;    %making sure kernel estimation trials not used for rb ratio calculation
 else
 end
@@ -63,12 +64,14 @@ if ~isempty(find(isnan(kernels_nt), 1))
 end
 
 kernels_e = nanmean(dff_data_mat(:, cell_list, 1:5), 3);  %for early trials only; 2D matrix: (values, cells)
-
+%kernels_e = mean(dff_data_mat(:, cell_list, 1:5), 3);  %for early trials only; 2D matrix: (values, cells)
 %finding indices of the trial-averaged peaks of activity for each cell
 if early_only == 0
-    [~, pki] = nanmax(kernels(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
+    %[~, pki] = nanmax(kernels(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
+    [~, pki] = max(kernels(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
 elseif early_only == 1
-    [~, pki] = nanmax(kernels_e(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
+    %[~, pki] = nanmax(kernels_e(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
+    [~, pki] = max(kernels_e(CS_onset_frame:(US_onset_frame + floor(200./frame_time)), :), [], 1);
 else
 end
 

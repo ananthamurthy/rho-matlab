@@ -11,8 +11,11 @@ function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer)
 tic
 close all
 
-if workingOnServer
+if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
 else
     HOME_DIR = '/Users/ananth/Documents/';
     HOME_DIR2 = '/Users/ananth/Desktop/';
@@ -23,13 +26,13 @@ addpath(genpath(strcat(HOME_DIR, 'rho-matlab/ImagingAnalysis/Suite2P-ananth')))
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
-ops0.diary           = 1;
+ops0.diary           = 0;
 
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 ops0.onlyProbeTrials = 0;
 
 if ops0.diary
-    if workingOnServer
+    if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
     else
         diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
@@ -46,7 +49,7 @@ fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
     dbase.session, ...
     dbase.date)
 
-if workingOnServer
+if workingOnServer == 1
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 else
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
