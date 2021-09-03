@@ -21,8 +21,9 @@ else
     HOME_DIR2 = '/Users/ananth/Desktop/';
 end
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions'))) % my custom functions
-addpath(genpath(strcat(HOME_DIR,'rho-matlab/ImagingAnalysis'))) % Additional functions
+%addpath(genpath(strcat(HOME_DIR,'rho-matlab/ImagingAnalysis'))) % Additional functions
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/ImagingAnalysis/Suite2P-ananth')))
+%addpath(strcat(HOME_DIR, '/rho-matlab/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;

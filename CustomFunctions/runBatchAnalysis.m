@@ -23,10 +23,11 @@ else
     HOME_DIR = '/Users/ananth/Documents/';
     HOME_DIR2 = '/Users/ananth/Desktop/';
 end
-addpath(genpath(strcat(HOME_DIR, '/MATLAB/CustomFunctions'))) % my custom functions
-addpath(genpath(strcat(HOME_DIR,'/MATLAB/ImagingAnalysis'))) % Additional functions
-addpath(genpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth')))
-addpath(strcat(HOME_DIR, '/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies'))
+
+addpath(genpath(strcat(HOME_DIR, '/rho-matlab/CustomFunctions'))) % my custom functions
+%addpath(genpath(strcat(HOME_DIR,'/rho-matlab/ImagingAnalysis'))) % Additional functions
+addpath(genpath(strcat(HOME_DIR, '/rho-matlab/ImagingAnalysis/Suite2P-ananth')))
+%addpath(strcat(HOME_DIR, '/rho-matlab/ImagingAnalysis/Suite2P-ananth/localCopies'))
 
 methodList = determineMethod(runA, runB, runC, runD, runE, runF);
 
