@@ -260,7 +260,7 @@ if ops0.loadSyntheticData %Synthetic Data
             %Method C - Simple Analysis
             mCInput.delta = 3;
             mCInput.skipFrames = [];
-            mCInput.nIterations = 1;
+            mCInput.nIterations = 1000;
             mCInput.startFrame = sdcp(runi).startFrame;
             mCInput.endFrame = sdcp(runi).endFrame;
             mCInput.threshold = 99; %in %
