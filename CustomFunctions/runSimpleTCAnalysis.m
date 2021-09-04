@@ -24,7 +24,9 @@ controls.endFrame = simpleInput.endFrame;
 
 for i = 1:nIterations
     %fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
-    fprintf('>> Random: %i\n', i)
+    if mod(i, 100) == 0
+        fprintf('>>> Random: %i of %i\n', i, nIterations)
+    end
     randDATA = generateRandData(DATA, controls);
     [~, randQ1(:, i), randQ2(:, i)] = simpleAnalysis(randDATA, simpleInput);
 end
