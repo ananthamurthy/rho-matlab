@@ -51,10 +51,8 @@ for cell = 1:nCells
             
             %Get Imprecision or pad
             if hitTrials(trial)
-                if limit < nFrames
-                    [~, I] = max(squeeze(DATA(cell, trial, (limit-delta):limit)), [], 'omitnan');
-                    p(trial) = (peakTimeBin(cell) * delta) - I;
-                end
+                [~, I] = max(squeeze(DATA(cell, trial, (limit-delta):limit)), [], 'omitnan');
+                p(trial) = (peakTimeBin(cell) * delta) - I;
             end
         end
     end
