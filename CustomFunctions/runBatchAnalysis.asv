@@ -337,7 +337,7 @@ if ops0.loadSyntheticData %Synthetic Data
             mFInput.endFrame = sdcp(runi).endFrame;
             mFInput.threshold = 99; %in %s
             [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
-            %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
+            mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
             mFOutput_batch(runi) = mFOutput;
             %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
@@ -424,7 +424,7 @@ else %Real Physiology Data
             mCInput.endFrame = dbase(runi).nFrames;
             mCInput.threshold = 99; %in %
             [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
-            %mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
+            mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
             mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
             mCOutput_batch(runi) = mCOutput;
             %save([saveFolder dbase(runi).mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
@@ -496,7 +496,7 @@ else %Real Physiology Data
             mFInput.endFrame = dbase(runi).nFrames;
             mFInput.threshold = 99; %in %s
             [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
-            %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
+            mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
             mFOutput_batch(runi) = mFOutput;
             %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodF.mat' ], 'mFInput', 'mFOutput')
