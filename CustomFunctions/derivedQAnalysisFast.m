@@ -43,17 +43,19 @@ for cell = 1:nCells
     s = std(squeeze(DATA_2D(cell, :))); %std dev along frames
     detectionThreshold = m + 2*s; %for each cell
     
+    limit = (peakTimeBin(cell) * delta) + delta;
     for trial = 1:nTrials    
-        %Find Hit Trials
-        limit = (peakTimeBin(cell) * delta) + delta;
+        %Find Hit Trials        
         if limit < nFrames
             hitTrials(trial) = ~isempty(find(DATA(cell, trial, (limit-delta):limit) > detectionThreshold, 1));
-        end
             
-        %Get Imprecision or pad
-        if hitTrials(trial)
-            [~, I] = max(squeeze(DATA(cell, trial, (peakTimeBin(cell) * delta): ((peakTimeBin(cell) * delta) + delta))), [], 'omitnan');
-            p(trial) = (peakTimeBin(cell) * delta) - I;
+            %Get Imprecision or pad
+            if hitTrials(trial)
+                if limit < nFrames
+                    [~, I] = max(squeeze(DATA(cell, trial, (limit-delta):limit)), [], 'omitnan');
+                    p(trial) = (peakTimeBin(cell) * delta) - I;
+                end
+            end
         end
     end
     
