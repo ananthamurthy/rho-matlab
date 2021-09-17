@@ -6,7 +6,7 @@ params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseNa
 params(job).methodList = 'A';
 params(job).sdcpStart = 1;
 params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
@@ -17,7 +17,7 @@ params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseNa
 params(job).methodList = 'B';
 params(job).sdcpStart = 1;
 params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
@@ -28,7 +28,7 @@ params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseNa
 params(job).methodList = 'C';
 params(job).sdcpStart = 1;
 params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
@@ -39,7 +39,7 @@ params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseNa
 params(job).methodList = 'D';
 params(job).sdcpStart = 1;
 params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
@@ -49,8 +49,8 @@ job = job + 1;
 params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
 params(job).methodList = 'E';
 params(job).sdcpStart = 1;
-params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).sdcpEnd = 111;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
@@ -58,10 +58,76 @@ params(job).trimRun = 0;
 %6
 job = job + 1;
 params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
-params(job).methodList = 'F';
-params(job).sdcpStart = 1;
-params(job).sdcpEnd = 333;
-params(job).gDate = 20210629;
+params(job).methodList = 'E';
+params(job).sdcpStart = 112;
+params(job).sdcpEnd = 222;
+params(job).gDate = 20210903;
 params(job).gRun = 1;
 params(job).trim = 0;
 params(job).trimRun = 0;
+
+%7
+job = job + 1;
+params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+params(job).methodList = 'E';
+params(job).sdcpStart = 223;
+params(job).sdcpEnd = 333;
+params(job).gDate = 20210903;
+params(job).gRun = 1;
+params(job).trim = 0;
+params(job).trimRun = 0;
+
+%8
+job = job + 1;
+params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+params(job).methodList = 'F';
+params(job).sdcpStart = 1;
+params(job).sdcpEnd = 333;
+params(job).gDate = 20210903;
+params(job).gRun = 1;
+params(job).trim = 0;
+params(job).trimRun = 0;
+
+% %9
+% job = job + 1;
+% params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+% params(job).methodList = 'E';
+% params(job).sdcpStart = 1;
+% params(job).sdcpEnd = 333;
+% params(job).gDate = 20210903;
+% params(job).gRun = 1;
+% params(job).trim = 0;
+% params(job).trimRun = 0;
+% 
+% %10
+% job = job + 1;
+% params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+% params(job).methodList = 'D';
+% params(job).sdcpStart = 1;
+% params(job).sdcpEnd = 333;
+% params(job).gDate = 20210903;
+% params(job).gRun = 1;
+% params(job).trim = 0;
+% params(job).trimRun = 0;
+% 
+% %11
+% job = job + 1;
+% params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+% params(job).methodList = 'D';
+% params(job).sdcpStart = 1;
+% params(job).sdcpEnd = 333;
+% params(job).gDate = 20210903;
+% params(job).gRun = 1;
+% params(job).trim = 0;
+% params(job).trimRun = 0;
+% 
+% %12
+% job = job + 1;
+% params(job).fileLocation = sprintf('%s/Imaging/%s/%s/', ANALYSIS_DIR, db.mouseName, db.date);
+% params(job).methodList = 'D';
+% params(job).sdcpStart = 1;
+% params(job).sdcpEnd = 333;
+% params(job).gDate = 20210903;
+% params(job).gRun = 1;
+% params(job).trim = 0;
+% params(job).trimRun = 0;
