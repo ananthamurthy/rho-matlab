@@ -15,7 +15,7 @@ else
 end
 saveFolder = strcat(saveDirec, dbase.mouseName, '/', dbase.date, '/');
 
-if ops0.diary
+if diaryOn
     if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
     else

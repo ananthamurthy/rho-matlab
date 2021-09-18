@@ -22,9 +22,14 @@ fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
 trialDetails = getTrialDetails(dbase(1));
 
 %% Load Harvest config details
+
+make_db
+disp('... done!')
+
+saveFolder = strcat(ANALYSIS_DIR, 'Imaging/', db.mouseName, '/', db.date, '/');
+
 configHarvest
 
-%% Consolidate analysis outputs
 for job = 1:length(params)
     fprintf('Parsing output from job: %i\n', job)
     jobData = harvestAnalyzedData(db, params(job));

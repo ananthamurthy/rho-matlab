@@ -6,32 +6,30 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer)
+function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryON)
 
 tic
 close all
 
 %% Operations
-%ops0.fig             = 1;
-ops0.saveData        = 1;
-ops0.diary           = 0;
-
+saveData        = 1;
+%onlyProbeTrials = 0;
+%fig             = 1;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
-ops0.onlyProbeTrials = 0;
 
 %% Directory config
 configDir %in localCopies
 
 %% Load real dataset details
-make_dbase %in localCopies
+make_db %in localCopies
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
-    dbase.mouseName, ...
-    dbase.sessionType, ...
-    dbase.session, ...
-    dbase.date)
+    db.mouseName, ...
+    db.sessionType, ...
+    db.session, ...
+    db.date)
 
 %% Load processed dF/F data for dataset
-realProcessedData = load(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '.mat'));
+realProcessedData = load(strcat(saveFolder, db.mouseName, '_', db.date, '.mat'));
 DATA = realProcessedData.dfbf;
 DATA_2D = realProcessedData.dfbf_2D;
 nCells = size(DATA, 1);
@@ -52,15 +50,15 @@ nDatasets = length(sdcp);
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
 %Check to see if the library exits, else create
-if isfile(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'))
+if isfile(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
     disp('Loading existing event library ...')
-    filepath = strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat');
+    filepath = strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat');
     load(filepath);
     disp('... done!')
 else
     disp('Curating Library ...')
     eventLibrary_2D = curateLibrary(DATA_2D);
-    save(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+    save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
     disp('... done!')
 end
 
@@ -89,7 +87,7 @@ clear s
 
 for runi = 1:1:nDatasets
     fprintf('Dataset: %i\n', runi)
-    sdo = syntheticDataMaker(dbase, DATA_2D, eventLibrary_2D, sdcp(runi));
+    sdo = syntheticDataMaker(db, DATA_2D, eventLibrary_2D, sdcp(runi));
     
     %Run specifics
     scurr = rng;
@@ -128,7 +126,7 @@ for runi = 1:1:nDatasets
 end
 
 %% Save Everything
-if ops0.saveData == 1
+if saveData == 1
     disp ('Saving everything ...')
     save(strcat(saveFolder, ...
         'synthDATA_', ...
@@ -145,6 +143,6 @@ elapsedTime = toc;
 disp('All done!')
 fprintf('Elapsed Time: %.4f seconds\n', elapsedTime)
 
-if ops0.diary
+if diaryOn
     diary off
 end

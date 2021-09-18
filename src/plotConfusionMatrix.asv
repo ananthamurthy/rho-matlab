@@ -4,9 +4,9 @@ clear
 
 tic
 
-workingOnServer = 2;
 %configDir
 %make_db
+
 
 plotRefQ = 1;
 plotAnalysedQs = 1;
@@ -16,12 +16,12 @@ input.nCells = 135;
 input.nAlgos = 8;
 
 % Synthetic Dataset Details
-input.gDate = 20210903; %generation date
+input.gDate = 20210629; %generation date
 input.gRun = 1; %generation run number
 input.nDatasets = 333;
 
 % Consolidated Analysis Details
-input.cDate = 20210911; %consolidation date
+input.cDate = 20210701; %consolidation date
 input.cRun = 1; %consolidation run number
 
 input.removeNaNs = 1;

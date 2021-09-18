@@ -4,27 +4,9 @@
 
 % tic
 function [Y, X] = developConfusionMatrix(input)
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth'))
 
-make_db
-
-workingOnServer = 0;
-
-if workingOnServer
-    HOME_DIR = '/home/bhalla/ananthamurthy/';
-    ANALYSIS_DIR = strcat(HOME_DIR, 'Work/Analysis');
-else
-    HOME_DIR = '/Users/ananth/Documents/';
-    HOME_DIR2 = '/Users/ananth/Desktop/';
-    ANALYSIS_DIR = strcat(HOME_DIR2, 'Work/Analysis');
-end
-
-%Automate for reading HOME_DIR and HOME_DIR2
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth'))
+configDir %in localCopies
+make_db %in localCopies
 
 nCells = input.nCells;
 nAlgos = input.nAlgos;
@@ -38,20 +20,25 @@ disp('Loading synthetic datasets ...')
 % gDate = 20210628; %generation date
 % gRun = 1; %generation run number
 % nDatasets = 80;
-gDate = input.gDate; %generation date
-gRun = input.gRun; %generation run number
 nDatasets = input.nDatasets;
-synthDataFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/synthDATA_%i_gRun%i_batch_%i.mat', gDate, gRun, nDatasets);
+synthDataFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/synthDATA_%i_gRun%i_batch_%i.mat', ...
+    db.mouseName, ...
+    db.date, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets);
 load(synthDataFilePath)
 disp('... done!')
 
 % Load Analysis Results
 disp('Loading analysis results ...')
-% cDate = 20210629; %consolidation date
-% cRun = 1; %consolidation run number
-cDate = input.cDate; %consolidation date
-cRun = input.cRun; %consolidation run number
-analysisFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/M26/20180514/M26_20180514_synthDataAnalysis_%i_cRun%i_cData.mat', cDate, cRun);
+analysisFilePath = sprintf('/Users/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%s_%s_synthDataAnalysis_%i_cRun%i_cData.mat', ...
+    db.mouseName, ...
+    db.date, ...
+    db.mouseName, ...
+    db.date, ...
+    input.cDate, ...
+    input.cRun);
 load(analysisFilePath)
 disp('... done!')
 
