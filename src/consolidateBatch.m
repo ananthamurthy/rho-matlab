@@ -4,7 +4,7 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function consolidateBatch(cDate, cRun, workingOnServer)
+function consolidateBatch(cDate, cRun, workingOnServer, diaryOn)
 
 tic
 
