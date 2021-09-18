@@ -5,8 +5,36 @@ clear
 tic
 
 workingOnServer = 2;
-%configDir
-%make_db
+diaryOn         = 0;
+
+%% Directory config
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+%Additinal search paths
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+make_db
+
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+
+if diaryOn
+    if workingOnServer == 1
+        diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
+    else
+        diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
+    end
+    diary on
+end
 
 plotRefQ = 1;
 plotAnalysedQs = 1;
@@ -25,6 +53,7 @@ input.cDate = 20210911; %consolidation date
 input.cRun = 1; %consolidation run number
 
 input.removeNaNs = 1;
+input.saveFolder = saveFolder;
 [Y, X] = developConfusionMatrix(input);
 
 %% TP, FN, FP, TN
@@ -154,5 +183,9 @@ lgd = legend({'Sensitivity', 'Specificity', 'False Discorvery Rate', 'False Omis
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-print(sprintf('/Users/ananth/Desktop/Results-%i-%i-%i', input.gDate, input.gRun, input.nDatasets), ...
+print(sprintf('%s/figs/Results-%i-%i-%i', ...
+    HOME_DIR2, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets), ...
     '-djpeg')

@@ -14,33 +14,36 @@ function emptyOutput = runBatchAnalysis(sdcpStart, sdcpEnd, runA, runB, runC, ru
 tic
 close all
 
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+
 methodList = determineMethod(runA, runB, runC, runD, runE, runF);
 
 %% Operations
 saveData                  = 1;
-onlyProbeTrials           = 0;
+onlyProbeTrials           = 0; %Mostly relevant for real physiology datasets
 loadSyntheticData         = 1;
 doSigOnly                 = 0;
 
-% % Print 6 lines of whitespace - Prevents any messages from being missed
-% for space = 1:6
-%     fprintf(1, '\n');
-% end
-% clear space
+%% Directory config
+path2localCopies = '/home/ananth/Documents/rho-matlab/localCopies';
+%configDir %in localCopies
+run(path2localCopies, configDir)
 
 %% Real and/or Synthetic Datasets Config
-make_dbase %in localCopies
+%make_db %in localCopies
+run(path2localCopies, make_db)
 
 fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
-    dbase(1).mouseName, ...
-    dbase(1).sessionType, ...
-    dbase(1).session, ...
-    dbase(1).date)
-trialDetails = getTrialDetails(dbase(1));
+    db(1).mouseName, ...
+    db(1).sessionType, ...
+    db(1).session, ...
+    db(1).date)
+trialDetails = getTrialDetails(db(1));
 
-%Load config file for Synthetic Data
+%% Load Synthetic Dataset config details
 if loadSyntheticData
-    configSynth %in localCopies
+    %configSynth %in localCopies
+    run(path2localCopies, configSynth)
     nDatasets = length(sdcp);
 end
 
@@ -181,7 +184,7 @@ if loadSyntheticData %Synthetic Data
             mAInput.cellList = 1:1:size(DATA,1); %using all cells
             mAInput.onFrame = sdcp(runi).startFrame;
             mAInput.offFrame = sdcp(runi).endFrame;
-            %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/dbase(1).samplingRate))/2; %in ms
+            %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db(1).samplingRate))/2; %in ms
             mAInput.ridgeHalfWidth = 100; %in ms
             %fprintf('ridgeHalfWidth: %.4e\n', mAInput.ridgeHalfWidth)
             mAInput.nIterations = 5000; % number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
@@ -191,7 +194,7 @@ if loadSyntheticData %Synthetic Data
             [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
             mAOutput.normQ = (mAOutput.Q)/max(mAOutput.Q(~isinf(mAOutput.Q)));
             mAOutput_batch(runi) = mAOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
         end
         
         % ----
@@ -217,7 +220,7 @@ if loadSyntheticData %Synthetic Data
             [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
             mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
             mBOutput_batch(runi) = mBOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
         end
         
         % ----
@@ -234,7 +237,7 @@ if loadSyntheticData %Synthetic Data
             %mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
             mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
             mCOutput_batch(runi) = mCOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
         end
         
         % ----
@@ -246,12 +249,12 @@ if loadSyntheticData %Synthetic Data
             mDInput.gaussianSmoothing = 1; %logical; "is this necessary?"!!!!!!!!
             mDInput.nSamples = 5; %for Gaussian Kernel
             mDInput.automatic = 1; %for selecting P; logical
-            mDInput.timeVector = (1:dbase(1).nFrames*size(DATA,2)) * (1/dbase(1).samplingRate); %in seconds; %For derivative
+            mDInput.timeVector = (1:db(1).nFrames*size(DATA,2)) * (1/db(1).samplingRate); %in seconds; %For derivative
             mDInput.getT = 0;
             [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
             mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
             mDOutput_batch(runi) = mDOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
         end
         
         % ----
@@ -286,7 +289,7 @@ if loadSyntheticData %Synthetic Data
             [mEOutput] = runSVMClassification(DATA, mEInput);
             mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
             mEOutput_batch(runi) = mEOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
         end
         
         % ----
@@ -306,15 +309,15 @@ if loadSyntheticData %Synthetic Data
             %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
             mFOutput_batch(runi) = mFOutput;
-            %save([saveFolder dbase(1).mouseName '_' dbase(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
         end
     end
 else %Real Physiology Data
-    nDatasets = length(dbase);
+    nDatasets = length(db);
     for runi = 1:nDatasets
         %This needs an update to verify proper handling of multiple real physiology datasets.
         %Load processed data (processed dfbf for dataset/session)
-        myData = load([saveFolder dbase(runi).mouseName '_' dbase(runi).date '.mat']);
+        myData = load([saveFolder db(runi).mouseName '_' db(runi).date '.mat']);
         nCells = size(myData.dfbf_2D, 1); %even myData.dfbf will work
         nanTest_input.nCells = nCells;
         %anTest_input.dataDesc = sprintf('Loaded Physiology Dataset %i', runi);
@@ -341,7 +344,7 @@ else %Real Physiology Data
             %Method A - Mehrab's Reliability Analysis (Bhalla Lab)
             mAInput.cellList = 1:1:size(DATA,1); %using all cells
             mAInput.onFrame = 1;
-            mAInput.offFrame = dbase(runi).nFrames;
+            mAInput.offFrame = db(runi).nFrames;
             mAInput.ridgeHalfWidth = 100; %in ms
             mAInput.nIterations = 5000; % number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
             mAInput.selectNonOverlappingTrials = 1; %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
@@ -350,7 +353,7 @@ else %Real Physiology Data
             [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
             mAOutput.normQ = (mAOutput.Q)/max(mAOutput.Q(~isinf(mAOutput.Q)));
             mAOutput_batch(runi) = mAOutput;
-            %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodA.mat' ], 'mAInput', 'mAOutput')
+            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodA.mat' ], 'mAInput', 'mAOutput')
         end
         
         % ----
@@ -364,7 +367,7 @@ else %Real Physiology Data
             mBInput.saveModel = 0;
             mBInput.nIterations = 1000;
             mBInput.startFrame = 1;
-            mBInput.endFrame = dbase(runi).nFrames;
+            mBInput.endFrame = db(runi).nFrames;
             mBInput.threshold = 99; %in %
             if ~mBInput.saveModel
                 try
@@ -376,7 +379,7 @@ else %Real Physiology Data
             [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
             mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
             mBOutput_batch(runi) = mBOutput;
-            %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodB.mat' ], 'mBInput', 'mBOutput')
+            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodB.mat' ], 'mBInput', 'mBOutput')
         end
         
         % ----
@@ -387,13 +390,13 @@ else %Real Physiology Data
             mCInput.skipFrames = [];
             mCInput.nIterations = 1000;
             mCInput.startFrame = 1;
-            mCInput.endFrame = dbase(runi).nFrames;
+            mCInput.endFrame = db(runi).nFrames;
             mCInput.threshold = 99; %in %
             [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
             %mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
             mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
             mCOutput_batch(runi) = mCOutput;
-            %save([saveFolder dbase(runi).mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
+            %save([saveFolder db(runi).mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
         end
         
         % ----
@@ -405,12 +408,12 @@ else %Real Physiology Data
             mDInput.gaussianSmoothing = 1; %logical
             mDInput.nSamples = 5; %for Gaussian Kernel
             mDInput.automatic = 1; %for selecting P; logical
-            mDInput.timeVector = (1:dbase(runi).nFrames*size(DATA,2)) * (1/dbase(runi).samplingRate); %in seconds; %For derivative
+            mDInput.timeVector = (1:db(runi).nFrames*size(DATA,2)) * (1/db(runi).samplingRate); %in seconds; %For derivative
             mDInput.getT = 1;
             [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
             mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
             mDOutput_batch(runi) = mDOutput;
-            %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodD.mat' ], 'mDInput', 'mDOutput')
+            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodD.mat' ], 'mDInput', 'mDOutput')
         end
         
         % ----
@@ -445,7 +448,7 @@ else %Real Physiology Data
             [mEOutput] = runSVMClassification(DATA, mEInput);
             mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
             mEOutput_batch(runi) = mEOutput;
-            %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodE.mat' ], 'mEInput', 'mEOutput')
+            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodE.mat' ], 'mEInput', 'mEOutput')
         end
         
         % ----
@@ -459,13 +462,13 @@ else %Real Physiology Data
             mFInput.gamma = 10;
             mFInput.nIterations = 1000;
             mFInput.startFrame = 1;
-            mFInput.endFrame = dbase(runi).nFrames;
+            mFInput.endFrame = db(runi).nFrames;
             mFInput.threshold = 99; %in %s
             [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
             %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
             mFOutput_batch(runi) = mFOutput;
-            %save([saveFolder dbase(runi).mouseName '_' dbase(runi).date '_methodF.mat' ], 'mFInput', 'mFOutput')
+            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodF.mat' ], 'mFInput', 'mFOutput')
         end
     end
 end
@@ -477,27 +480,27 @@ if saveData
     disp('Saving everything ...')
     if loadSyntheticData
         if runA
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodA_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mAInput', 'mAOutput_batch', '-v7.3')
         end
         
         if runB
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodB_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mBInput', 'mBOutput_batch', '-v7.3')
         end
         
         if runC
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodC_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mCInput', 'mCOutput_batch', '-v7.3')
         end
         
         if runD
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodD_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mDInput', 'mDOutput_batch', '-v7.3')
         end
         
         if runE
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodE_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mEInput', 'mEOutput_batch', '-v7.3')
         end
         
         if runF
-            save([saveFolder dbase.mouseName '_' dbase.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
+            save([saveFolder db.mouseName '_' db.date '_synthDataAnalysis_' num2str(gDate) '_gRun' num2str(gRun) '_methodF_batch_' num2str(sdcpStart) '-' num2str(sdcpEnd) '.mat' ], 'mFInput', 'mFOutput_batch', '-v7.3')
         end
         
         fprintf('Complete: %i to %i by %s [gDate:%i, gRun:%i]\n', sdcpStart, sdcpEnd, methodList, gDate, gRun);

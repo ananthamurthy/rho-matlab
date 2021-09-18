@@ -9,20 +9,43 @@ function consolidateBatch(cDate, cRun, workingOnServer)
 tic
 
 %% Directory config
-configDir %in localCopies
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+%Additinal search paths
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+make_db %in localCopies
 
-%% Real and/or Synthetic Datasets Config
-make_dbase %in localCopies
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
-fprintf('Analyzing %s_%i_%i - Date: %s\n', ...
-    dbase(1).mouseName, ...
-    dbase(1).sessionType, ...
-    dbase(1).session, ...
-    dbase(1).date)
+if diaryOn
+    if workingOnServer == 1
+        diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
+    else
+        diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
+    end
+    diary on
+end
+
+fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
+    db.mouseName, ...
+    db.sessionType, ...
+    db.session, ...
+    db.date)
 trialDetails = getTrialDetails(dbase(1));
 
 %% Load Harvest config details
-configHarvest
+configHarvest %in localCopies
 
 %% Consolidate analysis outputs
 for job = 1:length(params)
@@ -80,7 +103,7 @@ for job = 1:length(params)
     end
 end
 
-filename = [db.mouseName '_' db.date '_synthDataAnalysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
+filename = ['synthDATA_analysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
 fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')

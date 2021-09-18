@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryON)
+function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn)
 
 tic
 close all
@@ -18,10 +18,34 @@ saveData        = 1;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 
 %% Directory config
-configDir %in localCopies
-
-%% Load real dataset details
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+%Additinal search paths
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
 make_db %in localCopies
+
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+
+if diaryOn
+    if workingOnServer == 1
+        diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
+    else
+        diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
+    end
+    diary on
+end
+
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
     db.mouseName, ...
     db.sessionType, ...
@@ -44,7 +68,7 @@ input.dimensions = '2D';
 [~] = lookout4NaNs(DATA_2D, input);
 
 %% Load synthetic dataset control parameters
-configSynth %in localCopies
+configSynth
 nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
