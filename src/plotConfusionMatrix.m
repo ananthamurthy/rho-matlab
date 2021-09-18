@@ -4,7 +4,23 @@ clear
 
 tic
 
-workingOnServer = 2;
+plotRefQ = 1;
+plotAnalysedQs = 1;
+plotDatasetCheck = 0;
+
+input.nCells = 135;
+input.nAlgos = 8;
+
+% Synthetic Dataset Details
+input.gDate = 20210824; %generation date
+input.gRun = 1; %generation run number
+input.nDatasets = 333;
+
+% Consolidated Analysis Details
+input.cDate = 20210918; %consolidation date
+input.cRun = 1; %consolidation run number
+
+workingOnServer = 0;
 diaryOn         = 0;
 
 %% Directory config
@@ -35,22 +51,6 @@ if diaryOn
     end
     diary on
 end
-
-plotRefQ = 1;
-plotAnalysedQs = 1;
-plotDatasetCheck = 0;
-
-input.nCells = 135;
-input.nAlgos = 8;
-
-% Synthetic Dataset Details
-input.gDate = 20210903; %generation date
-input.gRun = 1; %generation run number
-input.nDatasets = 333;
-
-% Consolidated Analysis Details
-input.cDate = 20210911; %consolidation date
-input.cRun = 1; %consolidation run number
 
 input.removeNaNs = 1;
 input.saveFolder = saveFolder;

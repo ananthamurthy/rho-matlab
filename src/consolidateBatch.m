@@ -103,7 +103,7 @@ for job = 1:length(params)
     end
 end
 
-filename = ['synthDATA_analysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
+filename = ['synthDATA_Analysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
 fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
