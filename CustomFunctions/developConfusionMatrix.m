@@ -3,37 +3,14 @@
 % clear
 
 % tic
-function [Y, X] = developConfusionMatrix(input)
+function [Y, X] = developConfusionMatrix(input, sdo_batch, cData)
 
 nCells = input.nCells;
 nAlgos = input.nAlgos;
-
+nDatasets = input.nDatasets;
 %figureDetails = compileFigureDetails(16, 2, 5, 0.5, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %Extra colormap options: inferno/plasma/viridis/magm
 %C = distinguishable_colors(nAlgos);
-
-% Load Synthetic Data
-disp('Loading synthetic datasets ...')
-% gDate = 20210628; %generation date
-% gRun = 1; %generation run number
-% nDatasets = 80;
-nDatasets = input.nDatasets;
-synthDataFilePath = sprintf('%s/synthDATA_%i_gRun%i_batch_%i.mat', ...
-    input.saveFolder, ...
-    input.gDate, ...
-    input.gRun, ...
-    input.nDatasets);
-load(synthDataFilePath)
-disp('... done!')
-
-% Load Analysis Results
-disp('Loading analysis results ...')
-analysisFilePath = sprintf('%s/synthDATA_analysis_%i_cRun%i_cData.mat', ...
-    input.saveFolder, ...
-    input.cDate, ...
-    input.cRun);
-load(analysisFilePath)
-disp('... done!')
 
 % Prepare Look Up Table (lut)
 disp('Creating Look Up Table ...')

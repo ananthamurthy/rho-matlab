@@ -52,9 +52,31 @@ if diaryOn
     diary on
 end
 
+%% Load Synthetic Data
+disp('Loading synthetic datasets ...')
+% gDate = 20210628; %generation date
+% gRun = 1; %generation run number
+% nDatasets = 80;
+synthDataFilePath = sprintf('%s/synthDATA_%i_gRun%i_batch_%i.mat', ...
+    saveFolder, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets);
+load(synthDataFilePath)
+disp('... done!')
+
+%% Load Analysis Results
+disp('Loading analysis results ...')
+analysisFilePath = sprintf('%s/synthDATA_Analysis_%i_cRun%i_cData.mat', ...
+    saveFolder, ...
+    input.cDate, ...
+    input.cRun);
+load(analysisFilePath)
+disp('... done!')
+
 input.removeNaNs = 1;
 input.saveFolder = saveFolder;
-[Y, X] = developConfusionMatrix(input);
+[Y, X] = developConfusionMatrix(input, sdo_batch, cData);
 
 %% TP, FN, FP, TN
 nCases = length(Y);

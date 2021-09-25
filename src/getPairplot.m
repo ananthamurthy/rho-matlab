@@ -1,12 +1,20 @@
-%% ROC Curves for all methods
+% load fisheriris.mat 
+% colors = lines(3); 
+% label = {'sepal-length', 'sepal-width', 'petal-length', 'petal-width'} 
+% figure; pairplot(meas, label, species, colors, 'both'); 
+
+%% Comparative analysis on Synthetic Data
 close all
 clear
 
 tic
 
-input.plotOptimalPoint = 0;
+plotRefQ = 1;
+plotAnalysedQs = 1;
+plotDatasetCheck = 0;
 
 input.nCells = 135;
+input.nAlgos = 8;
 input.nMethods = 7;
 
 % Synthetic Dataset Details
@@ -72,7 +80,7 @@ analysisFilePath = sprintf('%s/synthDATA_Analysis_%i_cRun%i_cData.mat', ...
 load(analysisFilePath)
 disp('... done!')
 
-%% ROC
+%% Pairplots
 figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %Extra colormap options: inferno/plasma/viridis/magma
 C = distinguishable_colors(input.nMethods);
@@ -87,65 +95,5 @@ input.removeNaNs = 0;
 %Prepare the Look Up Table (LUT)
 [response, predictor] = getTheTable(sdo_batch, cData, input);
 
-for method = 1:1 %input.nMethods %Skips Ref Q and F
-    %disp(method)
-    %Linear Regression
-    clear Mdl
-    Mdl = fitglm(predictor(:, method), response, ...
-        'Distribution', 'binomial', ...
-        'Link', 'logit');
-    
-    %Get the scores
-    score_log = Mdl.Fitted.Probability;
-    
-    %ROC Curve coordinates
-    [Xlog, Ylog, Tlog, AUClog, optOP] = perfcurve(response, score_log, 1);
-    %disp(Xlog)
-    %disp(Ylog)
-    %disp(optOP)
-    
-    if isnan(Xlog)
-    elseif isnan(Ylog)
-        warning('Probably skipping ...')
-    end
-    
-    if input.plotOptimalPoint
-        try
-            plot(optOP(1), optOP(2), 'Color', C(method, :)', 'o')
-        catch
-            warning('Unable to plot optimal oprational point')
-        end
-    end
-    
-    %Plots
-    plot(Xlog, Ylog, '-', ...
-        'Color', C(method, :), ...
-        'LineWidth', figureDetails.lineWidth)
-    %Add Marker Indices- to do
-    title(sprintf('ROC Curves Without NaNs (N=%i)', input.nDatasets), ...
-        'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold') 
-    lgd1 = legend({'A (R2B)', 'B (TI)', 'C (Mean/Std)', 'D (PCA)', 'E (SVM)', 'F (Der)'}, ...
-        'Location', 'best');
-    lgd1.FontSize = figureDetails.fontSize;
-    hold on
-end
-title(sprintf('ROC Curves (N=%i)', input.nDatasets), ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xlabel('False Positive Rate', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-ylabel('True Positive Rate', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-set(gca, 'FontSize', figureDetails.fontSize)
-
-print(sprintf('%s/figs/ROC-%i-%i-%i-%i-%i', ...
-    HOME_DIR2, ...
-    input.gDate, ...
-    input.gRun, ...
-    input.nDatasets, ...
-    input.cDate, ...
-    input.cRun), ...
-    '-dpng')
+%pairplot(meas, label, species, colors, 'both');
+pairplot(predictor, response, response, C, 'both');
