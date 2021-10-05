@@ -13,7 +13,7 @@ nDatasets = input.nDatasets;
 %C = distinguishable_colors(nAlgos);
 
 % Prepare Look Up Table (lut)
-disp('Creating Look Up Table ...')
+disp('Creating Confusion Matrix ...')
 preLUT = zeros(nCells*nDatasets, nAlgos+1);
 
 reality = zeros(nDatasets, nCells);
