@@ -19,23 +19,23 @@ for dnum = 1:nDatasets
     reality = zeros(nCells, 1); %Preallocate
     reality(sdo_batch(dnum).ptcList) = 1; %Ground Truth
     
-    for method = 1:nMethods+1
-        if method == 1
-            preLUT(start:finish, method) = reality; %Ground Truth - True Class Labels
-        elseif method == 2
-            preLUT(start:finish, method) = squeeze(sdo_batch(dnum).Q);
-        elseif method == 3
-            preLUT(start:finish, method) = squeeze(cData.methodA.mAOutput_batch(dnum).Q); %scores
-        elseif method == 4
-            preLUT(start:finish, method) = squeeze(cData.methodB.mBOutput_batch(dnum).Q); %scores
-        elseif method == 5
-            preLUT(start:finish, method) = squeeze(cData.methodC.mCOutput_batch(dnum).Q2); %scores
-        elseif method == 6
-            preLUT(start:finish, method) = squeeze(cData.methodD.mDOutput_batch(dnum).Q); %scores
-        elseif method == 7
-            preLUT(start:finish, method) = squeeze(cData.methodE.mEOutput_batch(dnum).Q); %scores
-        elseif method == 8
-            preLUT(start:finish, method) = squeeze(cData.methodF.mFOutput_batch(dnum).Q2); %scores
+    for column = 1:nMethods+2
+        if column == 1
+            preLUT(start:finish, column) = reality; %Ground Truth - True Class Labels
+        elseif column == 2
+            preLUT(start:finish, column) = squeeze(sdo_batch(dnum).Q);
+        elseif column == 3
+            preLUT(start:finish, column) = squeeze(cData.methodA.mAOutput_batch(dnum).Q); %scores
+        elseif column == 4
+            preLUT(start:finish, column) = squeeze(cData.methodB.mBOutput_batch(dnum).Q); %scores
+        elseif column == 5
+            preLUT(start:finish, column) = squeeze(cData.methodC.mCOutput_batch(dnum).Q2); %scores
+        elseif column == 6
+            preLUT(start:finish, column) = squeeze(cData.methodD.mDOutput_batch(dnum).Q); %scores
+        elseif column == 7
+            preLUT(start:finish, column) = squeeze(cData.methodE.mEOutput_batch(dnum).Q); %scores
+        elseif column == 8
+            preLUT(start:finish, column) = squeeze(cData.methodF.mFOutput_batch(dnum).Q2); %scores
         end
     end
 end
@@ -51,6 +51,6 @@ end
 disp('... done!')
 
 response = LUT(:, 1); % Ground Truth - True Class Labels
-predictor = LUT(:, 2:input.nMethods+1);
+predictor = LUT(:, 3:input.nMethods+2);
 end
 % toc
