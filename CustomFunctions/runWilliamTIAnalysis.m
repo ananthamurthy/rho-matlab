@@ -76,15 +76,12 @@ if williamInput.getT
     Yfit_actual_2D = reshape(williamOutput.Yfit_actual, [length(testingTrials), nFrames]);
     YfitDiff_2D = reshape(williamOutput.YfitDiff, [length(testingTrials), nFrames]);
 else
-    %Maintain the same variables for the output structure with pointless
-    %values
     Yfit = 1;
     trainingTrials = 1;
     testingTrials = 1;
     Yfit_actual = 1;
     YfitDiff = 1;
     
-    %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
     Yfit_2D = 1;
     Yfit_actual_2D = 1;
     YfitDiff_2D = 1;
