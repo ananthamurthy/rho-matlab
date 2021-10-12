@@ -1,4 +1,7 @@
-function plotPSA(nExpts, nShuffles, myList, mainBarplotTitle, figureDetails, sdo_batch, cData, input, valueList, algoLabels, metricLabels)
+function results3Line = plotPSA(nExpts, nShuffles, myList, mainBarplotTitle, figureDetails, sdo_batch, cData, input, valueList, algoLabels, metricLabels)
+
+results3Line = zeros(input.nAlgos, nExpts);
+
 for expt = 1:nExpts
     
     iStart = myList(expt);
@@ -6,13 +9,14 @@ for expt = 1:nExpts
     
     [Y, X] = developConfusionMatrix4Effects(input, sdo_batch, cData, iSelected);
     
-    [results1, results2, results3] = compareAgainstTruth(X, Y, input);
+    %[results1, results2, results3] = compareAgainstTruth(X, Y, input);
+    [~, ~, results3] = compareAgainstTruth(X, Y, input);
     
     title([mainBarplotTitle, num2str(valueList(expt))], ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     
-    subplot(nExpts, 1, expt)
+    %subplot(nExpts, 1, expt)
     b = bar(results3);
     xlim([0, 2])
     axis tight
@@ -25,11 +29,12 @@ for expt = 1:nExpts
         'FontWeight', 'bold')
     xticklabels(algoLabels)
     xtickangle(45)
-    %set(gca,'xtick',[])
+    set(gca,'xtick',[])
     lgd = legend(metricLabels, ...
         'Location', 'best');
     lgd.FontSize = figureDetails.fontSize-3;
-    %set(gca, 'FontSize', figureDetails.fontSize)
+    set(gca, 'FontSize', figureDetails.fontSize)
     
+    results3Line(:, expt) = results3(:, 3);
 end
 end

@@ -213,16 +213,16 @@ cosineSimilarityMatrix2 = nan(input.nMethods, input.nMethods);
 Z = normPredictor;
 for method1 = 1:input.nMethods
     x = Z(:, method1);
+    tf = isnan(x);
+    %x(tf) = [];
     for method2 = 1:input.nMethods
-        if method1 ~= method2
-            y = Z(:, method2);
-            cosineSimilarityMatrix1(method1, method2) = getCosineSimilarity(x, y);
-        end
+        y = Z(:, method2);
+        cosineSimilarityMatrix1(method1, method2) = getCosineSimilarity(x(~tf), y(~tf));
     end
 end
 
-%correlationMatrix = corrcoef(normPredictor);
-correlationMatrix = corrcoef(predictor);
+correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
+%correlationMatrix = corrcoef(predictor);
 
 %Labels
 algoLabels = {'A-Boot', 'B-Boot', 'C-Boot', 'C-Otsu', 'D-Otsu', 'E-Otsu', 'F-Boot', 'F-Otsu'};
@@ -237,7 +237,7 @@ disp('Plotting ...')
 
 fig1 = figure(1);
 clf
-set(fig1, 'Position', [300, 300, 800, 1200])
+set(fig1, 'Position', [300, 300, 900, 1200])
 subplot(9, 2, [1:2, 3:4])
 b = bar(results1);
 xlim([0, 2])
@@ -371,7 +371,7 @@ print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
 %% Plots - II
 fig2 = figure(2);
 clf
-set(fig2, 'Position', [300, 300, 800, 400])
+set(fig2, 'Position', [300, 300, 900, 1200])
 title(sprintf('Comparative Analysis (N=%i)', input.nDatasets), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -383,47 +383,10 @@ title(sprintf('Comparative Analysis (N=%i)', input.nDatasets), ...
 %title(sprintf('Non-causality across methods (N=%i)', input.nDatasets))
 %title('Non-Causality Across Methods')
 
-%subplot(3, 9, 20:22)
-subplot(1, 2, 1)
-h = heatmap(cosineSimilarityMatrix1, ...
-    'Colormap', cool, ...
-    'Title', 'Cosine Similarity');
-h.XDisplayLabels = methodLabels;
-h.YDisplayLabels = methodLabels;
-set(gca, 'FontSize', figureDetails.fontSize)
-
-%subplot(3, 9, 24:26)
-subplot(1, 2, 2)
-h = heatmap(correlationMatrix, ...
-    'Colormap', cool, ...
-    'Title', 'Correlation Matrix');
-h.XDisplayLabels = methodLabels;
-%h.YDisplayLabels = methodLabels2;
-h.YDisplayLabels = {'', '', '', '', '', ''};
-set(gca, 'FontSize', figureDetails.fontSize)
-
-print(sprintf('%s/ComparingScores-%i-%i-%i-%i-%i_%i', ...
-    HOME_DIR2, ...
-    input.gDate, ...
-    input.gRun, ...
-    input.nDatasets, ...
-    input.cDate, ...
-    input.cRun, ...
-    workingOnServer), ...
-    '-dpng')
-
-%% Plots III
-fig3 = figure(3);
-clf
-set(fig3, 'Position', [300, 300, 800, 800])
-% title('All Scores', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
-%methodLabelsStrings = ['R2B', 'TI', 'Peak AUC/Std', 'PCA', 'SVM', 'Param. Eqs.'];
 for method = 1:input.nMethods
-    subplot(3, 2, method)
-    ptcScores = predictor(response == 1, method);
-    ocScores = predictor(response == 0, method);
+    subplot(4, 2, method)
+    ptcScores = normPredictor(response == 1, method);
+    ocScores = normPredictor(response == 0, method);
     %title(sprintf('Scores - Method %s', char(methodLabels(method))))
 %     histogram(ptcScores, ...
 %         'EdgeColor', 'g', ...
@@ -457,16 +420,41 @@ for method = 1:input.nMethods
     maxPTCScores = max(ptcScores);
     maxOCScores = max(ocScores);
     
-    minimum = min(minPTCScores, minOCScores);
-    maximum = max(maxPTCScores, maxOCScores);
-    
-    xlim([minimum maximum])
+    if method == 3 || method == 4 || method == 6
+        minimum = min(minPTCScores, minOCScores);
+        maximum = max(maxPTCScores, maxOCScores);
+        xlim([minimum maximum])
+    else
+        xlim([0 0.05])
+    end
     %ylim([0 25000])
     ylim([0 5000])
     set(gca, 'FontSize', figureDetails.fontSize)
 end
 hold off
-print(sprintf('%s/HistogramsAllScores-%i-%i-%i-%i-%i_%i', ...
+
+%subplot(3, 9, 20:22)
+subplot(4, 2, 7)
+h = heatmap(cosineSimilarityMatrix1, ...
+    'Colormap', cool, ...
+    'Title', 'Cosine Similarity', ...
+    'CellLabelColor','none');
+h.XDisplayLabels = methodLabels;
+h.YDisplayLabels = methodLabels;
+set(gca, 'FontSize', figureDetails.fontSize)
+
+%subplot(3, 9, 24:26)
+subplot(4, 2, 8)
+h = heatmap(correlationMatrix, ...
+    'Colormap', cool, ...
+    'Title', 'Correlation Coefficients', ...
+    'CellLabelColor','none');
+h.XDisplayLabels = methodLabels;
+%h.YDisplayLabels = methodLabels2;
+h.YDisplayLabels = {'', '', '', '', '', ''};
+set(gca, 'FontSize', figureDetails.fontSize)
+
+print(sprintf('%s/ComparingScores-%i-%i-%i-%i-%i_%i', ...
     HOME_DIR2, ...
     input.gDate, ...
     input.gRun, ...
