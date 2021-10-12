@@ -3,11 +3,11 @@
 % clear
 
 % tic
-function [Y, X] = developConfusionMatrix(input, sdo_batch, cData)
+function [Y, X] = developConfusionMatrix4Effects(input, sdo_batch, cData, indices)
 
 nCells = input.nCells;
 nAlgos = input.nAlgos;
-nDatasets = input.nDatasets;
+nDatasets = length(indices);
 %figureDetails = compileFigureDetails(16, 2, 5, 0.5, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %Extra colormap options: inferno/plasma/viridis/magm
 %C = distinguishable_colors(nAlgos);
@@ -19,7 +19,7 @@ preLUT = zeros(nCells*nDatasets, nAlgos+1);
 %reality = zeros(nDatasets, nCells);
 
 count = 0;
-for dnum = 1:nDatasets
+for dnum = indices(1):indices(nDatasets)
     count = count + 1;
     start = ((count-1)*nCells + 1);
     finish = count*nCells;

@@ -14,7 +14,7 @@ input.nCells = 135;
 input.nAlgos = 8;
 input.nMethods = 6;
 
-workingOnServer = 1;
+workingOnServer = 1; %Only to select the batch for datasets
 
 if workingOnServer == 1 %Bebinca
     % Synthetic Dataset Details
@@ -37,7 +37,7 @@ elseif workingOnServer == 2 %Adama
     input.cRun = 1; %consolidation run number
 end
 
-workingOnServer = 0;
+workingOnServer = 0; %Current
 diaryOn         = 0;
 
 
@@ -76,18 +76,6 @@ end
 plotRefQ = 1;
 plotAnalysedQs = 1;
 plotDatasetCheck = 0;
-
-% Synthetic Dataset Details
-input.gDate = 20210824; %generation date
-input.gRun = 1; %generation run number
-input.nDatasets = 333;
-
-% Consolidated Analysis Details
-input.cDate = 20210918; %consolidation date
-input.cRun = 1; %consolidation run number
-
-workingOnServer = 0;
-diaryOn         = 0;
 
 % Load Synthetic Data
 disp('Loading synthetic datasets ...')

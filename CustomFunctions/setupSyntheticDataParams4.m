@@ -50,7 +50,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(1-10)
+%N*(1:10)
 
 %PSA - Time cell percents with 'random' order
 for value = 10:10:100
@@ -75,7 +75,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(11-20)
+%N*(11:20)
 
 %PSA - Max Hit Trial Percents with 'fixed' assignment
 for value = 10:10:100
@@ -100,7 +100,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(21-30)
+%N*(21:30)
 
 %PSA - Max Hit Trial Percents with 'random' assignment
 for value = 10:10:100
@@ -125,7 +125,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(31-40)
+%N*(31:40)
 
 %PSA - Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
 for value = 10:10:100
@@ -150,7 +150,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(41-50)
+%N*(41:50)
 
 %PSA - Max Hit Trial Percents with 'random' assignment, 'random' trial order
 for value = 10:10:100
@@ -175,7 +175,7 @@ for value = 10:10:100
         rng(sdcp(count).randomseed)
     end
 end
-%N*(51-60)
+%N*(51:60)
 
 %PSA - Event Widths (percentiles)
 for value = 10:10:70
@@ -200,7 +200,7 @@ for value = 10:10:70
         rng(sdcp(count).randomseed)
     end
 end
-%N*(61-67)
+%N*(61:67)
 
 %PSA - Event Widths (percentiles) with standard deviations
 for value = 10:10:70
@@ -225,7 +225,7 @@ for value = 10:10:70
         rng(sdcp(count).randomseed)
     end
 end
-%N*(68-74)
+%N*(68:74)
 
 %PSA - Uniform Imprecisions
 for value = 1:2:20
@@ -250,7 +250,7 @@ for value = 1:2:20
         rng(sdcp(count).randomseed)
     end
 end
-%N*(75-84)
+%N*(75:84)
 
 %PSA - Normal Imprecisions
 for value = 1:2:20
@@ -275,7 +275,7 @@ for value = 1:2:20
         rng(sdcp(count).randomseed)
     end
 end
-%N*(85-94)
+%N*(85:94)
 
 %PSA - Noise (only Gaussian type)
 %for value = 10:10:100
@@ -301,7 +301,7 @@ for value = 10:10:50
         rng(sdcp(count).randomseed)
     end
 end
-%N*(95-99)
+%N*(95:99)
 
 %% Physiology
 % Noise
