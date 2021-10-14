@@ -86,10 +86,10 @@ else %Manual mode
             'FontWeight', 'bold')
         set(gca, 'FontSize', 15)
         
-        finish = nanTest_input('Finish? y/n: ', 's');
+        finish = input('Finish? y/n: ', 's');
         
         if ~strcmpi(finish, 'y')
-            selectedIndex = nanTest_input('Enter a PC option: ');
+            selectedIndex = input('Enter a PC option: ');
         end
     end
     set(gcf,'Visible','off')
