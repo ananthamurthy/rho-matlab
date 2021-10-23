@@ -6,10 +6,13 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch] = generateSyntheticDataExample(gDate, gRun, workingOnServer)
-
 tic
 close all
+clear
+
+gDate = 20211020;
+gRun = 1;
+workingOnServer = 0;
 
 if workingOnServer
     HOME_DIR = '/home/bhalla/ananthamurthy/';
@@ -23,10 +26,13 @@ addpath(genpath(strcat(HOME_DIR, 'MATLAB/ImagingAnalysis/Suite2P-ananth')))
 
 %ops0.fig             = 1;
 ops0.saveData        = 1;
-ops0.diary           = 1;
+ops0.plotData        = 1;
+ops0.diary           = 0;
 
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 ops0.onlyProbeTrials = 0;
+
+ addpath('/Users/ananth/Documents/rho-matlab/CustomFunctions')
 
 if ops0.diary
     if workingOnServer
@@ -38,13 +44,13 @@ if ops0.diary
 end
 
 %% Load real dataset details
-make_dbase %Currently only for one session at a time
+make_db %Currently only for one session at a time
 
 fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
-    dbase.mouseName, ...
-    dbase.sessionType, ...
-    dbase.session, ...
-    dbase.date)
+    db.mouseName, ...
+    db.sessionType, ...
+    db.session, ...
+    db.date)
 
 if workingOnServer
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
@@ -52,10 +58,10 @@ else
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 
-saveFolder = strcat(saveDirec, dbase.mouseName, '/', dbase.date, '/');
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 %% Load processed dF/F data for dataset
-realProcessedData = load(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '.mat'));
+realProcessedData = load(strcat(saveFolder, db.mouseName, '_', db.date, '.mat'));
 DATA = realProcessedData.dfbf;
 DATA_2D = realProcessedData.dfbf_2D;
 nCells = size(DATA, 1);
@@ -70,25 +76,21 @@ input.dimensions = '2D';
 [~] = lookout4NaNs(DATA_2D, input);
 
 %% Load synthetic dataset control parameters
-%setupSyntheticDataParams %Loads all options for Parameter Sensitivity Analysis (N = 199); "PSA1" or "Unphysiological"
-%setupSyntheticDataParams2 %Loads all options for specific Synthetic Datasets (N=1*33); "BoS"
-%setupSyntheticDataParams3 %Loads all options for specific Synthetic Datasets (N=8*12); "Physiological"
-%setupSyntheticDataParams4 %Loads all options for specific Synthetic Datasets (N=3*111); all out; "PSA2 + Physiology"
 setupSyntheticDataParametersSchematic
 nDatasets = length(sdcp);
 
 %% Organize Library of Calcium Events
 %Cell specific curation of the calcium event library
 %Check to see if the library exits, else create
-if isfile(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'))
+if isfile(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'))
     disp('Loading existing event library ...')
-    filepath = strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat');
+    filepath = strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat');
     load(filepath);
     disp('... done!')
 else
     disp('Curating Library ...')
     eventLibrary_2D = curateLibrary(DATA_2D);
-    save(strcat(saveFolder, dbase.mouseName, '_', dbase.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+    save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
     disp('... done!')
 end
 
@@ -117,7 +119,7 @@ clear s
 
 for runi = 1:1:nDatasets
     fprintf('Dataset: %i\n', runi)
-    sdo = syntheticDataMaker(dbase, DATA_2D, eventLibrary_2D, sdcp(runi));
+    sdo = syntheticDataMaker(db, DATA_2D, eventLibrary_2D, sdcp(runi));
     
     %Run specifics
     scurr = rng;
@@ -155,6 +157,79 @@ for runi = 1:1:nDatasets
     sdo_batch(runi) = sdo;
 end
 
+%% Plots
+figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+fig1 = figure(1);
+clf
+set(fig1, 'Position', [100, 100, 800, 1200])
+
+for myCase = 1:8
+    %cell = randi(100);
+    cell = 52;
+    
+    a = squeeze(sdo_batch(myCase).syntheticDATA(cell, 1:5, :));
+    
+    if myCase == 1
+        myText = 'Noise - Low';
+    elseif myCase == 2
+        myText = 'Noise - High';
+    elseif myCase == 3
+        myText = 'Event Widths - Small';
+    elseif myCase == 4
+        myText = 'Event Widths - Large';
+    elseif myCase == 5
+        myText = 'Imprecision - Low';
+    elseif myCase == 6
+        myText = 'Imprecision - High';
+    elseif myCase == 7
+        myText = 'Hit Trial Ratio - Low';
+    elseif myCase == 8
+        myText = 'Hit Trial Ratio - High';
+    end
+    
+    subplot(4, 2, myCase)
+
+    if mod(myCase, 2) ~= 0
+        for trial =  1:5
+            plot((a(trial, :)*100) + (trial-1)*80, 'b')
+            set(gca,'XTick',[])
+            set(gca,'YTick',[])
+            xlim([1 246])
+            ylim([-200 500])
+            hold on
+        end
+        hold off
+    else
+        if myCase == 1 %High Noise
+            for trial = 1:1
+                plot((a(trial, :)*100) + (trial-1)*80, 'r')
+                set(gca,'XTick',[])
+                set(gca,'YTick',[])
+                xlim([1 246])
+                ylim([-200 1000])
+                hold on
+            end
+            
+        else
+            for trial = 1:5
+                plot((a(trial, :)*100) + (trial-1)*80, 'r')
+                set(gca,'XTick',[])
+                set(gca,'YTick',[])
+                xlim([1 246])
+                ylim([-200 500])
+                hold on
+            end
+            hold off
+        end
+    end
+    title(myText, ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+
+    set(gca, 'FontSize', figureDetails.fontSize)
+    clear a
+end
+
 %% Save Everything
 if ops0.saveData == 1
     disp ('Saving everything ...')
@@ -176,3 +251,5 @@ fprintf('Elapsed Time: %.4f seconds\n', elapsedTime)
 if ops0.diary
     diary off
 end
+
+toc
