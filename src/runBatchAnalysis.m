@@ -14,8 +14,6 @@ function emptyOutput = runBatchAnalysis(sdcpStart, sdcpEnd, runA, runB, runC, ru
 tic
 close all
 
-methodList = determineMethod(runA, runB, runC, runD, runE, runF);
-
 %% Operations
 saveData                  = 1;
 onlyProbeTrials           = 0; %Mostly relevant for real physiology datasets
@@ -41,6 +39,8 @@ addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
 make_db %in localCopies
 
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+
+methodList = determineMethod(runA, runB, runC, runD, runE, runF);
 
 if diaryOn
     if workingOnServer == 1
@@ -268,6 +268,7 @@ if loadSyntheticData %Synthetic Data
             mDInput.automatic = 1; %for selecting P; logical
             mDInput.timeVector = (1:db(1).nFrames*size(DATA,2)) * (1/db(1).samplingRate); %in seconds; %For derivative
             mDInput.getT = 0;
+            mDInput.use1PC = 0;
             [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
             mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
             mDOutput_batch(runi) = mDOutput;

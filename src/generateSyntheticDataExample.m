@@ -6,10 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-tic
-close all
-clear
-
+disp('Generating Example Schematics ...')
 gDate = 20211020;
 gRun = 1;
 workingOnServer = 0;
@@ -32,7 +29,7 @@ ops0.diary           = 0;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 ops0.onlyProbeTrials = 0;
 
- addpath('/Users/ananth/Documents/rho-matlab/CustomFunctions')
+addpath('/Users/ananth/Documents/rho-matlab/CustomFunctions')
 
 if ops0.diary
     if workingOnServer
@@ -161,8 +158,10 @@ end
 figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 fig1 = figure(1);
 clf
-set(fig1, 'Position', [100, 100, 800, 1200])
+set(fig1, 'Position', [100, 300, 900, 1200])
 
+
+C = linspecer(6);
 for myCase = 1:8
     %cell = randi(100);
     cell = 52;
@@ -188,68 +187,73 @@ for myCase = 1:8
     end
     
     subplot(4, 2, myCase)
-
+    
     if mod(myCase, 2) ~= 0
         for trial =  1:5
-            plot((a(trial, :)*100) + (trial-1)*80, 'b')
-            set(gca,'XTick',[])
-            set(gca,'YTick',[])
+            plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(2, :))
+            %set(gca,'XTick',[])
+            %set(gca,'YTick',[])
             xlim([1 246])
             ylim([-200 500])
             hold on
         end
         hold off
+        if myCase == 7
+            xlabel('Frames (@14.5Hz)', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+            ylabel('dF/F (%)', ...
+                'FontSize', figureDetails.fontSize, ...
+                'FontWeight', 'bold')
+        end
     else
         if myCase == 1 %High Noise
             for trial = 1:1
-                plot((a(trial, :)*100) + (trial-1)*80, 'r')
-                set(gca,'XTick',[])
-                set(gca,'YTick',[])
+                plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(1, :))
+                %set(gca,'XTick',[])
+                %set(gca,'YTick',[])
                 xlim([1 246])
                 ylim([-200 1000])
                 hold on
             end
-            
+            hold off
         else
             for trial = 1:5
-                plot((a(trial, :)*100) + (trial-1)*80, 'r')
-                set(gca,'XTick',[])
-                set(gca,'YTick',[])
+                plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(1, :))
+                %set(gca,'XTick',[])
+                %set(gca,'YTick',[])
                 xlim([1 246])
                 ylim([-200 500])
                 hold on
             end
             hold off
         end
+        
     end
     title(myText, ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
-
+    
     set(gca, 'FontSize', figureDetails.fontSize)
     clear a
 end
+print(sprintf('%s/Examples', ...
+    HOME_DIR2), ...
+    '-dpng')
 
 %% Save Everything
 if ops0.saveData == 1
-    disp ('Saving everything ...')
+    disp ('Saving example ...')
     save(strcat(saveFolder, ...
-        'synthDATA_', ...
-        num2str(gDate), ...
-        '_gRun', num2str(gRun), ...
-        '_batch_', ...
+        'synthDATA_example_', ...
         num2str(nDatasets), ...
         '.mat'), ...
         'sdcp', 'sdo_batch', ...
         '-v7.3')
     disp('... done!')
 end
-elapsedTime = toc;
-disp('All done!')
-fprintf('Elapsed Time: %.4f seconds\n', elapsedTime)
+disp('... Example created.')
 
 if ops0.diary
     diary off
 end
-
-toc

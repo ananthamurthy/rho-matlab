@@ -47,7 +47,7 @@ for cell = 1:nCells
     for trial = 1:nTrials    
         %Find Hit Trials        
         if limit < nFrames
-            hitTrials(trial) = ~isempty(find(DATA(cell, trial, (limit-delta):limit) > detectionThreshold, 1));
+            hitTrials(trial) = ~isempty(find(DATA(cell, trial, :) > detectionThreshold, 1));
             
             %Get Imprecision or pad
             if hitTrials(trial)
@@ -77,7 +77,12 @@ for cell = 1:nCells
         SDPbySW(cell) = std(p, 'omitnan')/(derivedQInput.endFrame - derivedQInput.startFrame);
         
         %Get Score
-        Q2(cell) = HTR(cell) * exp(-1 * ((a * NbyS2(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
+        exponentSection = exp(-1 * ((a * NbyS2(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
+        if isnan(exponentSection)
+            Q2(cell) = 0;
+        else
+            Q2(cell) = HTR(cell) * exponentSection;
+        end
     end
 end
 

@@ -59,7 +59,7 @@ sdcp(i).endFrame = 150;
 sdcp(i).imprecisionFWHM = 0;
 sdcp(i).imprecisionType = 'uniform';
 sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 30;
+sdcp(i).noisePercent = 15;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
 rng(sdcp(i).randomseed)
@@ -149,7 +149,7 @@ rng(sdcp(i).randomseed)
 i = i + 1;
 sdcp(i).timeCellPercent = 100;
 sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 5;
+sdcp(i).maxHitTrialPercent = 2;
 sdcp(i).hitTrialPercentAssignment = 'fixed';
 sdcp(i).trialOrder = 'basic';
 sdcp(i).eventWidth = {70, 1};

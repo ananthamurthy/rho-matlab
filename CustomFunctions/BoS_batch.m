@@ -30,7 +30,7 @@ nTrials = 5; %only for data visualization plots
 nMethods = 6;
 
 figureDetails = compileFigureDetails(16, 2, 5, 0.5, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
-%Extra colormap options: inferno/plasma/viridis/magm
+%Extra colormap options: inferno/plasma/viridis/magma
 C = distinguishable_colors(nMethods+1);
 
 checkMethodB = 1;

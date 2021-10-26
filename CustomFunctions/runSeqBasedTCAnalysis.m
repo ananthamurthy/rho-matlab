@@ -58,7 +58,9 @@ if seqAnalysisInput.automatic
     %Add condition to only include eigenvalues >1? Skipping
     
     %Select the index of the PC that explains the highest percentage of the total variance
-    [~, selectedIndex] = max(explained);
+    if seqAnalysisInput.use1PC
+        [~, selectedIndex] = max(explained);
+    end
     
 else %Manual mode
     %Make a gui? Keeping things simple
@@ -103,8 +105,14 @@ end
 
 %seqAnalysisOutput.recDATA = ((score(:, selectedIndex) * coeff(selectedIndex, :)) + mu)';
 
-%Take the first derivative of Selected Principal Component
-seqAnalysisOutput.selectedPC = squeeze(score(:, selectedIndex));
+if seqAnalysisInput.use1PC
+    %Take the first derivative of Selected Principal Component
+    seqAnalysisOutput.selectedPC = squeeze(score(:, selectedIndex));
+else
+    %Take the first derivative of the first 3 principal componenets
+    seqAnalysisOutput.selectedPC = squeeze(score(:, 1:3));
+end
+
 %size(seqAnalysisOutput.selectedPC);
 dx = seqAnalysisOutput.selectedPC(2:end) - seqAnalysisOutput.selectedPC(1:end-1);
 dt = (seqAnalysisInput.timeVector(2:end) - seqAnalysisInput.timeVector(1:end-1))'; %Transpose
