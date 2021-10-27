@@ -80,6 +80,8 @@ for cell = 1:nCells
         exponentSection = exp(-1 * ((a * NbyS2(cell)) + (b * SDbyMEW(cell)) + (g * SDPbySW(cell))));
         if isnan(exponentSection)
             Q2(cell) = 0;
+        elseif isinf(exponentSection)
+            Q2(cell) = 0;
         else
             Q2(cell) = HTR(cell) * exponentSection;
         end
