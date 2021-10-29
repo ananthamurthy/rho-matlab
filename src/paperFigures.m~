@@ -437,18 +437,18 @@ for algo = 1:input.nAlgos
         'FontWeight', 'bold')
     colorbar
     colormap(linspecer)
-    if algo ~= 4
+    if algo ~= 8 && algo ~= 4
         set(colorbar,'visible','off')
     end
     xticklabels({'0', '1'})
     yticklabels({'1', '0'})
-    if algo == 5
+    if algo > 4
         %h.XLabel = 'Prediction';
         xlabel('Prediction', ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     end
-    if algo == 5
+    if algo == 1 || algo == 5
         %h.YLabel = 'Ground Truth';
         ylabel('Ground Truth', ...
         'FontSize', figureDetails.fontSize, ...
@@ -547,7 +547,7 @@ for set = 1:nSets
         ylabel('Counts', ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
-        xticklabels(methodLabels)
+        xticklabels(method  Labels)
         xtickangle(45)
         %set(gca,'xtick',[])
         %legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
