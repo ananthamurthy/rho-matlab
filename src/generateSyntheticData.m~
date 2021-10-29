@@ -6,11 +6,9 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest)
+function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, )
 
-if profilerTest
-    profile on
-end
+profile on -history
 
 tic
 close all
@@ -154,13 +152,10 @@ for runi = 1:1:nDatasets
 end
 elapsedTime = toc;
 
-if profilerTest
-    profilerStats = profile('info');
-    profile -timestamp
-    profile off
-else
-    profilerStats = [];
-end
+profilerStats = profile('info');
+
+profile -timestamp
+profile off
 %% Save Everything
 if saveData == 1
     disp ('Saving everything ...')

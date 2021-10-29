@@ -9,11 +9,11 @@ close all
 clear
 
 tic
-
 %% Plots - I
+%%
 generateSyntheticDataExample
-
 %% Subsequent plots
+%%
 input.nCells = 135;
 input.nAlgos = 8;
 input.nMethods = 6;
@@ -154,10 +154,10 @@ for algo = 1:input.nAlgos
     FP = sum(allFP(:, algo));
     TN = sum(allTN(:, algo));
     
-    confusionMatrix(algo, 1, 1) = TN;
-    confusionMatrix(algo, 1, 2) = FP;
-    confusionMatrix(algo, 2, 1) = FN;
-    confusionMatrix(algo, 2, 2) = TP;
+    confusionMatrix(algo, 1, 1) = FN;
+    confusionMatrix(algo, 1, 2) = TP;
+    confusionMatrix(algo, 2, 1) = TN;
+    confusionMatrix(algo, 2, 2) = FP;
     
     TPR(algo) = TP/(TP + FN);
     FPR(algo) = FP/(FP + TN);
@@ -257,10 +257,8 @@ metricLabels = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
 legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
-
-
 %% Plots - IV
-
+%%
 disp('Plotting Scores and Comparisions ...')
 fig4 = figure(4);
 clf
@@ -413,9 +411,8 @@ print(sprintf('%s/ComparingScores-%i-%i-%i-%i-%i_%i', ...
     '-dpng')
 
 disp('... Scores and Comparisons Plotted')
-
 %% Plots - V
-
+%%
 disp('Plotting Performance Metrics ...')
 
 fig5 = figure(5);
@@ -427,18 +424,35 @@ title('Confusion Matrices and Performance Evalutation', ...
 for algo = 1:input.nAlgos
    
     subplot(7, 4, algo)
-    h = heatmap(squeeze(confusionMatrix(algo, :, :)), ...
-        'Colormap', linspecer, ...
-        'Title', sprintf('%s', char(algoLabels(algo))), ...
-        'CellLabelColor','none');
-    h.XDisplayLabels = {'0', '1'};
-    h.YDisplayLabels = {'0', '1'};
+%     h = heatmap(squeeze(confusionMatrix(algo, :, :)), ...
+%         'Colormap', linspecer, ...
+%         'Title', sprintf('%s', char(algoLabels(algo))), ...
+%         'CellLabelColor','none');
+%     h.XDisplayLabels = {'0', '1'};
+%     h.YDisplayLabels = {'0', '1'};
     
+    imagesc(squeeze(confusionMatrix(algo, :, :)))
+    title(sprintf('%s', char(algoLabels(algo))), ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    colorbar
+    colormap(linspecer)
+    if algo ~= 8 && algo ~= 4
+        set(colorbar,'visible','off')
+    end
+    xticklabels({'0', '1'})
+    yticklabels({'1', '0'})
     if algo > 4
-        h.XLabel = 'Prediction';
+        %h.XLabel = 'Prediction';
+        xlabel('Prediction', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
     end
     if algo == 1 || algo == 5
-        h.YLabel = 'Ground Truth';
+        %h.YLabel = 'Ground Truth';
+        ylabel('Ground Truth', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
     end
     set(gca, 'FontSize', figureDetails.fontSize)
 end
@@ -487,6 +501,9 @@ xtickangle(45)
 legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 
+% Runtime and profile
+subplot(7, 4, [23:24, 27:28])
+
 print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
     HOME_DIR2, ...
     input.gDate, ...
@@ -496,9 +513,8 @@ print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
     '-djpeg')
 
 disp('... Performance Metrics Plotted')
-
-
 %% Plots VI
+%%
 disp('Plotting Sensitivity and Resource ...')
 
 nSets = 3;

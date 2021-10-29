@@ -20,9 +20,9 @@ controls.endFrame = simpleInput.endFrame;
 
 for i = 1:nIterations
     %fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
-    if mod(i, 100) == 0
-        fprintf('>>> Random: %i of %i\n', i, nIterations)
-    end
+%     if mod(i, 100) == 0
+%         fprintf('>>> Random: %i of %i\n', i, nIterations)
+%     end
     randDATA = generateRandData(DATA, controls);
     [~, randQ2(:, i)] = simpleAnalysisFast(randDATA, simpleInput);
 end

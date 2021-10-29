@@ -25,22 +25,24 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 %%
 i = 0;
 %% Synthetic Data Parameters
-
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {80, 2};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 15;
-sdcp(i).imprecisionType = 'uniform';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 5;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+nShuffles = 3;
+for shuffle = 1:nShuffles
+    i = i + 1;
+    sdcp(i).timeCellPercent = 100;
+    sdcp(i).cellOrder = 'basic';
+    sdcp(i).maxHitTrialPercent = 66;
+    sdcp(i).hitTrialPercentAssignment = 'random';
+    sdcp(i).trialOrder = 'basic';
+    sdcp(i).eventWidth = {80, 2};
+    sdcp(i).eventAmplificationFactor = 1;
+    sdcp(i).eventTiming = 'sequential';
+    sdcp(i).startFrame = 75;
+    sdcp(i).endFrame = 150;
+    sdcp(i).imprecisionFWHM = 15;
+    sdcp(i).imprecisionType = 'uniform';
+    sdcp(i).noise = 'gaussian';
+    sdcp(i).noisePercent = 5;
+    sdcp(i).randomseed = 'shuffle';
+    sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
+    rng(sdcp(i).randomseed)
+end
