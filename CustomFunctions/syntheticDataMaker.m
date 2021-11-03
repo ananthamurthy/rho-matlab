@@ -144,7 +144,7 @@ for cell = 1:nCells
                         %directly insert the event (by replacement)
                         syntheticDATA(cell, trial, ((frameIndex(cell, trial)+ pad(cell, trial)) - I :(frameIndex(cell, trial) + (pad(cell, trial)) - I + length(event) - 1))) = event * control.eventAmplificationFactor;
                     catch
-                        error('Cannot insert event as Pad: %d', pad(cell, trial))
+                        warning('Cannot insert event as Pad: %d', pad(cell, trial))
                     end
                 end
                 %fprintf('syntheticDATA trial length: %i\n', length(syntheticDATA(cell, trial, :)))
