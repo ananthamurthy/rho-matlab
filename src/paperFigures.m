@@ -297,13 +297,21 @@ for method = 1:input.nMethods
     title(sprintf('Method - %s', char(methodLabels(method))), ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
-    if method == 3 || method == 6
-        %do nothing
+    
+    if method == 1
+        xlim([0, 0.02])
+    elseif method == 2
+        xlim([0, 0.02])
+    elseif method == 3
+        xlim([0, 1])
     elseif method == 4
         xlim([-0.5, 0.5])
-    else
-        xlim([0, 0.03])
+    elseif method == 5
+        xlim([-0.02, 0.02])
+    elseif method == 6
+        xlim([0, 1])
     end
+    
     lgd = legend({'Time Cells'}, ...
         'Location', 'best');
     lgd.FontSize = figureDetails.fontSize-3;
@@ -322,7 +330,21 @@ for method = 1:input.nMethods
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
     end
-    xlim([-0.02, 0.02])
+    
+    if method == 1
+        xlim([0, 0.02])
+    elseif method == 2
+        xlim([0, 0.02])
+    elseif method == 3
+        xlim([0, 1])
+    elseif method == 4
+        xlim([-0.5, 0.5])
+    elseif method == 5
+        xlim([-0.02, 0.02])
+    elseif method == 6
+        xlim([0, 1])
+    end
+    
     lgd = legend({'Other Cells'}, ...
         'Location', 'best');
     lgd.FontSize = figureDetails.fontSize-3;
@@ -421,27 +443,43 @@ set(fig5, 'Position', [600, 300, 900, 1200])
 title('Confusion Matrices and Performance Evalutation', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
+%subplot(7, 5, [1:5, 6:10])
 for algo = 1:input.nAlgos
-   
-    subplot(7, 4, algo)
-%     h = heatmap(squeeze(confusionMatrix(algo, :, :)), ...
-%         'Colormap', linspecer, ...
-%         'Title', sprintf('%s', char(algoLabels(algo))), ...
-%         'CellLabelColor','none');
-%     h.XDisplayLabels = {'0', '1'};
-%     h.YDisplayLabels = {'0', '1'};
     
-    imagesc(squeeze(confusionMatrix(algo, :, :)))
+    if algo == 1
+        subplot(10, 8, 1:2)
+    elseif algo == 2
+        subplot(10, 8, 3:4)
+	elseif algo == 3
+        subplot(10, 8, 5:6)
+	elseif algo == 4
+        subplot(10, 8, 7:8)
+    elseif algo == 5
+        subplot(10, 8, 17:18)
+    elseif algo == 6
+        subplot(10, 8, 19:20)
+    elseif algo == 7
+        subplot(10, 8, 21:22)
+    elseif algo == 8
+        subplot(10, 8, 23:24)
+    end
+    
+    imagesc(squeeze(confusionMatrix(algo, :, :)));
     title(sprintf('%s', char(algoLabels(algo))), ...
         'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold')
+        'FontWeight', 'bold');
+    
+    xticks([1, 2])
+    xticklabels({'0', '1'})
+    yticks([1, 2])
+    yticklabels({'1', '0'})
     colorbar
     colormap(linspecer)
+    
     if algo ~= 4
         set(colorbar,'visible','off')
     end
-    xticklabels({'0', '1'})
-    yticklabels({'1', '0'})
+    
     if algo == 5
         %h.XLabel = 'Prediction';
         xlabel('Prediction', ...
@@ -454,16 +492,17 @@ for algo = 1:input.nAlgos
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     end
+    
     set(gca, 'FontSize', figureDetails.fontSize)
 end
 
-subplot(7, 4, [9:12, 13:16])
+subplot(10, 8, (40:56))
 d = bar(results3);
 xlim([0 5])
 axis tight
-% title('Prediction Performance Metrics', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+title('Predictive Performance Metrics', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
 xlabel('All Algorithms', ...
 'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -482,7 +521,7 @@ allUnique = zeros(input.nAlgos, 3);
 allUnique(:, 1) = sum(unique1, 1);
 allUnique(:, 2) = sum(unique2, 1);
 allUnique(:, 3) = sum(unique3, 1);
-subplot(7, 4, [21:22, 25:26])
+subplot(10, 8, [65:67, 73:76])
 bar(allUnique)
 xlim([1, 8])
 axis tight
@@ -501,60 +540,66 @@ xtickangle(45)
 legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 
-% Runtime and profile - Synthesis % Analysis
-subplot(7, 4, [23:24, 27:28])
-[diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
-gDate2 = 20211029; %For example datasets - Profiler On
-nSets = 3;
-
 %workingOnServer = 0;
-profilerTest = 1;
+profilerTest = 0;
 %diaryOn = 0;
-nMethods = input.nMethods;
-methodList = {'A (R2B)', 'B (TI)', 'C (Simple)', 'D (Offset PCA)', 'E (SVM)', 'F (Param.)' };
-
-runTime = zeros(nSets, nMethods);
-for set = 1:nSets
-    gRun2 = set; %For example datasets - Profiler On
-    
-    for method = 1:nMethods
-        if method == 1
-            elapsedTime = runBatchAnalysis(1, nDatasets, 1, 0, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
-        elseif method == 2
-            elapsedTime = runBatchAnalysis(1, nDatasets, 0, 1, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
-        elseif method == 3
-            elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 1, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
-        elseif method == 4
-            elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 1, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
-        elseif method == 5
-            elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 1, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
-        elseif method == 6
-            elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 0, 1, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+if profilerTest
+    % Runtime and profile - Synthesis % Analysis
+    [diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
+    gDate2 = 20211029; %For example datasets - Profiler On
+    gRun = 2;
+    nSets = 9;
+    nMethods = input.nMethods;
+    runTime = zeros(nSets, nMethods+1);
+    for iSet = 1:nSets
+        gRun2 = iSet; %For example datasets - Profiler On
+        
+        [~, elapsedTime] = generateSyntheticData(20211029, 2, 0, 0, 1);
+        
+        for myMethod = 1:nMethod+1
+            if myMethod == 1
+                %use the elapsedTime for generation
+                %Offset by 1
+            elseif myMethod == 2
+                elapsedTime = runBatchAnalysis(1, nDatasets, 1, 0, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            elseif myMethod == 3
+                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 1, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            elseif myMethod == 4
+                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 1, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            elseif myMethod == 5
+                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 1, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            elseif myMethod == 6
+                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 1, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            elseif myMethod == 7
+                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 0, 1, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+            end
+            sprintf('Analysis of %i datasets by %s took %d mins.\n', nDatasets, char(methodLabel(myMethod)), elapsedTime/60)
+            
+            runTime(iSet, method) = elapsedTime/60;
         end
-        sprintf('Analysis of %i datasets by %s took %d mins.\n', nDatasets, char(methodList), elapsedTime/60)
-        
-        runTime(set, method) = elapsedTime/60;
-        
-        bar(runTime)
-        xlim([1, 8])
-        axis tight
-        title('Runtimes', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xlabel('All Algorithms', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        ylabel('Counts', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xticklabels(methodLabels)
-        xtickangle(45)
-        %set(gca,'xtick',[])
-        %legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
-        set(gca, 'FontSize', figureDetails.fontSize)
     end
+else
+    runTime = [11/60, 23.54, 7.48, 21.47, 0.04, 0.25, 160.71];
 end
-
+subplot(10, 8, [70:72, 78:80])
+semilogy(runTime, 'xr', ...
+    'MarkerSize', 16)
+xlim([1, 7])
+axis tight
+title('Runtimes', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xlabel('All Procedures', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+ylabel('log(time/min.)', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels({'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'})
+xtickangle(45)
+%set(gca,'xtick',[]) legend({'1/8 Algorithms', '2/8 Algorithms', '3/8
+%Algorithms'})
+set(gca, 'FontSize', figureDetails.fontSize)
 print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
     HOME_DIR2, ...
     input.gDate, ...
@@ -593,9 +638,8 @@ set(fig6, 'Position', [1500, 300, 900, 1200])
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise1);
 [Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise2);
 [Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise3);
-results3Line = zeros(input.nAlgos, nSets);
 
-nShuffles = 3;
+nShuffles = 10; %same throughout
 for iSet = 1:nSets
     if iSet == 1
         X = X1;
@@ -607,6 +651,7 @@ for iSet = 1:nSets
         X = X3;
         Y = Y3;
     end
+
     for shuffle = 1:nShuffles
         if shuffle == 1
             myCells = 1:input.nCells;
@@ -616,13 +661,28 @@ for iSet = 1:nSets
             myCells = (input.nCells*2)+1: input.nCells*3;
             [results1, results2, results3] = compareAgainstTruth(X(myCells, :), Y(myCells), input);
         end
-        
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
+        
     end
 end
 
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
+
+%Student's t-test (2 sample)
+for myMethod1 = 1:input.nMethods
+    for myMethod2 = 1:input.nMethods
+        if myMethod1 ~= myMethod2
+            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
+            
+            if ~isnan(h)
+                if h
+                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
+                end
+            end
+        end
+    end
+end
 
 subplot(3, 2, 1)
 errorbar(meanBundledResults3', stdBundledResults3', ...
@@ -634,7 +694,7 @@ title('The Effect of Noise', ...
 xticks([1, 2, 3])
 xticklabels({'5%', '15%', '30%'})
 %xtickangle(45)
-xlabel('Noise (%)', ...
+xlabel('Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...
@@ -647,7 +707,7 @@ set(gca, 'FontSize', figureDetails.fontSize)
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW1);
 [Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW2);
 [Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW3);
-results3Line = zeros(input.nAlgos, nSets);
+
 
 for iSet = 1:nSets
     if iSet == 1
@@ -677,6 +737,21 @@ end
 
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
+
+%Student's t-test (2 sample)
+for myMethod1 = 1:input.nMethods
+    for myMethod2 = 1:input.nMethods
+        if myMethod1 ~= myMethod2
+            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
+            
+            if ~isnan(h)
+                if h
+                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
+                end
+            end
+        end
+    end
+end
 
 subplot(3, 2, 2)
 errorbar(meanBundledResults3', stdBundledResults3', ...
@@ -700,7 +775,6 @@ set(gca, 'FontSize', figureDetails.fontSize)
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp1);
 [Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp2);
 [Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp3);
-results3Line = zeros(input.nAlgos, nSets);
 
 for iSet = 1:nSets
     if iSet == 1
@@ -730,6 +804,21 @@ end
 
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
+
+%Student's t-test (2 sample)
+for myMethod1 = 1:input.nMethods
+    for myMethod2 = 1:input.nMethods
+        if myMethod1 ~= myMethod2
+            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
+            
+            if ~isnan(h)
+                if h
+                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
+                end
+            end
+        end
+    end
+end
 
 subplot(3, 2, 3)
 errorbar(meanBundledResults3', stdBundledResults3', ...
@@ -753,7 +842,7 @@ set(gca, 'FontSize', figureDetails.fontSize)
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR1);
 [Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR2);
 [Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR3);
-results3Line = zeros(input.nAlgos, nSets);
+
 for iSet = 1:nSets
     if iSet == 1
         X = X1;
@@ -783,6 +872,21 @@ end
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
+%Student's t-test (2 sample)
+for myMethod1 = 1:input.nMethods
+    for myMethod2 = 1:input.nMethods
+        if myMethod1 ~= myMethod2
+            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
+            
+            if ~isnan(h)
+                if h
+                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
+                end
+            end
+        end
+    end
+end
+
 subplot(3, 2, 4)
 errorbar(meanBundledResults3', stdBundledResults3', ...
     'LineWidth', figureDetails.lineWidth, ...
@@ -793,7 +897,7 @@ title('The Effect of Hit Trial Ratio', ...
 xticks([1, 2, 3])
 xticklabels({'33%', '66%', '100%'})
 %xtickangle(45)
-xlabel('Hit Trial Ratio (as %)', ...
+xlabel('Hit Trial Ratio', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...

@@ -497,10 +497,10 @@ elapsedTime = toc;
 if profilerTest
     profilerStats = profile('info');
     profile -timestamp
-    profile off
 else
     profilerStats = [];
 end
+profile off
 %% Save Data
 % If no method is specified, "analysis" will not save anything since no
 % analysis would have been run.
@@ -642,8 +642,8 @@ if saveData
     end
     disp('... done!')
 end
-toc
-emptyOutput = []; %Shell scripts seem to like this; unnecessary for the actual analysis runs.
+
+%emptyOutput = []; %Shell scripts seem to like this; unnecessary for the actual analysis runs.
 
 if diaryOn
     diary off

@@ -4,7 +4,10 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function consolidateBatch(cDate, cRun, workingOnServer, diaryOn)
+function elapsedTime = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest)
+if profilerTest
+    profile on
+end
 
 tic
 
@@ -108,15 +111,22 @@ fullPath4Save = strcat(saveFolder, filename);
 
 disp('Saving everything ...')
 
-save(fullPath4Save, 'cData', '-v7.3')
+elapsedTime = toc;
+if profilerTest
+    profilerStats = profile('info');
+    profile -timestamp
+else
+    profilerStats = [];
+end
+profile off
+
+save(fullPath4Save, 'cData', 'elapsedTime', 'profilerStats', '-v7.3')
 %save(fullPath4Save, 'cData')
 disp('... done!')
 
 % %Information about new file
 % h5info(filename, saveFolder)
 % h5disp(filename, saveFolder)
-
-toc
 disp('All done!')
 
 end

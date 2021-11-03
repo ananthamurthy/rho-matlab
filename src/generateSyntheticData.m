@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest)
+function [sdo_batch, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest)
 
 if profilerTest
     profile on
@@ -157,10 +157,10 @@ elapsedTime = toc;
 if profilerTest
     profilerStats = profile('info');
     profile -timestamp
-    profile off
 else
     profilerStats = [];
 end
+profile off
 %% Save Everything
 if saveData == 1
     disp ('Saving everything ...')
