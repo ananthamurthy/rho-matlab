@@ -16,10 +16,6 @@ end
 % mustBeNonnegative(X0)
 % mustBeNonnegative(Y)
 
-svmOutput.X = X;
-svmOutput.X0 = X0;
-svmOutput.Y = Y;
-
 %Train Model
 if svmInput.saveModel
     svmOutput.SVMModel = fitcsvm(X, Y, ...

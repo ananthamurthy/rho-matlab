@@ -122,9 +122,6 @@ mDOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method E
-s.X = [];
-s.X0 = [];
-s.Y = [];
 s.SVMModel = [];
 s.Yfit = [];
 s.YfitDiff = [];
