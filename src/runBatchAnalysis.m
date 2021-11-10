@@ -306,7 +306,6 @@ if loadSyntheticData %Synthetic Data
                 catch
                 end
             end
-            mEInput.saveBasicOutput = 0;
             [mEOutput] = runSVMClassification(DATA, mEInput);
             mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
             mEOutput_batch(runi) = mEOutput;
