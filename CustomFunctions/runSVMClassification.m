@@ -33,7 +33,7 @@ end
 
 %Test model
 if svmInput.saveModel
-    [Yfit, score] = predict(svmOutput.SVMModel, X0);
+    [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
 else
     [Yfit, score] = predict(SVMModel, X0);
     
@@ -42,7 +42,7 @@ else
 end
 
 if ~svmInput.saveBasicOutput
-    svmOutput.YfitDiff = Yfit - Yfit_actual;
+    svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
 else
     YfitDiff = Yfit - Yfit_actual;
     
@@ -61,9 +61,9 @@ end
 
 if ~svmInput.saveBasicOutput
     %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
-    svmOutput.Yfit_2D = reshape(Yfit, [length(testingTrials), nCells]);
-    svmOutput.Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells]);
-    svmOutput.YfitDiff_2D = reshape(YfitDiff, [length(testingTrials), nCells]);
+    svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
+    svmOutput.Yfit_actual_2D = reshape(svmOutput.Yfit_actual, [length(testingTrials), nCells]);
+    svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
 else
     %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
     Yfit_2D = reshape(Yfit, [length(testingTrials), nCells]);
