@@ -33,7 +33,11 @@ end
 
 %Test model
 if svmInput.saveModel
-    [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
+    if ~svmInput.saveBasicOutput
+        [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
+    else
+        [Yfit, score] = predict(SVMModel, X0);
+    end
 else
     [Yfit, score] = predict(SVMModel, X0);
     
