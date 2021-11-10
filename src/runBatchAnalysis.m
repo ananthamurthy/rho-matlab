@@ -132,7 +132,6 @@ s.Q = [];
 s.Yfit_2D = [];
 s.Yfit_actual_2D = [];
 s.YfitDiff_2D = [];
-s.Q_2D = [];
 s.T = [];
 s.timeCells = [];
 s.nanList = [];
