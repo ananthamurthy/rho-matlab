@@ -29,7 +29,7 @@ if workingOnServer == 1
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 elseif workingOnServer == 2
     HOME_DIR = '/home/ananth/Documents/';
-    HOME_DIR2 = '/home/ananth/Desktop/';
+    HOME_DIR2 = '/media/ananth/Storage/';
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 else
     HOME_DIR = '/Users/ananth/Documents/';
@@ -299,7 +299,6 @@ if loadSyntheticData %Synthetic Data
                     mEInput.ocList = input('Enter Other Cell List: ');
                 end
             end
-            
             mEInput.saveModel = 0;
             if ~mEInput.saveModel
                 try
