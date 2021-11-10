@@ -33,52 +33,26 @@ end
 
 %Test model
 if svmInput.saveModel
-    if ~svmInput.saveBasicOutput
-        [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
-    else
-        [Yfit, score] = predict(SVMModel, X0);
-    end
+    [svmOutput.Yfit, score] = predict(svmOutput.SVMModel, X0);
 else
-    [Yfit, score] = predict(SVMModel, X0);
-    
-    %Meaningless numbers - saving on disk space
-    svmOutput.Yfit = 1;
+    [svmOutput.Yfit, score] = predict(SVMModel, X0);
 end
 
-if ~svmInput.saveBasicOutput
-    svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
-else
-    YfitDiff = Yfit - Yfit_actual;
-    
-    %Meaningless numbers - saving on disk space
-    svmOutput.YfitDiff = 1;
-end
-
+svmOutput.YfitDiff = svmOutput.Yfit - Yfit_actual;
 try
     allQ = score(:, 2); %Only looking at the "positive class" scores (to classify as "time cell")
 catch
-    %Sometimes, the dataset cannot be split into two classes, so saving
-    %single-class scores
+    %Usually only if all cells are classified the same (often - no time
+    %cells). Here, negative scores are considered.
     %disp('**** Caught a dataset with only 1 column ****')
     allQ = score(:, 1);
 end
 
-if ~svmInput.saveBasicOutput
-    %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
-    svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
-    svmOutput.Yfit_actual_2D = reshape(svmOutput.Yfit_actual, [length(testingTrials), nCells]);
-    svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
-else
-    %Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
-    Yfit_2D = reshape(Yfit, [length(testingTrials), nCells]);
-    Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells]);
-    YfitDiff_2D = reshape(YfitDiff, [length(testingTrials), nCells]);
-    
-    %Meaningless numbers - saving on disk space
-    svmOutput.Yfit_2D = 1;
-    svmOutput.Yfit_actual_2D = 1;
-    svmOutput.YfitDiff_2D = 1;
-end
+%Reshape Yfit and Yfit_actual to a 2D matrix - trials vs frames
+svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
+svmOutput.Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells]);
+svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
+
 svmOutput.Q_2D = reshape(allQ, [length(testingTrials), nCells]);
 svmOutput.Q = median(svmOutput.Q_2D); % Try either mean or median
 
