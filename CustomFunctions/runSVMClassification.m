@@ -36,6 +36,9 @@ if svmInput.saveModel
     [Yfit, score] = predict(svmOutput.SVMModel, X0);
 else
     [Yfit, score] = predict(SVMModel, X0);
+    
+    %Meaningless numbers - saving on disk space
+    svmOutput.Yfit = 1;
 end
 
 if ~svmInput.saveBasicOutput
