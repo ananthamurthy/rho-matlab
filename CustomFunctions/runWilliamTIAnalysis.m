@@ -76,6 +76,7 @@ if williamInput.getT
     Yfit_actual_2D = reshape(williamOutput.Yfit_actual, [length(testingTrials), nFrames]);
     YfitDiff_2D = reshape(williamOutput.YfitDiff, [length(testingTrials), nFrames]);
 else
+    %Meaningless numbers - saving on disk space
     Yfit = 1;
     trainingTrials = 1;
     testingTrials = 1;
