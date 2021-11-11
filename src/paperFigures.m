@@ -9,6 +9,7 @@ close all
 clear
 
 tic
+addpath(genpath('/Users/ananth/Documents/rho-matlab/CustomFunctions'))
 %% Plots - I
 %%
 generateSyntheticDataExample
