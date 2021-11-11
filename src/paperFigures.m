@@ -576,7 +576,7 @@ if profilerTest
             elseif myMethod == 7
                 elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 0, 0, 1, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             end
-            sprintf('Analysis of %i datasets by %s took %d mins.\n', num2str(3), char(methodLabels(myMethod)), elapsedTime/60)
+            sprintf('Set %i: Analysis of %i datasets by %s took %d mins.\n', iSet, num2str(3), char(methodLabels(myMethod)), elapsedTime/60)
             
             runTime(iSet, myMethod) = elapsedTime/60;
         end
