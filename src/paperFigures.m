@@ -543,7 +543,10 @@ xtickangle(45)
 legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 
-runTime = [];
+disp('Loading run times ...')
+runtimeFilePath = '/HOMEDIR/rho-matlab/runtimes.mat';
+load(runtimeFilePath)
+disp('... done!')
 
 meanRunTime = mean(runTime, 1);
 stdRunTime = std(runTime, 1);
