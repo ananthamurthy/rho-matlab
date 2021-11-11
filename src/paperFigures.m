@@ -335,7 +335,7 @@ for method = 1:input.nMethods
     end
     
     if method == 1
-        xlim([0, 0.02])
+        xlim([0, 0.005])
     elseif method == 2
         xlim([0, 0.02])
     elseif method == 3
@@ -581,12 +581,16 @@ if profilerTest
             runTime(iSet, method) = elapsedTime/60;
         end
     end
-else
+else % Manually add values
     runTime = [11/60, 23.54, 7.48, 21.47, 0.04, 0.25, 160.71];
 end
+meanRunTime = mean(runTime, 1);
+stdRunTime = std(runTime, 1);
 subplot(10, 8, [70:72, 78:80])
-semilogy(runTime, 'xr', ...
-    'MarkerSize', 16)
+hAx=axes;
+hAx.YScale = 'log';
+
+errorbar(meanRunTime', stdRunTime')
 xlim([1, 7])
 axis tight
 title('Runtimes', ...
