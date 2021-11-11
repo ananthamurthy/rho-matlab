@@ -410,7 +410,7 @@ ylabel('True Positive Rate', ...
     'FontWeight', 'bold')
 lgd1 = legend(methodLabels, ...
     'Location', 'best');
-lgd1.FontSize = figureDetails.fontSize;
+lgd1.FontSize = figureDetails.fontSize-3;
 
 set(gca, 'FontSize', figureDetails.fontSize)
 
