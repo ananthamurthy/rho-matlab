@@ -546,35 +546,35 @@ profilerTest = 1;
 %diaryOn = 0;
 if profilerTest
     % Runtime and profile - Synthesis % Analysis
-    [diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
-    gDate2 = 20211029; %For example datasets - Profiler On
-    gRun = 2;
+    %[diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
+    gDate2 = 20211111; %For example datasets - Profiler On
+    gRun2 = 1;
     nSets = 9;
     nMethods = input.nMethods;
     runTime = zeros(nSets, nMethods+1);
     for iSet = 1:nSets
         gRun2 = iSet; %For example datasets - Profiler On
         
-        [~, elapsedTime] = generateSyntheticData(20211029, 2, 0, 0, 1);
+        [~, elapsedTime] = generateSyntheticData(gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
         
         for myMethod = 1:nMethods+1
             if myMethod == 1
                 %use the elapsedTime for generation
                 %Offset by 1
             elseif myMethod == 2
-                elapsedTime = runBatchAnalysis(1, nDatasets, 1, 0, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 1, 0, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             elseif myMethod == 3
-                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 1, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 0, 1, 0, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             elseif myMethod == 4
-                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 1, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 1, 0, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             elseif myMethod == 5
-                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 1, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 1, 0, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             elseif myMethod == 6
-                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 1, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 0, 1, 0, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             elseif myMethod == 7
-                elapsedTime = runBatchAnalysis(1, nDatasets, 0, 0, 0, 0, 0, 1, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
+                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 0, 0, 1, gDate2, gRun2, workingOnServer, diaryOn, profilerTest);
             end
-            sprintf('Analysis of %i datasets by %s took %d mins.\n', nDatasets, char(methodLabel(myMethod)), elapsedTime/60)
+            sprintf('Analysis of %i datasets by %s took %d mins.\n', num2str(3), char(methodLabel(myMethod)), elapsedTime/60)
             
             runTime(iSet, method) = elapsedTime/60;
         end
