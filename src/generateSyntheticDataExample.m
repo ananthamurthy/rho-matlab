@@ -36,7 +36,7 @@ ops0.onlyProbeTrials = 0;
 addpath('/Users/ananth/Documents/rho-matlab/CustomFunctions')
 
 if ops0.diary
-    if workingOnServer
+    if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
     else
         diary (strcat(HOME_DIR2, '/logs/dataGenDiary_', num2str(gDate), '_', num2str(gRun)))
@@ -53,7 +53,7 @@ fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
     db.session, ...
     db.date)
 
-if workingOnServer
+if workingOnServer == 1
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 else
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
