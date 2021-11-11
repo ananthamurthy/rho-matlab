@@ -551,7 +551,7 @@ if profilerTest
     %[diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
     gDate2 = 20211111; %For example datasets - Profiler On
     gRun2 = 1;
-    nSets = 9;
+    nSets = 3;
     nMethods = input.nMethods;
     runTime = zeros(nSets, nMethods+1);
     for iSet = 1:nSets
@@ -578,7 +578,7 @@ if profilerTest
             end
             sprintf('Analysis of %i datasets by %s took %d mins.\n', num2str(3), char(methodLabels(myMethod)), elapsedTime/60)
             
-            runTime(iSet, method) = elapsedTime/60;
+            runTime(iSet, myMethod) = elapsedTime/60;
         end
     end
 else % Manually add values
