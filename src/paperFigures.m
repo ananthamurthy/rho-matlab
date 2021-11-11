@@ -697,6 +697,7 @@ ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 lgd = legend(algoLabels);
+lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 
@@ -759,6 +760,7 @@ ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 lgd = legend(algoLabels);
+lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp1);
@@ -819,6 +821,7 @@ ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 lgd = legend(algoLabels);
+lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR1);
@@ -879,6 +882,7 @@ ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 lgd = legend(algoLabels);
+lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 % Concordance
