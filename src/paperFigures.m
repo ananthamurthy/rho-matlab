@@ -206,7 +206,7 @@ for obs = 1:length(Y)
 end
 
 input.plotOptimalPoint = 0;
-figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %Extra colormap options: inferno/plasma/viridis/magma
 %C = distinguishable_colors(input.nMethods);
 C = linspecer(input.nMethods);
@@ -938,7 +938,6 @@ for algo = 1:nConcordanceAlgos
     results(algo, 3) = 2 * results(algo, 1) * results(algo, 2)/(results(algo, 1) + results(algo, 2)); %F1 Score
 end
 
-figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 legendLabels = {'Recall', 'Precision', 'F1 Score'};
 
 subplot(3, 2, [5, 6])
