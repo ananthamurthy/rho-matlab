@@ -582,14 +582,14 @@ if profilerTest
         end
     end
 else % Manually add values
-    runTime = [11/60, 23.54, 7.48, 21.47, 0.04, 0.25, 160.71];
+    %runTime = [];
 end
 meanRunTime = mean(runTime, 1);
 stdRunTime = std(runTime, 1);
+
 subplot(10, 8, [70:72, 78:80])
 hAx=axes;
 hAx.YScale = 'log';
-
 errorbar(meanRunTime', stdRunTime')
 xlim([1, 7])
 axis tight
