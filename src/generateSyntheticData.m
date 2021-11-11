@@ -13,7 +13,7 @@ if profilerTest
 end
 
 tic
-close all
+%close all
 
 %% Operations
 saveData        = 1;
