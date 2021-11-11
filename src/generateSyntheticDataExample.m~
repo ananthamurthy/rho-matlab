@@ -11,12 +11,12 @@ gDate = 20211020;
 gRun = 1;
 workingOnServer = 2;
 
-if workingOnServer == 1
+if workingOnServer
     HOME_DIR = '/home/bhalla/ananthamurthy/';
 elseif workingOnServer == 2
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/media/ananth/Storage/';
-    %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 else
     HOME_DIR = '/Users/ananth/Documents/';
     HOME_DIR2 = '/Users/ananth/Desktop/';
