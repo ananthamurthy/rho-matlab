@@ -1,5 +1,6 @@
 function runTime = profilerTest(gDate, nSets, nMethods, workingOnServer, diaryOn)
 
+methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
 myProfilerTest = 1;
 if myProfilerTest
     % Runtime and profile - Synthesis % Analysis
