@@ -164,7 +164,7 @@ set(fig1, 'Position', [100, 300, 900, 1200])
 C = linspecer(6);
 for myCase = 1:8
     %cell = randi(100);
-    cell = 52;
+    cell = 31;
     
     a = squeeze(sdo_batch(myCase).syntheticDATA(cell, 1:5, :));
     
@@ -190,11 +190,11 @@ for myCase = 1:8
     
     if mod(myCase, 2) ~= 0
         for trial =  1:5
-            plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(2, :))
+            plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(2, :), 'LineWidth', 1.5)
             %set(gca,'XTick',[])
             %set(gca,'YTick',[])
             xlim([1 246])
-            ylim([-200 500])
+            ylim([-200 800])
             hold on
         end
         hold off
@@ -209,21 +209,21 @@ for myCase = 1:8
     else
         if myCase == 1 %High Noise
             for trial = 1:1
-                plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(1, :))
+                plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(1, :), 'LineWidth', 1.5)
                 %set(gca,'XTick',[])
                 %set(gca,'YTick',[])
                 xlim([1 246])
-                ylim([-200 1000])
+                ylim([-200 800])
                 hold on
             end
             hold off
         else
             for trial = 1:5
-                plot((a(trial, :)*100) + (trial-1)*80, 'Color', C(1, :))
+                plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(1, :), 'LineWidth', 1.5)
                 %set(gca,'XTick',[])
                 %set(gca,'YTick',[])
                 xlim([1 246])
-                ylim([-200 500])
+                ylim([-200 800])
                 hold on
             end
             hold off

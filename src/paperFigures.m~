@@ -27,7 +27,7 @@ if workingOnServer == 1 %Bebinca
     input.nDatasets = 417;
     
     % Consolidated Analysis Details
-    input.cDate = 20210918; %consolidation date @!!!!!
+    input.cDate = 20210918; %consolidation date
     input.cRun = 1; %consolidation run number
     
 elseif workingOnServer == 2 %Adama
@@ -41,7 +41,7 @@ elseif workingOnServer == 2 %Adama
     input.cRun = 2; %consolidation run number
 end
 
-%workingOnServer = 0; %Current
+workingOnServer = 0; %Current
 diaryOn         = 0;
 
 
@@ -556,7 +556,7 @@ if profilerTest
         
         [~, elapsedTime] = generateSyntheticData(20211029, 2, 0, 0, 1);
         
-        for myMethod = 1:nMethods+1
+        for myMethod = 1:nMethod+1
             if myMethod == 1
                 %use the elapsedTime for generation
                 %Offset by 1
@@ -653,7 +653,13 @@ for iSet = 1:nSets
     end
 
     for shuffle = 1:nShuffles
-        myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        if shuffle == 1
+            myCells = 1:input.nCells;
+        elseif shuffle == 2
+            myCells = input.nCells+1: input.nCells*2;
+        elseif shuffle == 3
+            myCells = (input.nCells*2)+1: input.nCells*3;
+        end
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
@@ -685,9 +691,9 @@ title('The Effect of Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'5', '15', '30'})
+xticklabels({'5%', '15%', '30%'})
 %xtickangle(45)
-xlabel('Noise (as %)', ...
+xlabel('Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...
@@ -715,7 +721,13 @@ for iSet = 1:nSets
     end
     
     for shuffle = 1:nShuffles
-        myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        if shuffle == 1
+            myCells = 1:input.nCells;
+        elseif shuffle == 2
+            myCells = input.nCells+1: input.nCells*2;
+        elseif shuffle == 3
+            myCells = (input.nCells*2)+1: input.nCells*3;
+        end
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
@@ -747,7 +759,7 @@ title('The Effect of Event Widths', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'30', '50', '70'})
+xticklabels({'30th', '50th', '70th'})
 %xtickangle(45)
 xlabel('Event Widths (as percentiles)', ...
     'FontSize', figureDetails.fontSize, ...
@@ -775,8 +787,15 @@ for iSet = 1:nSets
     end
     
     for shuffle = 1:nShuffles
-        myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
-        [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
+        if shuffle == 1
+            myCells = 1:input.nCells;
+        elseif shuffle == 2
+            myCells = input.nCells+1: input.nCells*2;
+        elseif shuffle == 3
+            myCells = (input.nCells*2)+1: input.nCells*3;
+            [results1, results2, results3] = compareAgainstTruth(X(myCells, :), Y(myCells), input);
+        end
+        
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
@@ -807,9 +826,9 @@ title('The Effect of Imprecision', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'2', '5', '7'})
+xticklabels({'2 frames', '5 frames', '7 frames'})
 %xtickangle(45)
-xlabel('Normal Imprecision (as frames)', ...
+xlabel('Normal Imprecision', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...
@@ -824,19 +843,26 @@ set(gca, 'FontSize', figureDetails.fontSize)
 
 for iSet = 1:nSets
     if iSet == 1
-        Xeffect = X1;
-        Yeffect = Y1;
+        X = X1;
+        Y = Y1;
     elseif iSet == 2
-        Xeffect = X2;
-        Yeffect = Y2;
+        X = X2;
+        Y = Y2;
     elseif iSet == 3
-        Xeffect = X3;
-        Yeffect = Y3;
+        X = X3;
+        Y = Y3;
     end
     
     for shuffle = 1:nShuffles
-        myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
-        [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
+        if shuffle == 1
+            myCells = 1:input.nCells;
+        elseif shuffle == 2
+            myCells = input.nCells+1: input.nCells*2;
+        elseif shuffle == 3
+            myCells = (input.nCells*2)+1: input.nCells*3;
+            [results1, results2, results3] = compareAgainstTruth(X(myCells, :), Y(myCells), input);
+        end
+        
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
@@ -867,9 +893,9 @@ title('The Effect of Hit Trial Ratio', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'33', '66', '100'})
+xticklabels({'33%', '66%', '100%'})
 %xtickangle(45)
-xlabel('Hit Trial Ratio (as %)', ...
+xlabel('Hit Trial Ratio', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...
@@ -970,6 +996,6 @@ print(sprintf('%s/Resource-%i-%i-%i-%i-%i_%i', ...
 
 disp('... Sensitivity and Resource Plotted.')
 
-elapsedTime2 = toc;
-fprintf('Elapsed Time: %.4f seconds\n', elapsedTime2)
+elapsedTime = toc;
+fprintf('Elapsed Time: %.4f seconds\n', elapsedTime)
 disp('... All Done!')
