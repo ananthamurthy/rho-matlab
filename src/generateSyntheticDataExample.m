@@ -159,7 +159,7 @@ for runi = 1:1:nDatasets
 end
 
 %% Plots
-figureDetails = compileFigureDetails(16, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 fig1 = figure(1);
 clf
 set(fig1, 'Position', [100, 300, 900, 1200])
