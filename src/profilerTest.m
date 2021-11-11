@@ -1,11 +1,12 @@
+function runTime = profilerTest()
+
 myProfilerTest = 1;
 if myProfilerTest
     % Runtime and profile - Synthesis % Analysis
     %[diagnostics] = generateSyntheticData(20211029, 2, 0, 0, 1);
     gDate2 = 20211111; %For example datasets - Profiler On
-    gRun2 = 1;
-    nSets = 3;
-    nMethods = input.nMethods;
+    nSets = 4;
+    nMethods = 6;
     runTime = zeros(nSets, nMethods+1);
     for iSet = 1:nSets
         gRun2 = iSet; %For example datasets - Profiler On
@@ -34,4 +35,5 @@ if myProfilerTest
             runTime(iSet, myMethod) = elapsedTime/60;
         end
     end
+end
 end
