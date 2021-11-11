@@ -544,7 +544,8 @@ legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 
 disp('Loading run times ...')
-runtimeFilePath = '/HOMEDIR/rho-matlab/runtimes.mat';
+runtimeFilePath = sprintf('/%s/rho-matlab/runtimes.mat', ...
+    HOME_DIR);
 load(runtimeFilePath)
 disp('... done!')
 
