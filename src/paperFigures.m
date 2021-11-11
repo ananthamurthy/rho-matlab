@@ -301,7 +301,7 @@ for method = 1:input.nMethods
         'FontWeight', 'bold')
     
     if method == 1
-        xlim([0, 0.02])
+        xlim([0, 0.005])
     elseif method == 2
         xlim([0, 0.02])
     elseif method == 3
