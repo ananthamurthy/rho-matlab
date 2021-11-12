@@ -559,7 +559,7 @@ errorbar(meanRunTime', stdRunTime', 'ro', 'MarkerSize', 10, 'CapSize', 10)
 %xlim([1, 7])
 xticks([1, 2, 3, 4, 5, 6, 7])
 %ylim([0, 80])
-yticks([0, 10, 20, 30, 40, 50, 60, 70, 80])
+yticks([0, 20, 40, 60, 80, 100])
 axis tight
 title('Runtimes', ...
     'FontSize', figureDetails.fontSize, ...
