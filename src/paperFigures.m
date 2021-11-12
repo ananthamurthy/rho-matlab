@@ -555,7 +555,7 @@ stdRunTime = std(runTime, 1);
 
 subplot(10, 8, [70:72, 78:80])
 %boxplot(runTime, procedureLabels)
-errorbar(meanRunTime', stdRunTime', '.')
+errorbar(meanRunTime', stdRunTime', 'o', 'MarkerSize', 10)
 xlim([1, 7])
 axis tight
 title('Runtimes', ...
