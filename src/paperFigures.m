@@ -258,6 +258,8 @@ metricLabels = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
 legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
+procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};
+
 %% Plots - IV
 %%
 disp('Plotting Scores and Comparisions ...')
@@ -548,13 +550,11 @@ runtimeFilePath = [HOME_DIR 'rho-matlab/runtimes.mat'];
 load(runtimeFilePath)
 disp('... done!')
 
-meanRunTime = mean(runTime, 1);
-stdRunTime = std(runTime, 1);
+%meanRunTime = mean(runTime, 1);
+%stdRunTime = std(runTime, 1);
 
 subplot(10, 8, [70:72, 78:80])
-hAx=axes;
-hAx.YScale = 'log';
-errorbar(meanRunTime', stdRunTime')
+boxplot(runTime, procedureLabels)
 xlim([1, 7])
 axis tight
 title('Runtimes', ...
@@ -566,7 +566,7 @@ xlabel('Procedures', ...
 ylabel('log(time/min.)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-xticklabels({'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'})
+xticklabels(procedureLabels)
 xtickangle(45)
 %set(gca,'xtick',[]) legend({'1/8 Algorithms', '2/8 Algorithms', '3/8
 %Algorithms'})
