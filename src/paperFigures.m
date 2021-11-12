@@ -550,11 +550,12 @@ runtimeFilePath = [HOME_DIR 'rho-matlab/runtimes.mat'];
 load(runtimeFilePath)
 disp('... done!')
 
-%meanRunTime = mean(runTime, 1);
-%stdRunTime = std(runTime, 1);
+meanRunTime = mean(runTime, 1);
+stdRunTime = std(runTime, 1);
 
 subplot(10, 8, [70:72, 78:80])
-boxplot(runTime, procedureLabels)
+%boxplot(runTime, procedureLabels)
+errorbar(meanRunTime', stdRunTime', '.')
 xlim([1, 7])
 axis tight
 title('Runtimes', ...
@@ -563,7 +564,7 @@ title('Runtimes', ...
 xlabel('Procedures', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('log(time/min.)', ...
+ylabel('Time (mins.)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticklabels(procedureLabels)
