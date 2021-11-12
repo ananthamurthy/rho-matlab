@@ -8,8 +8,8 @@ cellOrder = 'basic'; %basic or random
 maxHitTrialPercent = 100; %in %
 hitTrialPercentAssignment = 'random'; %fixed or random
 trialOrder = 'random'; %basic or random
-eventWidth = {50, 'stddev'}; %{location, width}; e.g. - {percentile, stddev}
-eventAmplificationFactor = 10;
+eventWidth = {50, 1}; %{percentile, range}
+eventAmplificationFactor = 1;
 eventTiming = 'sequential'; %sequential or random
 startFrame = 116; %Try to leave a good set of frames (depending on sampling rate) as buffer
 endFrame = 123; %Try to leave a good set of frames (depending on sampling rate) as buffer
@@ -22,669 +22,283 @@ comment = 'anything you like'
 Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}
-%%
-i = 0;
+%% Parameter Sensitivity Analysis (PSA)
+%Synthetic Data Parameters - Batch
+N = 3;
+count = 0;
+%Sequential Timing
+%PSA - Time cell percents with 'basic' order
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = value;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'basic';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(1:10)
 
-%% Noise
-%1
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Time cell percents with 'random' order
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = value;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'basic';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(11:20)
 
-%2
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Max Hit Trial Percents with 'fixed' assignment
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = value;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'basic';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(21:30)
 
-%3
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Max Hit Trial Percents with 'random' assignment
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = value;
+        sdcp(count).hitTrialPercentAssignment = 'random';
+        sdcp(count).trialOrder = 'basic';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(31:40)
 
-%4
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 15;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Max Hit Trial Percents with 'fixed' assignment, 'random' trial order
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = value;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(41:50)
 
-%5
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 15;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Max Hit Trial Percents with 'random' assignment, 'random' trial order
+for value = 10:10:100
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = value;
+        sdcp(count).hitTrialPercentAssignment = 'random';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(51:60)
 
-%6
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 15;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Event Widths (percentiles)
+for value = 10:10:70
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {value, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(61:67)
 
-%7
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 15;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Event Widths (percentiles) with standard deviations
+for value = 10:10:70
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {value, 1};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(68:74)
 
-%8
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 30;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Uniform Imprecisions
+for value = 1:2:20
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = value;
+        sdcp(count).imprecisionType = 'uniform';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(75:84)
 
-%% Event Width
-%9
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {30, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Normal Imprecisions
+for value = 1:2:20
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = value;
+        sdcp(count).imprecisionType = 'normal';
+        sdcp(count).noise = 'none';
+        sdcp(count).noisePercent = 5;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(85:94)
 
-%10
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {30, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%11
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {30, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%12
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {50, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%13
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {50, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%14
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {50, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%15
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%16
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%17
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%18
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {100, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%% Imprecision
-%19
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 2;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%20
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 2;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%21
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 2;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%22
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 7;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%23
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 7;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%24
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 7;
-sdcp(i).imprecisionType = 'normal';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%% Hit Trial Ratio
-%25
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 33;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%26
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 33;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%27
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 33;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%28
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%29
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%30
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 66;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%31
-i = i + 1;
-sdcp(i).timeCellPercent = 1;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%32
-i = i + 1;
-sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
-
-%33
-i = i + 1;
-sdcp(i).timeCellPercent = 100;
-sdcp(i).cellOrder = 'basic';
-sdcp(i).maxHitTrialPercent = 100;
-sdcp(i).hitTrialPercentAssignment = 'random';
-sdcp(i).trialOrder = 'basic';
-sdcp(i).eventWidth = {70, 1};
-sdcp(i).eventAmplificationFactor = 1;
-sdcp(i).eventTiming = 'sequential';
-sdcp(i).startFrame = 75;
-sdcp(i).endFrame = 150;
-sdcp(i).imprecisionFWHM = 0;
-sdcp(i).imprecisionType = 'none';
-sdcp(i).noise = 'none';
-sdcp(i).noisePercent = 0;
-sdcp(i).randomseed = 'default';
-sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
-rng(sdcp(i).randomseed)
+%PSA - Noise (only Gaussian type)
+%for value = 10:10:100
+for value = 10:10:50
+    for shuffles = 1:N
+        count = count + 1;
+        sdcp(count).timeCellPercent = 50;
+        sdcp(count).cellOrder = 'random';
+        sdcp(count).maxHitTrialPercent = 100;
+        sdcp(count).hitTrialPercentAssignment = 'fixed';
+        sdcp(count).trialOrder = 'random';
+        sdcp(count).eventWidth = {100, 0};
+        sdcp(count).eventAmplificationFactor = 1;
+        sdcp(count).eventTiming = 'sequential';
+        sdcp(count).startFrame = 75;
+        sdcp(count).endFrame = 150;
+        sdcp(count).imprecisionFWHM = 0;
+        sdcp(count).imprecisionType = 'none';
+        sdcp(count).noise = 'gaussian';
+        sdcp(count).noisePercent = value;
+        sdcp(count).randomseed = 'shuffle';
+        sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
+        rng(sdcp(count).randomseed)
+    end
+end
+%N*(95:99)

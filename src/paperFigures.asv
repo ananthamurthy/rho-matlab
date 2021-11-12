@@ -253,7 +253,7 @@ correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
 
 %Labels
 algoLabels = {'A-Boot', 'B-Boot', 'C-Boot', 'C-Otsu', 'D-Otsu', 'E-Otsu', 'F-Boot', 'F-Otsu'};
-concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '=8'};
+concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '>=8'};
 metricLabels = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
@@ -542,8 +542,7 @@ ylabel('Counts', ...
 xticklabels(algoLabels)
 xtickangle(45)
 %set(gca,'xtick',[])
-lgd = legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'});
-lgd.FontSize = figureDetails.fontSize-3;
+legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 
 disp('Loading run times ...')
@@ -557,11 +556,10 @@ stdRunTime = std(runTime, 1);
 subplot(10, 8, [70:72, 78:80])
 %boxplot(runTime, procedureLabels)
 errorbar(meanRunTime', stdRunTime', 'ro', 'MarkerSize', 10, 'CapSize', 10)
-set(gca,'YScale','log')
 %xlim([1, 7])
 xticks([1, 2, 3, 4, 5, 6, 7])
-ylim([1, 100])
-yticks([1, 10, 100])
+%ylim([0, 80])
+yticks([0, 20, 40, 60, 80, 100])
 axis tight
 title('Runtimes', ...
     'FontSize', figureDetails.fontSize, ...
@@ -569,7 +567,7 @@ title('Runtimes', ...
 xlabel('Procedures', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('log(time/mins.)', ...
+ylabel('Time (mins.)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticklabels(procedureLabels)
@@ -725,7 +723,7 @@ subplot(3, 2, 2)
 errorbar(meanBundledResults3', stdBundledResults3', ...
     'LineWidth', figureDetails.lineWidth, ...
     'CapSize', 10)
-title('The Effect of Event Width', ...
+title('The Effect of Event Widths', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
@@ -792,7 +790,7 @@ title('The Effect of Imprecision', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'0', '33', '66'})
+xticklabels({'2', '5', '7'})
 %xtickangle(45)
 xlabel('Normal Imprecision (as frames)', ...
     'FontSize', figureDetails.fontSize, ...
@@ -829,9 +827,6 @@ end
 
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
-
-meanBundledResults3(isnan(meanBundledResults3)) = 0;
-stdBundledResults3(isnan(stdBundledResults3)) = 0;
 
 %Student's t-test (2 sample)
 for myMethod1 = 1:input.nMethods
