@@ -39,7 +39,9 @@ ESSENTIAL STEPS:
      // Depending on the experiment I had 3 different config files in configSynth.m:
 
       a) setupSyntheticDataParams %Loads all options for Physiology (N=360)
+      
       b) setupSyntheticDataParams2 %Loads all options for PSA (N=297)
+      
       c) setupSyntheticDataParams3 %Loads all options for Physiology and PSA (N=417)
 
       // Use your choice or make a new config file, as required.
