@@ -1,5 +1,18 @@
 function runTime = profilerTest(gDate, nSets, nMethods, workingOnServer, diaryOn)
 
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    %saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/media/ananth/Storage/';
+    %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+else
+    HOME_DIR = '/Users/ananth/Documents/';
+    HOME_DIR2 = '/Users/ananth/Desktop/';
+    %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+
 procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
 myProfilerTest = 1;
 if myProfilerTest
@@ -32,5 +45,7 @@ if myProfilerTest
             runTime(iSet, myMethod) = elapsedTime/60;
         end
     end
+    save([HOME_DIR 'rho-matlab/runtimes.mat'])
 end
+
 end
