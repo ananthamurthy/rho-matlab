@@ -4,7 +4,7 @@ The code base is to use pre-existing physiology data from calcium imaging to gen
 Before you begin:
 All data used has been processed for cell masks and roi detection using Suite-2p (https://www.suite2p.org).
 Any other cell detection system will also work, but with appropriate modifications.
-Here, I have provided an example dataset with the repository - M26_20180514.mat
+Here, I have provided an example dataset with the repository - "M26_20180514.mat"
 
 --> Create a directory according to:
 HOME_DIR/Work/Analysis/Imaging/MouseName/RecordingDate/
@@ -36,7 +36,7 @@ ESSENTIAL STEPS:
 
 4. Use "generateSyntheticData.m" to generate synthetic data configured in "setupSyntheticDataParams.m"
 
-     // Depending on the experiment I had 3 different config files in configSynth.m:
+     // Depending on the experiment I had 3 different config files in "configSynth.m":
 
         a) setupSyntheticDataParams %Loads all options for Physiology (N=360)
       
