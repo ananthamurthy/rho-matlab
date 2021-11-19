@@ -639,6 +639,9 @@ end
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
+meanBundledResults3(isnan(meanBundledResults3)) = 0;
+stdBundledResults3(isnan(stdBundledResults3)) = 0;
+
 %Student's t-test (2 sample)
 for myMethod1 = 1:input.nMethods
     for myMethod2 = 1:input.nMethods
@@ -664,7 +667,7 @@ title('The Effect of Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'5', '15', '30'})
+xticklabels({'10', '40', '70'})
 %xtickangle(45)
 xlabel('Noise (as %)', ...
     'FontSize', figureDetails.fontSize, ...
@@ -672,8 +675,8 @@ xlabel('Noise (as %)', ...
 ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-lgd = legend(algoLabels);
-lgd.FontSize = figureDetails.fontSize-3;
+%lgd = legend(algoLabels);
+%lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 
@@ -704,6 +707,9 @@ end
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
+meanBundledResults3(isnan(meanBundledResults3)) = 0;
+stdBundledResults3(isnan(stdBundledResults3)) = 0;
+
 %Student's t-test (2 sample)
 for myMethod1 = 1:input.nMethods
     for myMethod2 = 1:input.nMethods
@@ -729,7 +735,7 @@ title('The Effect of Event Width', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'30', '50', '70'})
+xticklabels({'30', '60', '90'})
 %xtickangle(45)
 xlabel('Event Widths (as percentiles)', ...
     'FontSize', figureDetails.fontSize, ...
@@ -767,6 +773,9 @@ end
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
+meanBundledResults3(isnan(meanBundledResults3)) = 0;
+stdBundledResults3(isnan(stdBundledResults3)) = 0;
+
 %Student's t-test (2 sample)
 for myMethod1 = 1:input.nMethods
     for myMethod2 = 1:input.nMethods
@@ -800,8 +809,8 @@ xlabel('Normal Imprecision (as frames)', ...
 ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-lgd = legend(algoLabels);
-lgd.FontSize = figureDetails.fontSize-3;
+%lgd = legend(algoLabels);
+%lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR1);
@@ -858,16 +867,16 @@ title('The Effect of Hit Trial Ratio', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticks([1, 2, 3])
-xticklabels({'33', '66', '100'})
+xticklabels({'33', '66', '99'})
 %xtickangle(45)
-xlabel('Hit Trial Ratio (as %)', ...
+xlabel('Max Hit Trial Ratio (as %)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-lgd = legend(algoLabels);
-lgd.FontSize = figureDetails.fontSize-3;
+%lgd = legend(algoLabels);
+%lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 % Concordance
