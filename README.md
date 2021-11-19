@@ -8,6 +8,7 @@ Here, I have provided an example dataset with the repository - M26_20180514.mat
 
 --> Create a directory according to:
 HOME_DIR/Work/Analysis/Imaging/MouseName/RecordingDate/
+
 e.g. - /home/bhalla/ananthamurthy/Work/Analysis/Imaging/M26/20180514/
 
 --> Copy M26_20180514.mat into the aforementioned directory. Now, the physiology dataset is in place, the code base can be run.
