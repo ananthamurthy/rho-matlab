@@ -16,7 +16,7 @@ e.g. - /home/bhalla/ananthamurthy/Work/Analysis/Imaging/M26/20180514/
 
 ESSENTIAL STEPS:
 
-1. The first step is to get a reasonable recording of a decent number of cells. I'd recommend N to be around 100 but any number is fine.
+1. The first step is to get a reasonable recording of a decent number of cells. I'd recommend N to be at least 100 but any number is fine.
 
 2. Use Suite2P to detect cells as ROIs.
 
