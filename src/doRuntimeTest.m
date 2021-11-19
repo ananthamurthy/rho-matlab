@@ -43,7 +43,8 @@ if myProfilerTest
             runTime(iSet, myProcedure) = elapsedTime/60;
         end
     end
-    save([HOME_DIR 'rho-matlab/runtimes.mat'])
+    save([HOME_DIR 'rho-matlab/runtimes.mat'], ...
+        'runTime')
 end
 
 end
