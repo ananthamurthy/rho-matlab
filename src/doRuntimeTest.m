@@ -13,7 +13,7 @@ else
     %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 
-procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
+procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'};
 myProfilerTest = 1;
 if myProfilerTest
     % Runtime and profile - Synthesis % Analysis

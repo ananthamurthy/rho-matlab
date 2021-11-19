@@ -1,4 +1,3 @@
-%% SETUP HARVEST PARAMETERS - All Methods (PSA)
 job = 0;
 %1
 job = job + 1;
