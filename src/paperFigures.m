@@ -33,12 +33,12 @@ if workingOnServer == 1 %Bebinca
     
 elseif workingOnServer == 2 %Adama
     % Synthetic Dataset Details
-    input.gDate = 20211114; %generation date
+    input.gDate = 20211120; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 417;
     
     % Consolidated Analysis Details
-    input.cDate = 20211118; %consolidation date
+    input.cDate = 20211124; %consolidation date
     input.cRun = 1; %consolidation run number
 end
 
