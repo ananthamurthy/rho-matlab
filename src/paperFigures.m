@@ -315,10 +315,11 @@ for method = 1:input.nMethods
     elseif method == 6
         xlim([0, 1])
     end
-    
-    lgd = legend({'Time Cells'}, ...
-        'Location', 'best');
-    lgd.FontSize = figureDetails.fontSize-3;
+    if method == 1
+        lgd = legend({'Time Cells'}, ...
+            'Location', 'best');
+        lgd.FontSize = figureDetails.fontSize-3;
+    end
     set(gca, 'FontSize', figureDetails.fontSize)
     
     subplot(16, 2, subplotNum+4)
@@ -350,9 +351,11 @@ for method = 1:input.nMethods
         xlim([0, 1])
     end
     
-    lgd = legend({'Other Cells'}, ...
-        'Location', 'best');
-    lgd.FontSize = figureDetails.fontSize-3;
+    if method == 1
+        lgd = legend({'Other Cells'}, ...
+            'Location', 'best');
+        lgd.FontSize = figureDetails.fontSize-3;
+    end
     set(gca, 'FontSize', figureDetails.fontSize)
     
 end
@@ -411,7 +414,7 @@ ylabel('True Positive Rate', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 lgd1 = legend(methodLabels, ...
-    'Location', 'best');
+    'Location', 'southeastoutside');
 lgd1.FontSize = figureDetails.fontSize-3;
 
 set(gca, 'FontSize', figureDetails.fontSize)
@@ -481,8 +484,10 @@ for algo = 1:input.nAlgos
     colorbar
     colormap(linspecer)
     
-    if algo ~= 4
-        set(colorbar,'visible','off')
+    if algo == 4 || algo == 8
+        set(colorbar,'visible','on')
+    else
+        set(colorbar, 'visible', 'off')
     end
     
     if algo == 5
@@ -517,7 +522,7 @@ ylabel('Rate', ...
 xticklabels(algoLabels)
 xtickangle(45)
 lgd = legend({'Recall', 'Precision', 'F1 Score'}, ...
-    'Location', 'best');
+    'Location', 'southeast');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
@@ -659,30 +664,57 @@ for myMethod1 = 1:input.nMethods
     end
 end
 
-subplot(3, 2, 1)
+subplot(4, 2, 2)
+%yyaxis left
+b1 = bar(meanBundledResults3(:, 1));
+b1.FaceColor = C(2, :);
+title('Physiological Regime', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+ylabel('Baseline F1 Score', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
+xtickangle(45)
+set(gca, 'FontSize', figureDetails.fontSize)
+
+%set(b1,'FaceAlpha', 0.5)
+dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(70-10);
+myBarPlot(:, 1) = meanBundledResults3(:, 1);
+myBarPlot(:, 2) = dependence;
+subplot(4, 2, 3)
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
-h = heatmap(meanBundledResults3, ...
-    'Colormap', flipud(linspecer), ...
-    'Title', 'The Effect of Noise', ...
-    'CellLabelColor','none');
-h.ColorbarVisible = 'off';
-h.XDisplayLabels = {'10', '40', '70'};
-h.YDisplayLabels = algoLabels;
-% title('The Effect of Noise', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+% h = heatmap(meanBundledResults3, ...
+%     'Colormap', flipud(linspecer), ...
+%     'Title', 'The Effect of Noise', ...
+%     'CellLabelColor','none');
+% h.ColorbarVisible = 'off';
+% h.XDisplayLabels = {'10', '40', '70'};
+% h.YDisplayLabels = algoLabels;
+
+
+%yyaxis right
+b2 = bar(dependence);
+b2.FaceColor = C(1, :);
+ylabel('\Delta F1 Score/\Delta Noise', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+%set(b2,'FaceAlpha', 0.5)
+
+title('Noise (%)', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
 % xticks([1, 2, 3])
 % xticklabels({'10', '40', '70'})
-%xtickangle(45)
-h.XLabel = 'Noise (as %)';
+xtickangle(45)
+%h.XLabel = 'Noise (as %)';
 % xlabel('Noise (as %)', ...
 %     'FontSize', figureDetails.fontSize, ...
 %     'FontWeight', 'bold')
-% ylabel('F1 Score', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+
 %lgd = legend(algoLabels);
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
@@ -734,33 +766,49 @@ for myMethod1 = 1:input.nMethods
         end
     end
 end
-
-subplot(3, 2, 2)
+dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(90-30);
+myBarPlot(:, 1) = meanBundledResults3(:, 1);
+myBarPlot(:, 2) = dependence;
+subplot(4, 2, 4)
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
-h = heatmap(meanBundledResults3, ...
-    'Colormap', flipud(linspecer), ...
-    'Title', 'The Effect of Event Width', ...
-    'CellLabelColor','none');
-h.XDisplayLabels = {'30', '60', '90'};
-%h.YDisplayLabels = algoLabels;
-h.YDisplayLabels = {'', '', '', '', '', '', '', ''};
-% title('The Effect of Event Width', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
-% xticks([1, 2, 3])
-% xticklabels({'30', '60', '90'})
-%xtickangle(45)
-h.XLabel = 'Event Width (as percentiles)';
-% xlabel('Event Width (as percentiles)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+% h = heatmap(meanBundledResults3, ...
+%     'Colormap', flipud(linspecer), ...
+%     'Title', 'The Effect of Noise', ...
+%     'CellLabelColor','none');
+% h.ColorbarVisible = 'off';
+% h.XDisplayLabels = {'10', '40', '70'};
+% h.YDisplayLabels = algoLabels;
+% yyaxis left
+% b1 = bar(meanBundledResults3(:, 2));
 % ylabel('F1 Score', ...
 %     'FontSize', figureDetails.fontSize, ...
 %     'FontWeight', 'bold')
-% lgd = legend(algoLabels);
-% lgd.FontSize = figureDetails.fontSize-3;
+% set(b1,'FaceAlpha', 0.5)
+
+%yyaxis right
+b2 = bar(dependence);
+b2.FaceColor = C(1, :);
+ylabel('\Delta F1 Score/\Delta EW', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+%set(b2,'FaceAlpha', 0.5)
+
+title('EW (%ile)', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
+% xticks([1, 2, 3])
+% xticklabels({'10', '40', '70'})
+xtickangle(45)
+%h.XLabel = 'Noise (as %)';
+% xlabel('Noise (as %)', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
+
+%lgd = legend(algoLabels);
+%lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 [Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp1);
@@ -808,31 +856,47 @@ for myMethod1 = 1:input.nMethods
         end
     end
 end
-
-subplot(3, 2, 3)
+dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(66-0);
+myBarPlot(:, 1) = meanBundledResults3(:, 1);
+myBarPlot(:, 2) = dependence;
+subplot(4, 2, 5)
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
-h = heatmap(meanBundledResults3, ...
-    'Colormap', flipud(linspecer), ...
-    'Title', 'The Effect of Imprecision', ...
-    'CellLabelColor','none');
-h.ColorbarVisible = 'off';
-h.XDisplayLabels = {'0', '33', '66'};
-h.YDisplayLabels = algoLabels;
-% title('The Effect of Imprecision', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
-% xticks([1, 2, 3])
-% xticklabels({'0', '33', '66'})
-%xtickangle(45)
-h.XLabel = 'Normal Imprecision (as frames)';
-% xlabel('Normal Imprecision (as frames)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+% h = heatmap(meanBundledResults3, ...
+%     'Colormap', flipud(linspecer), ...
+%     'Title', 'The Effect of Noise', ...
+%     'CellLabelColor','none');
+% h.ColorbarVisible = 'off';
+% h.XDisplayLabels = {'10', '40', '70'};
+% h.YDisplayLabels = algoLabels;
+% yyaxis left
+% b1 = bar(meanBundledResults3(:, 1));
 % ylabel('F1 Score', ...
 %     'FontSize', figureDetails.fontSize, ...
 %     'FontWeight', 'bold')
+% set(b1,'FaceAlpha', 0.5)
+
+%yyaxis right
+b2 = bar(dependence);
+b2.FaceColor = C(1, :);
+ylabel('\Delta F1 Score/\Delta Imp', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+%set(b2,'FaceAlpha', 0.5)
+
+title('Imp. (frames)', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
+% xticks([1, 2, 3])
+% xticklabels({'10', '40', '70'})
+xtickangle(45)
+%h.XLabel = 'Noise (as %)';
+% xlabel('Noise (as %)', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
+
 %lgd = legend(algoLabels);
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
@@ -882,32 +946,47 @@ for myMethod1 = 1:input.nMethods
         end
     end
 end
-
-subplot(3, 2, 4)
+dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(99-33);
+myBarPlot(:, 1) = meanBundledResults3(:, 1);
+myBarPlot(:, 2) = dependence;
+subplot(4, 2, 6)
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
-h = heatmap(meanBundledResults3, ...
-    'Colormap', flipud(linspecer), ...
-    'Title', 'The Effect of Hit Trial Ratio', ...
-    'CellLabelColor','none');
-h.ColorbarVisible = 'off';
-h.XDisplayLabels = {'33', '66', '99'};
-%h.YDisplayLabels = algoLabels;
-h.YDisplayLabels = {'', '', '', '', '', '', '', ''};
-% title('The Effect of Hit Trial Ratio', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
-% xticks([1, 2, 3])
-% xticklabels({'33', '66', '99'})
-%xtickangle(45)
-h.XLabel = 'Max Hit Trial Ratio (as %)';
-% xlabel('Max Hit Trial Ratio (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+% h = heatmap(meanBundledResults3, ...
+%     'Colormap', flipud(linspecer), ...
+%     'Title', 'The Effect of Noise', ...
+%     'CellLabelColor','none');
+% h.ColorbarVisible = 'off';
+% h.XDisplayLabels = {'10', '40', '70'};
+% h.YDisplayLabels = algoLabels;
+% yyaxis left
+% b1 = bar(meanBundledResults3(:, 2));
 % ylabel('F1 Score', ...
 %     'FontSize', figureDetails.fontSize, ...
 %     'FontWeight', 'bold')
+% set(b1,'FaceAlpha', 0.5)
+
+%yyaxis right
+b2 = bar(dependence);
+b2.FaceColor = C(1, :);
+ylabel('\Delta F1 Score/\Delta HTR', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+%set(b2,'FaceAlpha', 0.5)
+
+title('HTR (%)', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
+% xticks([1, 2, 3])
+% xticklabels({'10', '40', '70'})
+xtickangle(45)
+%h.XLabel = 'Noise (as %)';
+% xlabel('Noise (as %)', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
+
 %lgd = legend(algoLabels);
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
@@ -973,12 +1052,12 @@ end
 
 legendLabels = {'Recall', 'Precision', 'F1 Score'};
 
-subplot(3, 2, [5, 6])
+subplot(4, 2, [7, 8])
 d = bar(results);
 xlim([0 5])
 axis tight
 
-xlabel('Concordance Threshold', ...
+xlabel('Classification Concordance Threshold', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('Rate', ...
@@ -987,7 +1066,7 @@ ylabel('Rate', ...
 xticklabels(concordanceAlgoLabels)
 xtickangle(45)
 lgd = legend(legendLabels, ...
-    'Location', 'best');
+    'Location', 'southwest');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
