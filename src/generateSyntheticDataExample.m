@@ -33,8 +33,6 @@ ops0.diary           = 0;
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 ops0.onlyProbeTrials = 0;
 
-addpath('/Users/ananth/Documents/rho-matlab/CustomFunctions')
-
 if ops0.diary
     if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/dataGenDiary'))
@@ -190,7 +188,7 @@ for myCase = 1:8
         myText = 'Hit Trial Ratio - High';
     end
     
-    subplot(4, 2, myCase)
+    subplot(6, 2, myCase)
     
     if mod(myCase, 2) ~= 0
         for trial =  1:5
@@ -241,6 +239,22 @@ for myCase = 1:8
     set(gca, 'FontSize', figureDetails.fontSize)
     clear a
 end
+
+subplot(6, 2, 9:12)
+imagesc(squeeze(mean(sdo_batch(9).syntheticDATA, 2)*100));
+
+xlabel('Trial-Avg. Frames', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+ylabel('All Cells', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+z = colorbar;
+ylabel(z,'dF/F (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+colormap(linspecer)
+
 print(sprintf('%s/Examples', ...
     HOME_DIR2), ...
     '-dpng')

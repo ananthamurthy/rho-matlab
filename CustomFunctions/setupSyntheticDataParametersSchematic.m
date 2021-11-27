@@ -59,7 +59,7 @@ sdcp(i).endFrame = 150;
 sdcp(i).imprecisionFWHM = 0;
 sdcp(i).imprecisionType = 'uniform';
 sdcp(i).noise = 'gaussian';
-sdcp(i).noisePercent = 20;
+sdcp(i).noisePercent = 25;
 sdcp(i).randomseed = 'default';
 sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
 rng(sdcp(i).randomseed)
@@ -170,6 +170,26 @@ sdcp(i).timeCellPercent = 100;
 sdcp(i).cellOrder = 'basic';
 sdcp(i).maxHitTrialPercent = 100;
 sdcp(i).hitTrialPercentAssignment = 'fixed';
+sdcp(i).trialOrder = 'basic';
+sdcp(i).eventWidth = {60, 1};
+sdcp(i).eventAmplificationFactor = 1;
+sdcp(i).eventTiming = 'sequential';
+sdcp(i).startFrame = 75;
+sdcp(i).endFrame = 150;
+sdcp(i).imprecisionFWHM = 0;
+sdcp(i).imprecisionType = 'uniform';
+sdcp(i).noise = 'gaussian';
+sdcp(i).noisePercent = 10;
+sdcp(i).randomseed = 'default';
+sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
+rng(sdcp(i).randomseed)
+
+%% Physiological Regime - Baseline
+i = i + 1;
+sdcp(i).timeCellPercent = 50;
+sdcp(i).cellOrder = 'random';
+sdcp(i).maxHitTrialPercent = 66;
+sdcp(i).hitTrialPercentAssignment = 'random';
 sdcp(i).trialOrder = 'basic';
 sdcp(i).eventWidth = {60, 1};
 sdcp(i).eventAmplificationFactor = 1;

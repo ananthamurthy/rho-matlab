@@ -9,7 +9,7 @@ close all
 clear
 
 tic
-addpath(genpath('/Users/ananth/Documents/rho-matlab/CustomFunctions'))
+addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions'))
 %% Plots - I
 %%
 generateSyntheticDataExample
@@ -255,7 +255,7 @@ correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
 algoLabels = {'A-Boot', 'B-Boot', 'C-Boot', 'C-Otsu', 'D-Otsu', 'E-Otsu', 'F-Boot', 'F-Otsu'};
 concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '=8'};
 metricLabels = {'Recall', 'Precision', 'F1 Score'};
-methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'};
+methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC (C)', 'PCA (D)', 'SVM (E)', 'Param. (F)'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
 legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
 procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};
@@ -455,21 +455,21 @@ title('Confusion Matrices and Performance Evalutation', ...
 for algo = 1:input.nAlgos
     
     if algo == 1
-        subplot(10, 8, 1:2)
+        subplot(12, 8, 1:2)
     elseif algo == 2
-        subplot(10, 8, 3:4)
+        subplot(12, 8, 3:4)
 	elseif algo == 3
-        subplot(10, 8, 5:6)
+        subplot(12, 8, 5:6)
 	elseif algo == 4
-        subplot(10, 8, 7:8)
+        subplot(12, 8, 7:8)
     elseif algo == 5
-        subplot(10, 8, 17:18)
+        subplot(12, 8, 17:18)
     elseif algo == 6
-        subplot(10, 8, 19:20)
+        subplot(12, 8, 19:20)
     elseif algo == 7
-        subplot(10, 8, 21:22)
+        subplot(12, 8, 21:22)
     elseif algo == 8
-        subplot(10, 8, 23:24)
+        subplot(12, 8, 23:24)
     end
     
     imagesc(squeeze(confusionMatrix(algo, :, :)));
@@ -506,23 +506,24 @@ for algo = 1:input.nAlgos
     set(gca, 'FontSize', figureDetails.fontSize)
 end
 
-subplot(10, 8, (40:56))
+subplot(12, 8, (40:48))
 d = bar(results3);
 xlim([0 5])
 axis tight
 title('Predictive Performance Metrics', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-xlabel('All Algorithms', ...
-'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
+% xlabel('All Algorithms', ...
+% 'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
 ylabel('Rate', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
+xticklabels({'', '', '', '', '', '', '', '', })
 xticklabels(algoLabels)
 xtickangle(45)
 lgd = legend({'Recall', 'Precision', 'F1 Score'}, ...
-    'Location', 'southeast');
+    'Location', 'southwest');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
@@ -531,16 +532,16 @@ allUnique = zeros(input.nAlgos, 3);
 allUnique(:, 1) = sum(unique1, 1);
 allUnique(:, 2) = sum(unique2, 1);
 allUnique(:, 3) = sum(unique3, 1);
-subplot(10, 8, [65:67, 73:76])
+subplot(12, 8, (57:72))
 bar(allUnique)
 xlim([1, 8])
 axis tight
 title('Uniquely Identified Time Cells', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-xlabel('All Algorithms', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
+% xlabel('All Algorithms', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
 ylabel('Counts', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -559,9 +560,9 @@ disp('... done!')
 meanRunTime = mean(runTime, 1);
 stdRunTime = std(runTime, 1);
 
-subplot(10, 8, [70:72, 78:80])
+subplot(12, 8, [86:88, 94:96])
 %boxplot(runTime, procedureLabels)
-errorbar(meanRunTime', stdRunTime', 'ro', 'MarkerSize', 10, 'CapSize', 10)
+errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
 set(gca,'YScale','log')
 %xlim([1, 7])
 xticks([1, 2, 3, 4, 5, 6, 7])
@@ -647,31 +648,14 @@ stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 meanBundledResults3(isnan(meanBundledResults3)) = 0;
 stdBundledResults3(isnan(stdBundledResults3)) = 0;
 
-%Student's t-test (2 sample)
-for myMethod1 = 1:input.nMethods
-    for myMethod2 = 1:input.nMethods
-        if myMethod1 ~= myMethod2
-            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
-            
-            if ~isnan(h)
-                if h
-                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
-                else
-                    disp('Failed to reject null hypothesis')
-                end
-            end
-        end
-    end
-end
-
-subplot(4, 2, 2)
+subplot(11, 2, (1:4))
 %yyaxis left
 b1 = bar(meanBundledResults3(:, 1));
 b1.FaceColor = C(2, :);
-title('Physiological Regime', ...
+title('Baseline - Physiological Regime', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('Baseline F1 Score', ...
+ylabel('F1 Score', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticklabels(algoLabels);
@@ -680,9 +664,7 @@ set(gca, 'FontSize', figureDetails.fontSize)
 
 %set(b1,'FaceAlpha', 0.5)
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(70-10);
-myBarPlot(:, 1) = meanBundledResults3(:, 1);
-myBarPlot(:, 2) = dependence;
-subplot(4, 2, 3)
+subplot(11, 2, [7, 9])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
@@ -750,26 +732,8 @@ stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 meanBundledResults3(isnan(meanBundledResults3)) = 0;
 stdBundledResults3(isnan(stdBundledResults3)) = 0;
 
-%Student's t-test (2 sample)
-for myMethod1 = 1:input.nMethods
-    for myMethod2 = 1:input.nMethods
-        if myMethod1 ~= myMethod2
-            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
-            
-            if ~isnan(h)
-                if h
-                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
-                else
-                    disp('Failed to reject null hypothesis')
-                end
-            end
-        end
-    end
-end
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(90-30);
-myBarPlot(:, 1) = meanBundledResults3(:, 1);
-myBarPlot(:, 2) = dependence;
-subplot(4, 2, 4)
+subplot(11, 2, [8, 10])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
@@ -840,26 +804,8 @@ stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 meanBundledResults3(isnan(meanBundledResults3)) = 0;
 stdBundledResults3(isnan(stdBundledResults3)) = 0;
 
-%Student's t-test (2 sample)
-for myMethod1 = 1:input.nMethods
-    for myMethod2 = 1:input.nMethods
-        if myMethod1 ~= myMethod2
-            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
-            
-            if ~isnan(h)
-                if h
-                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
-                else
-                    disp('Failed to reject null hypothesis')
-                end
-            end
-        end
-    end
-end
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(66-0);
-myBarPlot(:, 1) = meanBundledResults3(:, 1);
-myBarPlot(:, 2) = dependence;
-subplot(4, 2, 5)
+subplot(11, 2, [13, 15])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
@@ -880,7 +826,7 @@ subplot(4, 2, 5)
 %yyaxis right
 b2 = bar(dependence);
 b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta Imp', ...
+ylabel('\Delta F1 Score/\Delta Imp.', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
@@ -930,26 +876,8 @@ stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 meanBundledResults3(isnan(meanBundledResults3)) = 0;
 stdBundledResults3(isnan(stdBundledResults3)) = 0;
 
-%Student's t-test (2 sample)
-for myMethod1 = 1:input.nMethods
-    for myMethod2 = 1:input.nMethods
-        if myMethod1 ~= myMethod2
-            [h,p] = ttest2(meanBundledResults3(myMethod1), meanBundledResults3(myMethod2));
-            
-            if ~isnan(h)
-                if h
-                    sprintf('Method: %i vs Method: %i has p = %d', myMethod1, myMethod2, p)
-                else
-                    disp('Failed to reject null hypothesis')
-                end
-            end
-        end
-    end
-end
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(99-33);
-myBarPlot(:, 1) = meanBundledResults3(:, 1);
-myBarPlot(:, 2) = dependence;
-subplot(4, 2, 6)
+subplot(11, 2, [14, 16])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
 %     'CapSize', 10)
@@ -1052,7 +980,7 @@ end
 
 legendLabels = {'Recall', 'Precision', 'F1 Score'};
 
-subplot(4, 2, [7, 8])
+subplot(11, 2, [19:22])
 d = bar(results);
 xlim([0 5])
 axis tight
