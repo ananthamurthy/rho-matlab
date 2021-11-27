@@ -560,6 +560,8 @@ disp('... done!')
 meanRunTime = mean(runTime, 1);
 stdRunTime = std(runTime, 1);
 
+subplot(12, 8, )
+
 subplot(12, 8, [86:88, 94:96])
 %boxplot(runTime, procedureLabels)
 errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
@@ -595,7 +597,8 @@ disp('... Performance Metrics Plotted')
 %% Plots VI
 %%
 disp('Plotting Sensitivity and Resource ...')
-
+x = 1:input.nAlgos;
+joinBundledResults3 = [];
 nSets = 3;
 
 iNoise1 = (298:307); %low
@@ -641,29 +644,19 @@ for iSet = 1:nSets
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
-
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))];
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-meanBundledResults3(isnan(meanBundledResults3)) = 0;
-stdBundledResults3(isnan(stdBundledResults3)) = 0;
-
-subplot(11, 2, (1:4))
-%yyaxis left
-b1 = bar(meanBundledResults3(:, 1));
-b1.FaceColor = C(2, :);
-title('Baseline - Physiological Regime', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-ylabel('F1 Score', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-xtickangle(45)
-set(gca, 'FontSize', figureDetails.fontSize)
-
 %set(b1,'FaceAlpha', 0.5)
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(70-10);
+var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
+var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
+sumVar = var1 + var2;
+for algo = 1:input.nAlgos
+    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(70-10);
+end
+dependence_stderr_pos = dependence_stderr_neg;
 subplot(11, 2, [7, 9])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -684,7 +677,12 @@ ylabel('\Delta F1 Score/\Delta Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
-
+hold on
+er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er.Color = [0 0 0];
+er.LineStyle = 'none';
+hold off
+axis tight
 title('Noise (%)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -725,14 +723,18 @@ for iSet = 1:nSets
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
-
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))];
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-meanBundledResults3(isnan(meanBundledResults3)) = 0;
-stdBundledResults3(isnan(stdBundledResults3)) = 0;
-
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(90-30);
+var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
+var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
+sumVar = var1 + var2;
+for algo = 1:input.nAlgos
+    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(90-30);
+end
+dependence_stderr_pos = dependence_stderr_neg;
 subplot(11, 2, [8, 10])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -758,7 +760,12 @@ ylabel('\Delta F1 Score/\Delta EW', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
-
+hold on
+er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er.Color = [0 0 0];
+er.LineStyle = 'none';
+hold off
+axis tight
 title('EW (%ile)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -797,14 +804,18 @@ for iSet = 1:nSets
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
-
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))];
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-meanBundledResults3(isnan(meanBundledResults3)) = 0;
-stdBundledResults3(isnan(stdBundledResults3)) = 0;
-
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(66-0);
+var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
+var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
+sumVar = var1 + var2;
+for algo = 1:input.nAlgos
+    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(66-0);
+end
+dependence_stderr_pos = dependence_stderr_neg;
 subplot(11, 2, [13, 15])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -830,7 +841,12 @@ ylabel('\Delta F1 Score/\Delta Imp.', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
-
+hold on
+er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er.Color = [0 0 0];
+er.LineStyle = 'none';
+hold off
+axis tight
 title('Imp. (frames)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -869,14 +885,18 @@ for iSet = 1:nSets
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
     end
 end
-
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))];
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-meanBundledResults3(isnan(meanBundledResults3)) = 0;
-stdBundledResults3(isnan(stdBundledResults3)) = 0;
-
 dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(99-33);
+var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
+var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
+sumVar = var1 + var2;
+for algo = 1:input.nAlgos
+    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(99-33);
+end
+dependence_stderr_pos = dependence_stderr_neg;
 subplot(11, 2, [14, 16])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -902,7 +922,12 @@ ylabel('\Delta F1 Score/\Delta HTR', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
-
+hold on
+er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er.Color = [0 0 0];
+er.LineStyle = 'none';
+hold off
+axis tight
 title('HTR (%)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
@@ -917,6 +942,29 @@ xtickangle(45)
 
 %lgd = legend(algoLabels);
 %lgd.FontSize = figureDetails.fontSize-3;
+set(gca, 'FontSize', figureDetails.fontSize)
+
+meanJoinBundledResults3 = squeeze(mean(joinBundledResults3, 1, 'omitnan'));
+stderrJoinBundledResults3 = squeeze(std(joinBundledResults3, 1, 'omitnan')/sqrt(size(joinBundledResults3, 1)));
+
+subplot(11, 2, (1:4))
+%yyaxis left
+b1 = bar(meanJoinBundledResults3);
+b1.FaceColor = C(2, :);
+hold on
+er = errorbar(meanJoinBundledResults3, stderrJoinBundledResults3, 'CapSize', 12);
+er.Color = [0 0 0];                            
+er.LineStyle = 'none'; 
+hold off
+axis tight
+title('Baseline - Physiological Regime', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+ylabel('F1 Score', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels(algoLabels);
+xtickangle(45)
 set(gca, 'FontSize', figureDetails.fontSize)
 
 % Concordance

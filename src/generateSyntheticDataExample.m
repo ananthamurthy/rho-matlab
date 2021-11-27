@@ -166,7 +166,7 @@ set(fig1, 'Position', [100, 300, 900, 1200])
 C = linspecer(6);
 for myCase = 1:8
     %cell = randi(100);
-    cell = 31;
+    cell = 50;
     
     a = squeeze(sdo_batch(myCase).syntheticDATA(cell, 1:5, :));
     
@@ -192,11 +192,10 @@ for myCase = 1:8
     
     if mod(myCase, 2) ~= 0
         for trial =  1:5
-            plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(2, :), 'LineWidth', 1.5)
-            %set(gca,'XTick',[])
-            %set(gca,'YTick',[])
+            plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(2, :), 'LineWidth', 1)
+            set(gca,'YTick',[-200 0 200])
             xlim([1 246])
-            ylim([-200 800])
+            ylim([-200 1500])
             hold on
         end
         hold off
@@ -211,21 +210,19 @@ for myCase = 1:8
     else
         if myCase == 1 %High Noise
             for trial = 1:1
-                plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(1, :), 'LineWidth', 1.5)
-                %set(gca,'XTick',[])
-                %set(gca,'YTick',[])
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', 1)
+                set(gca,'YTick',[-200 0 200])
                 xlim([1 246])
-                ylim([-200 800])
+                ylim([-200 1500])
                 hold on
             end
             hold off
         else
             for trial = 1:5
-                plot((a(trial, :)*100) + (trial-1)*150, 'Color', C(1, :), 'LineWidth', 1.5)
-                %set(gca,'XTick',[])
-                %set(gca,'YTick',[])
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', 1)
+                set(gca,'YTick',[-200 0 200])
                 xlim([1 246])
-                ylim([-200 800])
+                ylim([-200 1500])
                 hold on
             end
             hold off
@@ -240,13 +237,28 @@ for myCase = 1:8
     clear a
 end
 
-subplot(6, 2, 9:12)
+subplot(6, 2, [9, 11])
 imagesc(squeeze(mean(sdo_batch(9).syntheticDATA, 2)*100));
 
 xlabel('Trial-Avg. Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('All Cells', ...
+ylabel('All Cells - Low Noise', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+z = colorbar;
+ylabel(z,'dF/F (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+colormap(linspecer)
+
+subplot(6, 2, [10, 12])
+imagesc(squeeze(mean(sdo_batch(10).syntheticDATA, 2)*100));
+
+xlabel('Trial-Avg. Frames', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+ylabel('All Cells - High Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
