@@ -187,7 +187,7 @@ rng(sdcp(i).randomseed)
 %% Physiological Regime - Baseline
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'random';
+sdcp(i).cellOrder = 'basic';
 sdcp(i).maxHitTrialPercent = 66;
 sdcp(i).hitTrialPercentAssignment = 'random';
 sdcp(i).trialOrder = 'basic';
@@ -207,7 +207,7 @@ rng(sdcp(i).randomseed)
 %% Physiological Regime - Higher Noise
 i = i + 1;
 sdcp(i).timeCellPercent = 50;
-sdcp(i).cellOrder = 'random';
+sdcp(i).cellOrder = 'basic';
 sdcp(i).maxHitTrialPercent = 66;
 sdcp(i).hitTrialPercentAssignment = 'random';
 sdcp(i).trialOrder = 'basic';
