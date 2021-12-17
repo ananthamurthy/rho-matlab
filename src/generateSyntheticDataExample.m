@@ -193,7 +193,7 @@ for myCase = 1:8
     if mod(myCase, 2) ~= 0
         for trial =  1:5
             plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(2, :), 'LineWidth', 1)
-            set(gca,'YTick',[-200 0 200])
+            set(gca,'YTick',[-200 200])
             xlim([1 246])
             ylim([-200 1500])
             hold on
@@ -211,7 +211,7 @@ for myCase = 1:8
         if myCase == 1 %High Noise
             for trial = 1:1
                 plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', 1)
-                set(gca,'YTick',[-200 0 200])
+                set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
                 hold on
@@ -220,7 +220,7 @@ for myCase = 1:8
         else
             for trial = 1:5
                 plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', 1)
-                set(gca,'YTick',[-200 0 200])
+                set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
                 hold on

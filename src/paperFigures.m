@@ -255,7 +255,7 @@ correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
 algoLabels = {'A-Boot', 'B-Boot', 'C-Boot', 'C-Otsu', 'D-Otsu', 'E-Otsu', 'F-Boot', 'F-Otsu'};
 concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '=8'};
 metricLabels = {'Recall', 'Precision', 'F1 Score'};
-methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC (C)', 'PCA (D)', 'SVM (E)', 'Param. (F)'};
+methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC (C)', 'Offset PCA (D)', 'SVM (E)', 'Param. (F)'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
 legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
 procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};

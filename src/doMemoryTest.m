@@ -46,8 +46,9 @@ if myProfilerTest
             
             in_use(iSet, myProcedure) = monitor_memory_whos;
             
-        end
-        profview
+            profview
+            keyboard
+        end 
     end
     
     %Plots
