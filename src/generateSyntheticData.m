@@ -160,6 +160,7 @@ if profilerTest
     memoryUsage = whos;
 else
     profilerStats = [];
+    memoryUsage = [];
 end
 profile off
 %% Save Everything
