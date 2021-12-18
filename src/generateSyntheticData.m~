@@ -157,7 +157,7 @@ elapsedTime = toc;
 if profilerTest
     profilerStats = profile('info');
     profile -timestamp
-    memoryUsage = whos;
+    memowhos
 else
     profilerStats = [];
 end
@@ -172,7 +172,7 @@ if saveData == 1
         '_batch_', ...
         num2str(nDatasets), ...
         '.mat'), ...
-        'sdcp', 'sdo_batch', 'elapsedTime', 'memoryUsage', 'profilerStats', ...
+        'sdcp', 'sdo_batch', 'elapsedTime', 'profilerStats', ...
         '-v7.3')
     disp('... done!')
 end

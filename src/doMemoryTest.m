@@ -16,7 +16,7 @@ end
 procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'};
 myProfilerTest = 1;
 if myProfilerTest
-    profile -memory on
+    %profile -memory on
     % Runtime and profile - Synthesis % Analysis
     runTime = zeros(nSets, nProcedures);
     in_use = zeros(nSets, nProcedures);
@@ -44,10 +44,10 @@ if myProfilerTest
             
             runTime(iSet, myProcedure) = elapsedTime/60;
             
-            in_use(iSet, myProcedure) = monitor_memory_whos;
-            
-            profview
-            keyboard
+            %in_use(iSet, myProcedure) = monitor_memory_whos;
+            %whos
+            %profview
+            %keyboard
         end 
     end
     
