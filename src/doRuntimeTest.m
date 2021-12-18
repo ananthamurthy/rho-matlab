@@ -24,19 +24,19 @@ if myProfilerTest
         for myProcedure = 1:nProcedures
             if myProcedure == 1
                 %use the elapsedTime for generation
-                [~, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, ~, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 2
-                elapsedTime = runBatchAnalysis(1, 3, 1, 0, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(1, 3, 1, 0, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 3
-                elapsedTime = runBatchAnalysis(1, 3, 0, 1, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(1, 3, 0, 1, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 4
-                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime]= runBatchAnalysis(1, 3, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 5
-                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 1, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(1, 3, 0, 0, 0, 1, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 6
-                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 0, 1, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(1, 3, 0, 0, 0, 0, 1, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 7
-                elapsedTime = runBatchAnalysis(1, 3, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(1, 3, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             end
             sprintf('Set: %i -> nDatasets: 3 -> Procedure: %s -> Time: %d mins.\n', iSet, char(procedureLabels(myProcedure)), elapsedTime/60)
             

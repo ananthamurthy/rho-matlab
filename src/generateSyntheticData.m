@@ -6,7 +6,7 @@
 % gDate: date when data generation occurred
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
-function [sdo_batch, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest)
+function [memoryUsage, totalMem, sdo_batch, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest)
 
 if profilerTest
     profile on
@@ -158,9 +158,15 @@ if profilerTest
     profilerStats = profile('info');
     profile -timestamp
     memoryUsage = whos;
+    nVariables = length(memoryUsage);
+    totalMem = 0;
+    for vari = 1:nVariables
+        totalMem = totalMem + (memoryUsage(vari).bytes/(1024^2));
+    end
 else
     profilerStats = [];
     memoryUsage = [];
+    totalMem = [];
 end
 profile off
 %% Save Everything
@@ -173,7 +179,12 @@ if saveData == 1
         '_batch_', ...
         num2str(nDatasets), ...
         '.mat'), ...
-        'sdcp', 'sdo_batch', 'elapsedTime', 'memoryUsage', 'profilerStats', ...
+        'sdcp', ...
+        'sdo_batch', ...
+        'elapsedTime', ...
+        'memoryUsage', ...
+        'totalMem', ...
+        'profilerStats', ...
         '-v7.3')
     disp('... done!')
 end
