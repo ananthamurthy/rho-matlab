@@ -1,6 +1,6 @@
 %NOTE: make sure to use the same value for nShuffles in the function call
 %as in setupSyntheticDataParametersSingle.m
-function [inUse, runTime] = doMemoryTest(gDate, nSets, nShuffles, nProcedures, plotFigure, workingOnServer, diaryOn)
+function [inUse, runTime] = doMemoryTest(gDate, nSets, nShuffles, nProcedures, workingOnServer, diaryOn)
 
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
@@ -52,75 +52,74 @@ if myProfilerTest
             %keyboard
         end
     end
-    if plotFigure
-        %Plots
-        input.nMethods = 6;
-        figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
-        %Extra colormap options: inferno/plasma/viridis/magma
-        %C = distinguishable_colors(input.nMethods);
-        C = linspecer(input.nMethods);
-        procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};
-        %procedureLabels2 = {'Synth.', '+A', '+B', '+C', '+D', '+E', '+F'};
-        
-        %Memory
-        meanInUse = mean(inUse, 2);
-        stdInUse = std(inUse, 2);
-        
-        %Runtime
-        meanRunTime = mean(runTime, 2);
-        stdRunTime = std(runTime, 2);
-        
-        x = 1:7;
-        fig1 = figure(1);
-        set(fig1, 'Position', [100, 100, 800, 400])
-        subplot(1, 2, 1)
-        %b1 = bar(squeeze(inUse(1, :)));
-        %b1.FaceColor = C(1, :);
-        %axis tight
-        b1 = bar(meanInUse);
-        b1.FaceColor = C(1, :);
-        %set(b2,'FaceAlpha', 0.5)
-        hold on
-        er = errorbar(x, meanInUse, stdInUse, 'CapSize', 12);
-        er.Color = [0 0 0];
-        er.LineStyle = 'none';
-        xlabel('Steps', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        ylabel('Memory Usage (MB)', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xticklabels(procedureLabels)
-        xtickangle(45)
-        set(gca, 'FontSize', figureDetails.fontSize)
-        
-        subplot(1, 2, 2)
-        b1 = bar(meanRunTime);
-        b1.FaceColor = C(2, :);
-        %set(b2,'FaceAlpha', 0.5)
-        hold on
-        er = errorbar(x, meanRunTime, stdRunTime, 'CapSize', 12);
-        er.Color = [0 0 0];
-        er.LineStyle = 'none';
-        set(gca,'YScale','log')
-        %xlim([1, 7])
-        xticks([1, 2, 3, 4, 5, 6, 7])
-        ylim([1, 100])
-        yticks([1, 10, 100])
-        axis tight
-        title('Runtimes', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xlabel('Steps', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        ylabel('log(time/mins.)', ...
-            'FontSize', figureDetails.fontSize, ...
-            'FontWeight', 'bold')
-        xticklabels(procedureLabels)
-        xtickangle(45)
-        set(gca, 'FontSize', figureDetails.fontSize)
-    end
+%     %Plots
+%     input.nMethods = 6;
+%     figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%     %Extra colormap options: inferno/plasma/viridis/magma
+%     %C = distinguishable_colors(input.nMethods);
+%     C = linspecer(input.nMethods);
+%     procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};
+%     %procedureLabels2 = {'Synth.', '+A', '+B', '+C', '+D', '+E', '+F'};
+%     
+%     %Memory
+%     meanInUse = mean(inUse, 2);
+%     stdInUse = std(inUse, 2);
+%     
+%     %Runtime
+%     meanRunTime = mean(runTime, 2);
+%     stdRunTime = std(runTime, 2);
+%     
+%     x = 1:7;
+%     fig1 = figure(1);
+%     set(fig1, 'Position', [100, 100, 800, 400])
+%     subplot(1, 2, 1)
+%     %b1 = bar(squeeze(inUse(1, :)));
+%     %b1.FaceColor = C(1, :);
+%     %axis tight
+%     b1 = bar(meanInUse);
+%     b1.FaceColor = C(1, :);
+%     %set(b2,'FaceAlpha', 0.5)
+%     hold on
+%     er = errorbar(x, meanInUse, stdInUse, 'CapSize', 12);
+%     er.Color = [0 0 0];
+%     er.LineStyle = 'none';
+%     xlabel('Steps', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+%     ylabel('Memory Usage (MB)', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+%     xticklabels(procedureLabels)
+%     xtickangle(45)
+%     set(gca, 'FontSize', figureDetails.fontSize)
+%     
+%     subplot(1, 2, 2)
+%     b1 = bar(meanRunTime);
+%     b1.FaceColor = C(2, :);
+%     %set(b2,'FaceAlpha', 0.5)
+%     hold on
+%     er = errorbar(x, meanRunTime, stdRunTime, 'CapSize', 12);
+%     er.Color = [0 0 0];
+%     er.LineStyle = 'none';
+%     set(gca,'YScale','log')
+%     %xlim([1, 7])
+%     xticks([1, 2, 3, 4, 5, 6, 7])
+%     ylim([1, 100])
+%     yticks([1, 10, 100])
+%     axis tight
+%     title('Runtimes', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+%     xlabel('Steps', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+%     ylabel('log(time/mins.)', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+%     xticklabels(procedureLabels)
+%     xtickangle(45)
+%     set(gca, 'FontSize', figureDetails.fontSize)
+    
     %Save
     save([HOME_DIR 'rho-matlab/profile_nShuffles' num2str(nShuffles) '.mat'], ...
         'runTime', ...
