@@ -552,60 +552,97 @@ lgd = legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'});
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-disp('Loading run times ...')
-runtimeFilePath = [HOME_DIR 'rho-matlab/runtimes.mat'];
+disp('Loading runtimes ...')
+meanInUse = zeros(3, 7); %3 cases; 7 steps or numerical procedures
+stdInUse = zeros(3, 7);
+meanRunTime = zeros(3, 7);
+stdRunTime = zeros(3, 7);
+
+for iCase = 1:3
+    if iCase == 1
+        nShuffles = 1;
+    elseif iCase == 2
+        nShuffles = 4;
+    elseif iCase == 3
+        nShuffles = 10;
+    end
+runtimeFilePath = [HOME_DIR 'rho-matlab/profile_nShuffles' num2str(nShuffles) '.mat'];
 load(runtimeFilePath)
+
+meanInUse(iCase, :) = mean(inUse, 1);
+stdInUse(iCase, :) = std(inUse, 1);
+
+meanRunTime(iCase, :) = mean(runTime, 1);
+stdRunTime(iCase, :) = std(runTime, 1);
+end
 disp('... done!')
 
-meanRunTime = mean(runTime, 1);
-stdRunTime = std(runTime, 1);
 
 %Usage
-usage = [10.07, 1.6, 5.2; ...
-    23.5, 14.2, 45.3; ...
-    23.5, 14.2, 45.4; ...
-    23.5, 14.2, 45.4; ...
-    23.9, 14.2, 45.9; ...
-    23.7, 14.3, 45.6; ...
-    23.6, 14.2, 45.3; ...
-    ];
+% usage = [10.07, 1.6, 5.2; ...
+%     23.5, 14.2, 45.3; ...
+%     23.5, 14.2, 45.4; ...
+%     23.5, 14.2, 45.4; ...
+%     23.9, 14.2, 45.9; ...
+%     23.7, 14.3, 45.6; ...
+%     23.6, 14.2, 45.3; ...
+%     ];
 
 subplot(12, 8, [81:84, 89:92] )
-b = bar(usage);
+b1 = bar(meanInUse');
 axis tight
+% hold on
+% er = errorbar(meanInUse', stdInUse', 'CapSize', 12);
+% er.Color = [0 0 0];                            
+% er.LineStyle = 'none'; 
+% hold off
 title('Memory Usage', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-xlabel('Methods', ...
+xlabel('Steps', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('Value', ...
+ylabel('Workspace (MB)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-lgd = legend({'VIRT (g)', 'RES (g)', '%MEM'});
-lgd.FontSize = figureDetails.fontSize-3;
+xticks([1, 2, 3, 4, 5, 6, 7])
+ylim([0, 700])
+%yticks([0, 200, 400, 600])
+lgd = legend({'135 cells', '540 cells', '1350 cells'}, ...
+    'Location', 'southeastoutside');
+lgd.FontSize = figureDetails.fontSize-4;
 xticklabels(procedureLabels)
 xtickangle(45)
 set(gca, 'FontSize', figureDetails.fontSize)
 
 subplot(12, 8, [86:88, 94:96])
 %boxplot(runTime, procedureLabels)
-errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
+%errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
+b2 = bar(meanRunTime');
+axis tight
 set(gca,'YScale','log')
+% hold on
+% er = errorbar(meanRunTime', stdRunTime', 'CapSize', 12);
+% er.Color = [0 0 0];                            
+% er.LineStyle = 'none';
+% hold off
 %xlim([1, 7])
 xticks([1, 2, 3, 4, 5, 6, 7])
-ylim([1, 100])
-yticks([1, 10, 100])
+set(gca,'YLim',[1e0 1e4],'YTick',10.^(0:4))
+%yticks([1, 10, 100, 100])
 axis tight
 title('Runtimes', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-xlabel('Methods', ...
+xlabel('Steps', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 ylabel('log(time/mins.)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
+% lgd = legend({'1x = 135 cells', '4x = 540 cells', '10x = 1350 cells'}, ...
+%     'Location', 'best');
+% lgd.FontSize = figureDetails.fontSize-4;
 xticklabels(procedureLabels)
 xtickangle(45)
 %set(gca,'xtick',[]) legend({'1/8 Algorithms', '2/8 Algorithms', '3/8
