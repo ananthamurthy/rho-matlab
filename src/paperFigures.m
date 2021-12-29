@@ -1,6 +1,6 @@
 % Paper Figures
 % AUTHOR: Kambadur Ananthamurthy
-% DETAILS: 333 uniquely tagged synthetic datasets were analysed on the basis
+% DETAILS: 417 uniquely tagged synthetic datasets were analysed on the basis
 % of a variety of numerical procedures. Cells in each dataset were given
 % analog scores on the same basis.
 % Load the Consolidated Analysis Details and look for patterns in the plots.
@@ -218,47 +218,47 @@ input.removeNaNs = 1;
 [response, predictor] = getTheTable(sdo_batch, cData, input);
 
 %Normalize
-maxima = max(predictor);
-normPredictor = predictor./maxima;
+maximaN = zeros(input.nMethods, 1);
+minimaN = zeros(input.nMethods, 1);
+normPredictor = zeros(size(predictor));
+for method = 1:input.nMethods
+    maximaN(method) = max(predictor(:, method));
+    minimaN(method) = min(predictor(:, method));
+    
+    posi = find(predictor(:, method) > 0);
+    negi = find(predictor(:, method) < 0);
+    normPredictor(posi, method) = predictor(posi, method)/maximaN(method);
+    normPredictor(negi, method) = -1 * predictor(negi, method)/minimaN(method);
+end
 
 %Z-Score
 zPredictor = zscore(predictor);
 
 % Normalize Z-Score
-maxima = max(zPredictor);
-nzPredictor = zPredictor./maxima;
-
-% % Ruggero G. Bettinardi (2021). getCosineSimilarity(x,y)
-% % (https://www.mathworks.com/matlabcentral/fileexchange/62978-getcosinesimilarity-x-y),
-% % MATLAB Central File Exchange. Retrieved October 5, 2021.
-%
-% % When data points are sparse in the sense that some scores are undefined/missing,
-% % it is often better to use cosine similiarity between the pairwise scores across all method pairs.
-%
-% cosineSimilarityMatrix1 = nan(input.nMethods, input.nMethods);
-% cosineSimilarityMatrix2 = nan(input.nMethods, input.nMethods);
-% Z = normPredictor;
-% for method1 = 1:input.nMethods
-%     x = Z(:, method1);
-%     tf = isnan(x);
-%     %x(tf) = [];
-%     for method2 = 1:input.nMethods
-%         y = Z(:, method2);
-%         cosineSimilarityMatrix1(method1, method2) = getCosineSimilarity(x(~tf), y(~tf));
-%     end
-% end
+maximaZ = zeros(input.nMethods, 1);
+minimaZ = zeros(input.nMethods, 1);
+nzPredictor = zeros(size(predictor));
+for method = 1:input.nMethods
+    maximaZ(method) = max(zPredictor(:, method));
+    minimaZ(method) = min(zPredictor(:, method));
+    
+    posi = find(zPredictor(:, method) > 0);
+    negi = find(zPredictor(:, method) < 0);
+    nzPredictor(posi, method) = zPredictor(posi, method)/maximaN(method);
+    nzPredictor(negi, method) = -1 * zPredictor(negi, method)/minimaN(method);
+end
 
 correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
 %correlationMatrix = corrcoef(predictor);
 
 %Labels
-algoLabels = {'A-Boot', 'B-Boot', 'C-Boot', 'C-Otsu', 'D-Otsu', 'E-Otsu', 'F-Boot', 'F-Otsu'};
+algoLabels = {'rR2B-Bo', 'TI-Bo', 'pAUC-Bo', 'pAUC-Ot', 'offPCA-Ot', 'SVM-Ot', 'Param-Bo', 'Param-Ot'};
 concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '=8'};
 metricLabels = {'Recall', 'Precision', 'F1 Score'};
-methodLabels = {'R2B (A)', 'TI (B)', 'Peak AUC (C)', 'Offset PCA (D)', 'SVM (E)', 'Param. (F)'};
+methodLabels = {'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
 legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
-procedureLabels = {'Synth.', 'A', 'B', 'C', 'D', 'E', 'F'};
+procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 
 %% Plots - IV
 %%
@@ -269,7 +269,6 @@ set(fig4, 'Position', [1000, 300, 900, 1200])
 title(sprintf('Comparative Analysis (N=%i)', input.nDatasets), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-
 
 for method = 1:input.nMethods
     ptcScores = normPredictor(response == 1, method);
@@ -294,30 +293,32 @@ for method = 1:input.nMethods
         'EdgeColor', C(2, :), ...
         'FaceColor', C(2, :));
     binWidth = h.BinWidth;
-    %     ylabel('Counts', ...
-    %         'FontSize', figureDetails.fontSize, ...
-    %         'FontWeight', 'bold')
+%     ylabel('Counts', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
     hold off
-    title(sprintf('Method - %s', char(methodLabels(method))), ...
+    title(sprintf('Method: %s', char(methodLabels(method))), ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     
     if method == 1
-        xlim([0, 0.01])
+        %xlim([-0.005, 0.005])
+        xlim([-0.005, 0.01])
     elseif method == 2
-        xlim([0, 0.02])
+        xlim([-0.005, 0.01])
     elseif method == 3
         xlim([0, 1])
     elseif method == 4
-        xlim([-0.5, 0.5])
+        xlim([-0.6, 0.6])
     elseif method == 5
-        xlim([-0.02, 0.02])
+        xlim([-0.5, 0.5])
     elseif method == 6
         xlim([0, 1])
     end
+
     if method == 1
         lgd = legend({'Time Cells'}, ...
-            'Location', 'best');
+            'Location', 'northeast');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
@@ -336,24 +337,28 @@ for method = 1:input.nMethods
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
     end
-    
+%     title(sprintf('Method: %s', char(methodLabels(method))), ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
+
     if method == 1
-        xlim([0, 0.01])
+        %xlim([-0.005, 0.005])
+        xlim([-0.005, 0.01])
     elseif method == 2
-        xlim([0, 0.02])
+        xlim([-0.005, 0.01])
     elseif method == 3
         xlim([0, 1])
     elseif method == 4
-        xlim([-0.5, 0.5])
+        xlim([-0.6, 0.6])
     elseif method == 5
-        xlim([-0.02, 0.02])
+        xlim([-0.5, 0.5])
     elseif method == 6
         xlim([0, 1])
     end
     
     if method == 1
         lgd = legend({'Other Cells'}, ...
-            'Location', 'best');
+            'Location', 'northeast');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
@@ -426,8 +431,8 @@ h = heatmap(correlationMatrix, ...
     'Title', 'Correlation Coefficients', ...
     'CellLabelColor','none');
 h.XDisplayLabels = methodLabels;
-%h.YDisplayLabels = methodLabels2;
-h.YDisplayLabels = {'', '', '', '', '', ''};
+h.YDisplayLabels = methodLabels;
+%h.YDisplayLabels = {'', '', '', '', '', ''};
 set(gca, 'FontSize', figureDetails.fontSize)
 
 print(sprintf('%s/ComparingScores-%i-%i-%i-%i-%i_%i', ...

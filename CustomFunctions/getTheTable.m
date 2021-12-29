@@ -7,7 +7,7 @@ nCells = input.nCells;
 nMethods = input.nMethods;
 nDatasets = input.nDatasets;
 
-preLUT = zeros(nCells*nDatasets, nMethods+1);
+preLUT = zeros(nCells*nDatasets, nMethods+2);
 
 count = 0;
 for dnum = 1:nDatasets

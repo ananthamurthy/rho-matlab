@@ -195,7 +195,7 @@ for cell_noi = 1:length(cell_list)
             
             if isnan(rrb_ratio_vec_final(1, cell_noi))
                 %error('Method A: Nan found in rrb_ratio_vec_final for cell: %i', cell_noi)
-                rrb_ratio_vec_final(1, cell_noi) = 1; %assert
+                rrb_ratio_vec_final(1, cell_noi) = 1; %insist
             end
         end
     end
