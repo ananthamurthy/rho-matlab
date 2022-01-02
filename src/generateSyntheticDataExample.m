@@ -170,21 +170,21 @@ for myCase = 1:8
     a = squeeze(sdo_batch(myCase).syntheticDATA(cell, 1:5, :));
     
     if myCase == 1
-        myText = 'Noise - Low';
+        myText = sprintf('Noise - Low (%i%%)', sdcp(myCase).noisePercent);
     elseif myCase == 2
-        myText = 'Noise - High';
+        myText = sprintf('Noise - High (%i%%)', sdcp(myCase).noisePercent);
     elseif myCase == 3
-        myText = 'Event Widths - Small';
+        myText = sprintf('Event Widths - Small (%ith)', sdcp(myCase).eventWidth{1});
     elseif myCase == 4
-        myText = 'Event Widths - Large';
+        myText = sprintf('Event Widths - Large (%ith)', sdcp(myCase).eventWidth{1});
     elseif myCase == 5
-        myText = 'Imprecision - Low';
+        myText = sprintf('Imprecision - Low (%i frames)', sdcp(myCase).imprecisionFWHM);
     elseif myCase == 6
-        myText = 'Imprecision - High';
+        myText = sprintf('Imprecision - High (%i frames)', sdcp(myCase).imprecisionFWHM);
     elseif myCase == 7
-        myText = 'Hit Trial Ratio - Low';
+        myText = sprintf('Hit Trial Ratio - Low (%i%%)', sdcp(myCase).maxHitTrialPercent);
     elseif myCase == 8
-        myText = 'Hit Trial Ratio - High';
+        myText = sprintf('Hit Trial Ratio - High (%i%%)', sdcp(myCase).maxHitTrialPercent);
     end
     
     subplot(6, 2, myCase)
@@ -242,7 +242,7 @@ imagesc(squeeze(mean(sdo_batch(9).syntheticDATA, 2)*100));
 xlabel('Trial-Avg. Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('All Cells - Low Noise', ...
+ylabel(sprintf('All Cells - Low Noise (%i%%)', sdcp(9).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
@@ -257,7 +257,7 @@ imagesc(squeeze(mean(sdo_batch(10).syntheticDATA, 2)*100));
 xlabel('Trial-Avg. Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('All Cells - High Noise', ...
+ylabel(sprintf('All Cells - High Noise (%i%%)', sdcp(10).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;

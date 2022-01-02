@@ -292,6 +292,10 @@ for method = 1:input.nMethods
     h = histogram(ptcScores, ...
         'EdgeColor', C(2, :), ...
         'FaceColor', C(2, :));
+    if method == 1
+        %morebins(h);
+        h.NumBins = 10000;
+    end
     binWidth = h.BinWidth;
 %     ylabel('Counts', ...
 %         'FontSize', figureDetails.fontSize, ...
@@ -303,9 +307,9 @@ for method = 1:input.nMethods
     
     if method == 1
         %xlim([-0.005, 0.005])
-        xlim([-0.005, 0.01])
+        xlim([-0.005, 0.005])
     elseif method == 2
-        xlim([-0.005, 0.01])
+        xlim([-0.005, 0.005])
     elseif method == 3
         xlim([0, 1])
     elseif method == 4
@@ -315,10 +319,12 @@ for method = 1:input.nMethods
     elseif method == 6
         xlim([0, 1])
     end
-
-    if method == 1
+%     lgd = legend({'Time Cells'}, ...
+%             'Location', 'northwest');
+%         lgd.FontSize = figureDetails.fontSize-3;
+    if method == 1 || method == 2
         lgd = legend({'Time Cells'}, ...
-            'Location', 'northeast');
+            'Location', 'northwest');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
@@ -343,9 +349,9 @@ for method = 1:input.nMethods
 
     if method == 1
         %xlim([-0.005, 0.005])
-        xlim([-0.005, 0.01])
+        xlim([-0.005, 0.005])
     elseif method == 2
-        xlim([-0.005, 0.01])
+        xlim([-0.005, 0.005])
     elseif method == 3
         xlim([0, 1])
     elseif method == 4
@@ -355,10 +361,12 @@ for method = 1:input.nMethods
     elseif method == 6
         xlim([0, 1])
     end
-    
-    if method == 1
+%     lgd = legend({'Other Cells'}, ...
+%             'Location', 'northwest');
+%         lgd.FontSize = figureDetails.fontSize-3;
+    if method == 1 || method == 2
         lgd = legend({'Other Cells'}, ...
-            'Location', 'northeast');
+            'Location', 'northwest');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
@@ -558,10 +566,10 @@ lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 disp('Loading runtimes ...')
-meanInUse = zeros(3, 7); %3 cases; 7 steps or numerical procedures
-stdInUse = zeros(3, 7);
-meanRunTime = zeros(3, 7);
-stdRunTime = zeros(3, 7);
+meanInUse = zeros(7, 3); %3 cases; 7 steps or numerical procedures
+stdInUse = zeros(7, 3);
+meanRunTime = zeros(7, 3);
+stdRunTime = zeros(7, 3);
 
 for iCase = 1:3
     if iCase == 1
@@ -574,11 +582,11 @@ for iCase = 1:3
 runtimeFilePath = [HOME_DIR 'rho-matlab/profile_nShuffles' num2str(nShuffles) '.mat'];
 load(runtimeFilePath)
 
-meanInUse(iCase, :) = mean(inUse, 1);
-stdInUse(iCase, :) = std(inUse, 1);
+meanInUse(:, iCase) = mean(inUse, 1);
+stdInUse(:, iCase) = std(inUse, 1);
 
-meanRunTime(iCase, :) = mean(runTime, 1);
-stdRunTime(iCase, :) = std(runTime, 1);
+meanRunTime(:, iCase) = mean(runTime*60, 1);
+stdRunTime(:, iCase) = std(runTime*60, 1);
 end
 disp('... done!')
 
@@ -594,8 +602,7 @@ disp('... done!')
 %     ];
 
 subplot(12, 8, [81:84, 89:92] )
-b1 = bar(meanInUse');
-axis tight
+b1 = bar(meanInUse);
 % hold on
 % er = errorbar(meanInUse', stdInUse', 'CapSize', 12);
 % er.Color = [0 0 0];                            
@@ -623,7 +630,7 @@ set(gca, 'FontSize', figureDetails.fontSize)
 subplot(12, 8, [86:88, 94:96])
 %boxplot(runTime, procedureLabels)
 %errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
-b2 = bar(meanRunTime');
+b2 = bar(meanRunTime);
 axis tight
 set(gca,'YScale','log')
 % hold on
@@ -642,7 +649,7 @@ title('Runtimes', ...
 xlabel('Steps', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('log(time/mins.)', ...
+ylabel('Time (sec)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 % lgd = legend({'1x = 135 cells', '4x = 540 cells', '10x = 1350 cells'}, ...
