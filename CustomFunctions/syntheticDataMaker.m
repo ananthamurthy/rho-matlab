@@ -10,8 +10,9 @@ nTrials = dataset.nTrials;
 nFrames = dataset.nFrames;
 syntheticDATA = zeros(nCells, nTrials, nFrames);
 syntheticDATA_2D = zeros(nCells, nTrials*nFrames);
+backgroundActivity = zeros(nCells, nTrials, nFrames);
 noiseComponent = zeros(nCells, nFrames);
-background = zeros(nCells, nTrials, nFrames);
+recordingNoise = zeros(nCells, nTrials, nFrames);
 eventMax = zeros(nCells, nTrials);
 maxSignal = zeros(nCells, 1);
 
@@ -180,6 +181,29 @@ for cell = 1:nCells
     %fprintf('Max signal value for cell:%i is %d\n', cell, maxSignal(cell))
 end
 
+% Background (Spurious) Activity
+if control.addBackgroundSpikes4ptc == 1
+    for celli = 1:length(ptcList)
+        cell = ptcList(celli);
+        
+        for trial = 1:nTrials
+            backgroundActivity(cell, trial, :) = generateBackgroundActivity(DATA_2D(cell, :), eventLibrary_2D(cell), control, nFrames); % A trial's worth
+        end
+        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + backgroundActivity(cell, :, :);
+    end
+end
+
+if control.addBackgroundSpikes4oc == 1
+    for celli = 1:length(ocList)
+        cell = ocList(celli);
+        
+        for trial = 1:nTrials
+            backgroundActivity(cell, trial, :) = generateBackgroundActivity(DATA_2D(cell, :), eventLibrary_2D(cell), control, nFrames); % A trial's worth
+        end
+        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + backgroundActivity(cell, :, :); %(cell, trial, frame)
+    end
+end
+
 % Noise
 %if ~strcmpi(control.noise, 'none')
 if control.noisePercent ~= 0
@@ -191,10 +215,10 @@ if control.noisePercent ~= 0
         for trial = 1:nTrials
             ceil2zero = 0;
             % Generate noise
-            background(cell, trial, :) = squeeze(generateNoise(maxSignal(cell), control.noise, control.noisePercent, nFrames, ceil2zero));
+            recordingNoise(cell, trial, :) = squeeze(generateNoise(maxSignal(cell), control.noise, control.noisePercent, nFrames, ceil2zero));
         end
         % Add noise
-        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + background(cell, :, :); %(cell, trial, frame)
+        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + recordingNoise(cell, :, :); %(cell, trial, frame)
     end
     
     for celli = 1:length(ocList)
@@ -202,10 +226,10 @@ if control.noisePercent ~= 0
         
         %Randomly choose a Putative Time Cell to copy background
         selectedCellOption = ptcList(randperm(length(ptcList), 1));
-        background(cell, :, :) = background(selectedCellOption, :, :);
+        recordingNoise(cell, :, :) = recordingNoise(selectedCellOption, :, :);
         
         %Add noise
-        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + background(cell, :, :); %(cell, trial, frame)
+        syntheticDATA(cell, :, :) = syntheticDATA(cell, :, :) + recordingNoise(cell, :, :); %(cell, trial, frame)
     end
 end
 

@@ -43,6 +43,8 @@ for shuffle = 1:nShuffles
     sdcp(i).noise = 'gaussian';
     sdcp(i).noisePercent = 10;
     sdcp(i).randomseed = 'shuffle';
+    sdcp(i).addBackgroundSpikes4ptc = 1;
+    sdcp(i).addBackgroundSpikes4oc = 1;
     sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
     rng(sdcp(i).randomseed)
 end
