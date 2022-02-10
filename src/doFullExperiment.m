@@ -18,7 +18,7 @@ procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D
 nProcedures = 7;
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
-
+myProfilerTest = 0; %Keep this to 0, to avoid going into profile testing mode (see doMemoryTest.m)
 for myProcedure = 1:nProcedures
         if myProcedure == 1
             %use the elapsedTime for generation
