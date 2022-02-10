@@ -3,7 +3,9 @@
 if profilerTest
     setupSyntheticDataParametersSingle
 else
-    %setupSyntheticDataParams %Loads all options for Physiology (N=360)
-    %setupSyntheticDataParams2 %Loads all options for PSA (N=297)
-    setupSyntheticDataParams3 %Loads all options for Physiology and PSA (N=417)
+    %setupSyntheticDataParams %Loads all options for canonical Time Cells [Total N = 360]
+    %setupSyntheticDataParams2 %Loads all options for Parameter Sensitivity Ananlysis (PSA) [Total N = 297]
+    %setupSyntheticDataParams3 %Loads all options for PSA and canonical Time Cells [Total N = 417]
+    setupSyntheticDataParams4 %Loads all options for Time Cells with Background Activity [Total N = 120]
+    %setupSyntheticDataParams5 %Loads all options for PSA, canonical Time Cells, and Time Cells with Background Activity [Total N = 537]
 end

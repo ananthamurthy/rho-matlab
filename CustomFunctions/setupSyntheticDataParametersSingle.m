@@ -17,15 +17,18 @@ imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" aro
 imprecisionType = 'uniform'; %Uniform, Normal, or None
 noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
 noisePercent = 20; %How much percent of noise to add
-comment = 'anything you like'
-
+randomseed = 'shuffle'; %typically 'shuffle' or 'default'. See documentation for 'rng'
+addBackgroundSpikes4ptc = 1;
+addBackgroundSpikes4oc = 1;
+backDistLambda = 5;
+comment = 'anything you like';
 Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}
 %%
 i = 0;
 %% Synthetic Data Parameters
-nShuffles = 10;
+nShuffles = 1;
 for shuffle = 1:nShuffles
     i = i + 1;
     sdcp(i).timeCellPercent = 50;
@@ -45,6 +48,7 @@ for shuffle = 1:nShuffles
     sdcp(i).randomseed = 'shuffle';
     sdcp(i).addBackgroundSpikes4ptc = 1;
     sdcp(i).addBackgroundSpikes4oc = 1;
+    sdcp(i).backDistLambda = 5;
     sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
     rng(sdcp(i).randomseed)
 end

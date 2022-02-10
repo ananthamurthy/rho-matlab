@@ -35,7 +35,7 @@ if myProfilerTest
             elseif myProcedure == 3
                 [~, totalMem, elapsedTime] = runBatchAnalysis(1, nShuffles, 0, 1, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 4
-                [~, totalMem, elapsedTime]= runBatchAnalysis(1, nShuffles, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
+                [~, totalMem, elapsedTime] = runBatchAnalysis(1, nShuffles, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 5
                 [~, totalMem, elapsedTime] = runBatchAnalysis(1, nShuffles, 0, 0, 0, 1, 0, 0, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
             elseif myProcedure == 6

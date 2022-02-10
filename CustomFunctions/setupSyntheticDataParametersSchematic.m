@@ -3,10 +3,10 @@
 %{
 JUST FOR REFERENCE
 % Synthetic Data Parameters
-timeCellPercent = 100; %in %
+timeCellPercent = 50; %in %
 cellOrder = 'basic'; %basic or random
 maxHitTrialPercent = 100; %in %
-hitTrialPercentAssignment = 'fixed'; %fixed or random
+hitTrialPercentAssignment = 'random'; %fixed or random
 trialOrder = 'random'; %basic or random
 eventWidth = {50, 'stddev'}; %{location, width}; e.g. - {percentile, stddev}
 eventAmplificationFactor = 10;
@@ -17,8 +17,11 @@ imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" aro
 imprecisionType = 'uniform'; %Uniform, Normal, or None
 noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
 noisePercent = 20; %How much percent of noise to add
-comment = 'anything you like'
-
+randomseed = 'shuffle'; %typically 'shuffle' or 'default'. See documentation for 'rng'
+addBackgroundSpikes4ptc = 1;
+addBackgroundSpikes4oc = 1;
+backDistLambda = 5;
+comment = 'anything you like';
 Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}

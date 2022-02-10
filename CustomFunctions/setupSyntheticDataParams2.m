@@ -8,8 +8,8 @@ cellOrder = 'basic'; %basic or random
 maxHitTrialPercent = 100; %in %
 hitTrialPercentAssignment = 'random'; %fixed or random
 trialOrder = 'random'; %basic or random
-eventWidth = {50, 1}; %{percentile, range}
-eventAmplificationFactor = 1;
+eventWidth = {50, 'stddev'}; %{location, width}; e.g. - {percentile, stddev}
+eventAmplificationFactor = 10;
 eventTiming = 'sequential'; %sequential or random
 startFrame = 116; %Try to leave a good set of frames (depending on sampling rate) as buffer
 endFrame = 123; %Try to leave a good set of frames (depending on sampling rate) as buffer
@@ -17,8 +17,11 @@ imprecisionFWHM = 8; %Will be divided by 2 for positive and negative "width" aro
 imprecisionType = 'uniform'; %Uniform, Normal, or None
 noise = 'gaussian'; %Gaussian (as noisePercent) or None (renders noisePercent irrelevant)
 noisePercent = 20; %How much percent of noise to add
-comment = 'anything you like'
-
+randomseed = 'shuffle'; %typically 'shuffle' or 'default'. See documentation for 'rng'
+addBackgroundSpikes4ptc = 1;
+addBackgroundSpikes4oc = 1;
+backDistLambda = 5;
+comment = 'anything you like';
 Random Seed
 rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'shuffle'
 %}
@@ -44,8 +47,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -69,8 +75,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Percent Time Cells: %i; Cell Order: %s; Event Timing: %s', count, value, sdcp(count).cellOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -94,8 +103,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -119,8 +131,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -144,8 +159,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -169,8 +187,11 @@ for value = 10:10:100
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -194,8 +215,11 @@ for value = 10:10:70
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Event Width (percentile): %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -219,8 +243,11 @@ for value = 10:10:70
         sdcp(count).imprecisionFWHM = 0;
         sdcp(count).imprecisionType = 'none';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Event Width (percentile): %i (with stddev); Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -244,8 +271,11 @@ for value = 1:2:20
         sdcp(count).imprecisionFWHM = value;
         sdcp(count).imprecisionType = 'uniform';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Uniform ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -269,8 +299,11 @@ for value = 1:2:20
         sdcp(count).imprecisionFWHM = value;
         sdcp(count).imprecisionType = 'normal';
         sdcp(count).noise = 'none';
-        sdcp(count).noisePercent = 5;
+        sdcp(count).noisePercent = 10;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Normal ImprecisionFWHM: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
@@ -297,6 +330,9 @@ for value = 10:10:50
         sdcp(count).noise = 'gaussian';
         sdcp(count).noisePercent = value;
         sdcp(count).randomseed = 'shuffle';
+        sdcp(count).addBackgroundSpikes4ptc = 0;
+        sdcp(count).addBackgroundSpikes4oc = 0;
+        sdcp(count).backDistLambda = 5;
         sdcp(count).comment = sprintf('%i | Noise Percent: %i; Trial Assignment: %s; Trial Order: %s; Event Timing: %s', count, value, sdcp(count).hitTrialPercentAssignment, sdcp(count).trialOrder, sdcp(count).eventTiming);
         rng(sdcp(count).randomseed)
     end
