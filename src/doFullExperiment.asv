@@ -13,8 +13,8 @@ else
     %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 
-procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'}; %All; 8 procedures
-%procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'}; % 7 procedures
+%procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'}; %All; 8 procedures
+procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)'}; % 7 procedures
 nProcedures = 8;
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
@@ -42,10 +42,7 @@ for myProcedure = 1:nProcedures
         elseif myProcedure == 7
             disp('[INFO] Running Analysis by F ...')
             [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
-        elseif myProcedure == 8
-            disp('[INFO] Running Harvest ...')
-            %[~, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
-            [~, totalMem, elapsedTime] = consolidateBatch(gDate, gRun, workingOnServer, diaryOn, profilerTest); %using cDate = gDate; cRun = gRun; for small batches.
+        elseif myProcedure == 78
         end
         sprintf('Procedure: %s, nDatasets: %i, Time: %d sec, Mem.: %.4f MB\n', char(procedureLabels(myProcedure)), nTotalDatasets, elapsedTime, totalMem)
 

@@ -4,7 +4,7 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function elapsedTime = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest)
+function [memoryUsage, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest)
 if profilerTest
     profile on
 end
@@ -112,6 +112,13 @@ fullPath4Save = strcat(saveFolder, filename);
 disp('Saving everything ...')
 
 elapsedTime = toc;
+memoryUsage = whos;
+nVariables = length(memoryUsage);
+totalMem = 0;
+for vari = 1:nVariables
+    totalMem = totalMem + (memoryUsage(vari).bytes/(1024^2));
+end
+
 if profilerTest
     profilerStats = profile('info');
     profile -timestamp

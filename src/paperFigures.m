@@ -45,7 +45,6 @@ end
 %workingOnServer = 0; %Current
 diaryOn         = 0;
 
-
 % Directory config
 
 if workingOnServer == 1
@@ -75,7 +74,6 @@ if diaryOn
     end
     diary on
 end
-
 
 % Operations
 plotRefQ = 1;

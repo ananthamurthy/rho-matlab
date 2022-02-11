@@ -153,20 +153,18 @@ for runi = 1:1:nDatasets
     sdo_batch(runi) = sdo;
 end
 elapsedTime = toc;
+memoryUsage = whos;
+nVariables = length(memoryUsage);
+totalMem = 0;
+for vari = 1:nVariables
+    totalMem = totalMem + (memoryUsage(vari).bytes/(1024^2));
+end
 
 if profilerTest
     profilerStats = profile('info');
     profile -timestamp
-    memoryUsage = whos;
-    nVariables = length(memoryUsage);
-    totalMem = 0;
-    for vari = 1:nVariables
-        totalMem = totalMem + (memoryUsage(vari).bytes/(1024^2));
-    end
 else
     profilerStats = [];
-    memoryUsage = [];
-    totalMem = [];
 end
 profile off
 %% Save Everything
