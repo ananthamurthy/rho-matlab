@@ -25,6 +25,10 @@ function [MI,Isec,Ispk,Itime] = tempInfoOneNeuron(raster)
     end
     
     if isnan(Ispk)
-        error('Score of NaN by Method B')
+        error('Score of NaN by Method B using Ispk')
+    elseif isnan(Isec)
+        error('Score of NaN by Method B using Isec')
+    elseif isnan(MI)
+        error('Score of NaN by Method B using MI')
     end
 end

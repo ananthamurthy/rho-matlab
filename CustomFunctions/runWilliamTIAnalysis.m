@@ -7,19 +7,21 @@ nIterations = williamInput.nIterations;
 threshold = williamInput.threshold;
 
 %Preallocations
-MI = nan(nCells,1);
-Isec = nan(nCells,1);
 Ispk = nan(nCells,1);
-MI_rand = nan(nCells, nIterations);
-Isec_rand = nan(nCells, nIterations);
+Isec = nan(nCells,1);
+MI = nan(nCells,1);
 Ispk_rand = nan(nCells, nIterations);
+Isec_rand = nan(nCells, nIterations);
+MI_rand = nan(nCells, nIterations);
 Itime = nan(nCells,size(DATA,3),1);
 timeCells = nan(nCells, 1);
+timeCells2 = nan(nCells, 1);
+timeCells3 = nan(nCells, 1);
 %time = nan(nCells, 1);
 
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
-    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell,:,:)));
+    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell, :, :)));
 end
 
 %Generate circularly shifted randomized data
@@ -106,8 +108,8 @@ end
 williamOutput.Yfit = Yfit;
 %williamOutput.Q = Ispk;
 williamOutput.Q = real(Ispk);
-williamOutput.Q2 = Isec;
-williamOutput.Q3 = MI;
+williamOutput.Q2 = real(Isec);
+williamOutput.Q3 = real(MI);
 williamOutput.trainingTrials = trainingTrials;
 williamOutput.testingTrials = testingTrials;
 williamOutput.Yfit_actual = Yfit_actual;
