@@ -4,8 +4,8 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function [memoryUsage, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest)
-if profilerTest
+function [memoryUsage, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, myProfilerTest)
+if myProfilerTest
     profile on
 end
 
@@ -119,7 +119,7 @@ for vari = 1:nVariables
     totalMem = totalMem + (memoryUsage(vari).bytes/(1024^2));
 end
 
-if profilerTest
+if myProfilerTest
     profilerStats = profile('info');
     profile -timestamp
 else

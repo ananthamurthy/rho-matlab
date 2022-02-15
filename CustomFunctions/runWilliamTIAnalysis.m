@@ -10,6 +10,8 @@ threshold = williamInput.threshold;
 MI = nan(nCells,1);
 Isec = nan(nCells,1);
 Ispk = nan(nCells,1);
+MI_rand = nan(nCells, nIterations);
+Isec_rand = nan(nCells, nIterations);
 Ispk_rand = nan(nCells, nIterations);
 Itime = nan(nCells,size(DATA,3),1);
 timeCells = nan(nCells, 1);
@@ -29,7 +31,7 @@ for i = 1:nIterations
     randDATA = generateRandData(DATA, controls);
     %Calculate Temporal Information
     for cell = 1:nCells
-        [~, ~, Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(randDATA(cell, :, :)));
+        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(randDATA(cell, :, :)));
     end
 end
 
@@ -40,6 +42,20 @@ for cell = 1:nCells
         timeCells(cell) = 1;
     else
         timeCells(cell) = 0;
+    end
+
+    score2 = (sum(Isec_rand(cell, (Isec(cell)>Isec_rand(cell, :))))/williamInput.nIterations)*100;
+    if score2 > threshold
+        timeCells2(cell) = 1;
+    else
+        timeCells2(cell) = 0;
+    end
+
+    score3 = (sum(MI_rand(cell, (MI(cell)>MI_rand(cell, :))))/williamInput.nIterations)*100;
+    if score3 > threshold
+        timeCells3(cell) = 1;
+    else
+        timeCells3(cell) = 0;
     end
 end
 
@@ -90,6 +106,8 @@ end
 williamOutput.Yfit = Yfit;
 %williamOutput.Q = Ispk;
 williamOutput.Q = real(Ispk);
+williamOutput.Q2 = Isec;
+williamOutput.Q3 = MI;
 williamOutput.trainingTrials = trainingTrials;
 williamOutput.testingTrials = testingTrials;
 williamOutput.Yfit_actual = Yfit_actual;
@@ -98,6 +116,8 @@ williamOutput.Yfit_2D = Yfit_2D;
 williamOutput.Yfit_actual_2D = Yfit_actual_2D;
 williamOutput.YfitDiff_2D = YfitDiff_2D;
 williamOutput.timeCells = timeCells;
+williamOutput.timeCells2 = timeCells2;
+williamOutput.timeCells3 = timeCells3;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;

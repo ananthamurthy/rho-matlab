@@ -81,6 +81,8 @@ clear s
 s.Mdl = [];
 s.Yfit = [];
 s.Q = [];
+s.Q2 = [];
+s.Q3 = [];
 s.trainingTrials = [];
 s.testingTrials = [];
 s.Yfit_actual = [];
@@ -89,6 +91,8 @@ s.Yfit_2D = [];
 s.Yfit_actual_2D = [];
 s.YfitDiff_2D = [];
 s.timeCells = [];
+s.timeCells2 = [];
+s.timeCells3 = [];
 s.nanList = [];
 s.normQ = [];
 mBOutput_batch = repmat(s, 1, nDatasets);

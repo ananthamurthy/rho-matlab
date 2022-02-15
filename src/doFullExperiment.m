@@ -1,4 +1,4 @@
-function [inUse, runTime] = doFullExperiment(gDate, gRun, nTotalDatasets, workingOnServer, diaryOn)
+function [inUse, runTime] = doFullExperiment(gDate, gRun, cDate, cRun, nTotalDatasets, workingOnServer, diaryOn)
 
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
@@ -44,8 +44,8 @@ for myProcedure = 1:nProcedures
             [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, myProfilerTest);
         elseif myProcedure == 8
             disp('[INFO] Running Harvest ...')
-            %[~, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
-            [~, totalMem, elapsedTime] = consolidateBatch(gDate, gRun, workingOnServer, diaryOn, profilerTest); %using cDate = gDate; cRun = gRun; for small batches.
+            [~, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
+            %[~, totalMem, elapsedTime] = consolidateBatch(gDate, gRun, workingOnServer, diaryOn, profilerTest); %using cDate = gDate; cRun = gRun; for small batches.
         end
         sprintf('Procedure: %s, nDatasets: %i, Time: %d sec, Mem.: %.4f MB\n', char(procedureLabels(myProcedure)), nTotalDatasets, elapsedTime, totalMem)
 
