@@ -8,11 +8,11 @@ nIterations = simpleInput.nIterations;
 threshold = simpleInput.threshold; %in 100
 
 %Preallocation
-timeCells2 = nan(nCells, 1);
-%timeCells4 = nan(nCells, 2); %Unnecessary preallocation
-randQ2 = nan(nCells, nIterations);
+timeCells1 = nan(nCells, 1);
+%timeCells2 = nan(nCells, 2); %Unnecessary preallocation
+randQ1 = nan(nCells, nIterations);
 
-[peakTimeBin, Q2] = simpleAnalysisFast(DATA, simpleInput);
+[peakTimeBin, Q1] = simpleAnalysisFast(DATA, simpleInput);
 
 %Generate circularly shifted randomized data
 controls.startFrame = simpleInput.startFrame;
@@ -24,35 +24,35 @@ for i = 1:nIterations
 %         fprintf('>>> Random: %i of %i\n', i, nIterations)
 %     end
     randDATA = generateRandData(DATA, controls);
-    [~, randQ2(:, i)] = simpleAnalysisFast(randDATA, simpleInput);
+    [~, randQ1(:, i)] = simpleAnalysisFast(randDATA, simpleInput);
 end
 
 %Classify Time Cells
 %Using comparisons to randomized data
 for cell = 1:nCells
-    score2 = (sum(Q2(cell)>randQ2(cell, :))/nIterations)*100;
+    score2 = (sum(Q1(cell)>randQ1(cell, :))/nIterations)*100;
     
     if score2 > threshold
-        timeCells2(cell) = 1;
+        timeCells1(cell) = 1;
     else
-        timeCells2(cell) = 0;
+        timeCells1(cell) = 0;
     end
 end
 
 %Using Otsu's method of finding threshold
-thresholdOtsu2 = graythresh(Q2); %Otsu's method
-timeCells4 = Q2 > thresholdOtsu2;
+thresholdOtsu2 = graythresh(Q1); %Otsu's method
+timeCells2 = Q1 > thresholdOtsu2;
 
-stcaOutput.Q2 = Q2;
-stcaOutput.T = peakTimeBin;
-stcaOutput.timeCells2 = timeCells2;
-stcaOutput.timeCells4 = timeCells4;
+stcaOutput.Q1 = Q1;
+stcaOutput.T1 = peakTimeBin;
+stcaOutput.timeCells1 = timeCells1;
+stcaOutput.timeCells1 = timeCells2;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method C scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(stcaOutput.Q2, nanTest_input);
-stcaOutput.nanList = nanList;
+nanList1 = lookout4NaNs(stcaOutput.Q1, nanTest_input);
+stcaOutput.nanList1 = nanList1;
 
 end

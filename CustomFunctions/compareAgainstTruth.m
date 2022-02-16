@@ -7,11 +7,11 @@ allTP = zeros(nCases, input.nAlgos);
 allTN = zeros(nCases, input.nAlgos);
 allFP = zeros(nCases, input.nAlgos);
 allFN = zeros(nCases, input.nAlgos);
-TPR = zeros(input.nAlgos, 1); %Sensitivity
+TPR = zeros(input.nAlgos, 1); %Sensitivity or Recall
 FPR = zeros(input.nAlgos, 1); %Fall-out or False Positive Rate
 TNR = zeros(input.nAlgos, 1); %Specificity
 FNR = zeros(input.nAlgos, 1); %Miss Rate
-PPV = zeros(input.nAlgos, 1); %Positive Predictive Value
+PPV = zeros(input.nAlgos, 1); %Positive Predictive Value or Precision
 NPV = zeros(input.nAlgos, 1); %Negative Predictive Value
 FDR = zeros(input.nAlgos, 1); %False Discovery Rate
 FOR = zeros(input.nAlgos, 1); %Flase Omission Rate
@@ -46,18 +46,47 @@ for algo = 1:input.nAlgos
     FP = sum(allFP(:, algo));
     TN = sum(allTN(:, algo));
     
-    TPR(algo) = TP/(TP + FN);
-    FPR(algo) = FP/(FP + TN);
-    TNR(algo) = TN/(TN + FP);
-    FNR(algo) = FN/(FN + TP);
+%     fprintf('[INFO] Algorithm: %i\n', algo);
+%     fprintf('--> TP = %i\n', TP);
+%     fprintf('--> FN = %i\n', FN);
+%     fprintf('--> FP = %i\n', FP);
+%     fprintf('--> TN = %i\n', TN);
     
-    PPV(algo) = TP/(TP + FP);
-    NPV(algo) = TN/(TN + FN);
-    FDR(algo) = FP/(FP + TP);
-    FOR(algo) = FN/(FN + TN);
+    if TP == 0
+        TPR(algo) = 0;
+        PPV(algo) = 0;
+        TS(algo) = 0;
+    else
+        TPR(algo) = TP/(TP + FN); %Recall
+        PPV(algo) = TP/(TP + FP); %Precision
+        TS(algo) = TP/(TP + FN + FP);
+    end
+    
+    if FP == 0
+        FPR(algo) = 0;
+        FDR(algo) = 0;
+    else
+        FPR(algo) = FP/(FP + TN);
+        FDR(algo) = FP/(FP + TP);
+    end
+
+    if TN == 0
+        TNR(algo) = 0;
+        NPV(algo) = 0;
+    else
+        TNR(algo) = TN/(TN + FP);
+        NPV(algo) = TN/(TN + FN);
+    end
+
+    if FN == 0
+        FNR(algo) = 0;
+        FOR(algo) = 0;
+    else
+        FNR(algo) = FN/(FN + TP);
+        FOR(algo) = FN/(FN + TN);
+    end
     
     PT(algo) = (sqrt(TPR(algo)*(-TNR(algo) +1)) + TNR(algo) - 1)/(TPR(algo) + TNR(algo) -1);
-    TS(algo) = TP/(TP + FN + FP);
     
     ACC(algo) = (TP + TN)/(TP + TN + FP + FN);
     BA(algo) = (TPR(algo) + TNR(algo))/2;
@@ -74,6 +103,28 @@ for algo = 1:input.nAlgos
     
     results3(algo, 1) = TPR(algo);
     results3(algo, 2) = PPV(algo);
-    results3(algo, 3) = 2 * results3(algo, 1) * results3(algo, 2)/(results3(algo, 1) + results3(algo, 2));
+
+    if TPR(algo) == 0 %results3(algo, 1) == 0
+        results3(algo, 3) = 0;
+    elseif PPV(algo) == 0 %results3(algo, 2) == 0
+        results3(algo, 3) = 0;
+    else
+        results3(algo, 3) = 2 * results3(algo, 1) * results3(algo, 2)/(results3(algo, 1) + results3(algo, 2));
+    end
+
+    % NaN check - Recall
+    if isnan(results3(algo, 1))
+        warning('Recall is NaN for Algorithm %i', algo)
+    end
+    
+    % NaN check - Precision
+    if isnan(results3(algo, 2))
+        warning('Precision is NaN for Algorithm %i', algo)
+    end
+    
+    % NaN check - F1 Score
+    if isnan(results3(algo, 3))
+        warning('F1 Score is NaN for Algorithm %i', algo)
+    end
 end
 end

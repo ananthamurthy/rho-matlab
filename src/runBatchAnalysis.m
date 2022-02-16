@@ -69,18 +69,19 @@ end
 
 %% Preallocation
 %Method A
-s.Q = [];
-s.T = [];
-s.timeCells = [];
-s.nanList = [];
-s.normQ = [];
+s.Q1 = [];
+s.T1 = [];
+s.timeCells1 = []; %Bootstrap
+s.timeCells2 = []; %Otsu's
+s.nanList1 = [];
+s.normQ1 = [];
 mAOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method B
 s.Mdl = [];
 s.Yfit = [];
-s.Q = [];
+s.Q1 = [];
 s.Q2 = [];
 s.Q3 = [];
 s.trainingTrials = [];
@@ -90,25 +91,28 @@ s.YfitDiff = [];
 s.Yfit_2D = [];
 s.Yfit_actual_2D = [];
 s.YfitDiff_2D = [];
-s.timeCells = [];
+s.timeCells1 = [];
 s.timeCells2 = [];
 s.timeCells3 = [];
-s.nanList = [];
-s.normQ = [];
+s.timeCells4 = [];
+s.timeCells5 = [];
+s.timeCells6 = [];
+s.nanList1 = [];
+s.nanList2 = [];
+s.nanList3 = [];
+s.normQ1 = [];
+s.normQ2 = [];
+s.normQ3 = [];
 mBOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method C
-%s.Q1 = [];
-s.Q2 = [];
-s.T = [];
-%s.timeCells1 = [];
+s.Q1 = [];
+s.T1 = [];
+s.timeCells1 = [];
 s.timeCells2 = [];
-%s.timeCells3 = [];
-s.timeCells4 = [];
-s.nanList = [];
-%s.normQ1 = [];
-s.normQ2 = [];
+s.nanList1 = [];
+s.normQ1 = [];
 mCOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
@@ -117,11 +121,11 @@ s.selectedPC = [];
 s.d1 = [];
 s.dx = [];
 s.dt = [];
-s.Q = [];
-s.T = [];
-s.timeCells = [];
-s.nanList = [];
-s.normQ = [];
+s.Q1 = [];
+s.T1 = [];
+s.timeCells1 = []; %Otsu's; not implementing Bootstrap for now
+s.nanList1 = [];
+s.normQ1 = [];
 mDOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
@@ -129,29 +133,25 @@ clear s
 s.SVMModel = [];
 s.Yfit = [];
 s.YfitDiff = [];
-s.Q = [];
+s.Q1 = [];
 s.Yfit_2D = [];
 s.Yfit_actual_2D = [];
 s.YfitDiff_2D = [];
-s.Q_2D = [];
-s.T = [];
-s.timeCells = [];
-s.nanList = [];
-s.normQ = [];
+s.Q1_2D = [];
+s.T1 = [];
+s.timeCells1 = []; %Otsu's; not implementing Bootstrap for now
+s.nanList1 = [];
+s.normQ1 = [];
 mEOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
 %Method F
-%s.Q1 = [];
-s.Q2 = [];
-s.T = [];
-%s.timeCells1 = [];
-s.timeCells2 = [];
-%s.timeCells3 = [];
-s.timeCells4 = [];
-s.nanList = [];
-%s.normQ1 = [];
-s.normQ2 = [];
+s.Q1 = [];
+s.T1 = [];
+s.timeCells1 = []; %Bootstrap
+s.timeCells2 = []; %Otsu's
+s.nanList1 = [];
+s.normQ1 = [];
 mFOutput_batch = repmat(s, 1, nDatasets);
 clear s
 
@@ -213,7 +213,7 @@ if loadSyntheticData %Synthetic Data
             mAInput.earlyOnly = 0; %0 - uses all trials; 1 - uses only the first 5 trials of the session
             mAInput.startTrial = 1; %the analysis begins with this trial number (e.g. - 1: analysis on all trials)
             [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
-            mAOutput.normQ = (mAOutput.Q)/max(mAOutput.Q(~isinf(mAOutput.Q)));
+            mAOutput.normQ1 = (mAOutput.Q1)/max(mAOutput.Q1(~isinf(mAOutput.Q1)));
             mAOutput_batch(runi) = mAOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
         end
@@ -239,7 +239,9 @@ if loadSyntheticData %Synthetic Data
             end
             mBInput.getT = 0; %Set this off, unless you have GPU power on your machine
             [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
-            mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
+            mBOutput.normQ1 = (mBOutput.Q1)/max(mBOutput.Q1);
+            mBOutput.normQ1 = (mBOutput.Q2)/max(mBOutput.Q2);
+            mBOutput.normQ1 = (mBOutput.Q3)/max(mBOutput.Q3);
             mBOutput_batch(runi) = mBOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
         end
@@ -255,8 +257,7 @@ if loadSyntheticData %Synthetic Data
             mCInput.endFrame = sdcp(runi).endFrame;
             mCInput.threshold = 99; %in %
             [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
-            %mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
-            mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
+            mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
             mCOutput_batch(runi) = mCOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
         end
@@ -274,7 +275,7 @@ if loadSyntheticData %Synthetic Data
             mDInput.getT = 0;
             mDInput.use1PC = 1;
             [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
-            mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
+            mDOutput.normQ1 = (mDOutput.Q1) ./max(mDOutput.Q1);
             mDOutput_batch(runi) = mDOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
         end
@@ -308,7 +309,7 @@ if loadSyntheticData %Synthetic Data
                 end
             end
             [mEOutput] = runSVMClassification(DATA, mEInput);
-            mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
+            mEOutput.normQ1 = (mEOutput.Q1) ./max(mEOutput.Q1);
             mEOutput_batch(runi) = mEOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
         end
@@ -327,8 +328,7 @@ if loadSyntheticData %Synthetic Data
             mFInput.endFrame = sdcp(runi).endFrame;
             mFInput.threshold = 99; %in %s
             [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
-            %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
-            mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
+            mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput_batch(runi) = mFOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
         end

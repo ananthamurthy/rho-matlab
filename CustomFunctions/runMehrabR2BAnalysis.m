@@ -11,7 +11,8 @@ early_only = mehrabInput.earlyOnly;
 pk_behav_trial = mehrabInput.startTrial;
 
 %Preallocation
-timeCells = nan(size(DATA, 1), 1); %Will change to 'nCells' at some point
+timeCells1 = nan(nCells, 1); %Will include Time Cells and Other Cells
+timeCells2 = nan(nCells, 1);
 
 %Trial specifics
 frame_time = 1000/trialDetails.frameRate;
@@ -203,7 +204,7 @@ for cell_noi = 1:length(cell_list)
     if rrb_ratio_vec_final(1, cell_noi) == 0
         %error('Cell: %i randomization results in 0', cell_noi)
         %fprintf('Cell: %i has normal score: %d but random score of 0\n', cell_noi, rb_ratio_vec(1, cell_noi))
-        rrb_ratio_vec_final(1, cell_noi) = 1; %assign
+        rrb_ratio_vec_final(1, cell_noi) = 1; %assign (to fail time cell classifaction)
     end
     %     if (mod(cell_noi, 50) == 0) && cell_noi ~= size(dff_data_mat,1)
     %         fprintf('... %i cells examined ...\n', cell_noi)
@@ -226,17 +227,24 @@ end
 
 %all_scores = [all_scores, [rb_ratio_vec; rrb_ratio_vec_final] ];        %matrix containing ridge to background ratios
 
-mehrabOutput.Q = (rb_ratio_vec./rrb_ratio_vec_final)'; %Important to transpose
-timeCells(mehrabOutput.Q > 1) = 1; %Ratios compared to 1
-timeCells(mehrabOutput.Q <= 1) = 0; %Ratios compared to 1
-mehrabOutput.timeCells = timeCells;
-mehrabOutput.T = pki + CS_onset_frame;
+Q1 = rb_ratio_vec'; %Important to transpose.
+ratioR2BvR = (rb_ratio_vec./rrb_ratio_vec_final)'; %Important to transpose; Ratio of Ridge/Background Ratios for emperical vs random
+timeCells1 = ratioR2BvR > 1;
+
+%Using Otsu's method of finding threshold
+thresholdOtsu = graythresh(Q1); %Otsu's method
+timeCells2 = Q1 > thresholdOtsu;
+
+mehrabOutput.Q1 = Q1;
+mehrabOutput.T1 = pki + CS_onset_frame;
+mehrabOutput.timeCells1 = timeCells1;
+mehrabOutput.timeCells2 = timeCells2;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method A scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(mehrabOutput.Q, nanTest_input);
-mehrabOutput.nanList = nanList;
+nanList1 = lookout4NaNs(mehrabOutput.Q1, nanTest_input);
+mehrabOutput.nanList1 = nanList1;
 
 end

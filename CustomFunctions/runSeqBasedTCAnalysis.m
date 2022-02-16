@@ -136,9 +136,9 @@ for cell = 1:nCells
 
     if isnan(R_2x2(1, 2))
         %error('corrcoef is Nan for cell: %i by Method C', cell)
-        seqAnalysisOutput.Q(cell, 1) = 0;
+        seqAnalysisOutput.Q1(cell, 1) = 0;
     else
-        seqAnalysisOutput.Q(cell, 1) = R_2x2(1, 2);
+        seqAnalysisOutput.Q1(cell, 1) = R_2x2(1, 2);
     end
     
     %Get Peak Time bin from ETH
@@ -147,16 +147,16 @@ for cell = 1:nCells
         [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
     end
 end
-seqAnalysisOutput.T = peakTimeBin;
+seqAnalysisOutput.T1 = peakTimeBin;
 
-threshold = graythresh(seqAnalysisOutput.Q); %Otsu's method
-seqAnalysisOutput.timeCells = seqAnalysisOutput.Q > threshold;
+threshold = graythresh(seqAnalysisOutput.Q1); %Otsu's method
+seqAnalysisOutput.timeCells1 = seqAnalysisOutput.Q1 > threshold;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method D scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(seqAnalysisOutput.Q, nanTest_input);
-seqAnalysisOutput.nanList = nanList;
+nanList1 = lookout4NaNs(seqAnalysisOutput.Q1, nanTest_input);
+seqAnalysisOutput.nanList1 = nanList1;
 
 end

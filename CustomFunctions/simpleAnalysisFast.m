@@ -1,4 +1,4 @@
-function [peakTimeBin, Q2] = simpleAnalysisFast(DATA, simpleInput)
+function [peakTimeBin, Q] = simpleAnalysisFast(DATA, simpleInput)
 
 %nFrames = size(DATA, 3);
 %nTrials = size(DATA, 2);
@@ -15,16 +15,16 @@ delta = simpleInput.delta;
 %Time Vector
 [~, peakTimeBin] = max(ETH, [], 2);
 
-Q2 = nan(nCells, 1);
+Q = nan(nCells, 1);
 for cell = 1:nCells
     
     AUC4PeakBin = ETH(cell, peakTimeBin(cell));
     
     if AUC4PeakBin == 0
-        Q2(cell) = 0;
+        Q(cell) = 0;
     else
         stdAcrossBins = std(squeeze(ETH(cell, :)));
-        Q2(cell) = AUC4PeakBin/stdAcrossBins;
+        Q(cell) = AUC4PeakBin/stdAcrossBins;
     end
 end
 end

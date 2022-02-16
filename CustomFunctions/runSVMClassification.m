@@ -49,8 +49,8 @@ svmOutput.Yfit_2D = reshape(svmOutput.Yfit, [length(testingTrials), nCells]);
 svmOutput.Yfit_actual_2D = reshape(Yfit_actual, [length(testingTrials), nCells]);
 svmOutput.YfitDiff_2D = reshape(svmOutput.YfitDiff, [length(testingTrials), nCells]);
 
-svmOutput.Q_2D = reshape(allQ, [length(testingTrials), nCells]);
-svmOutput.Q = median(svmOutput.Q_2D, 1); % Try either mean or median across trials
+svmOutput.Q1_2D = reshape(allQ, [length(testingTrials), nCells]);
+svmOutput.Q1 = median(svmOutput.Q1_2D, 1); % Try either mean or median across trials
 
 % Time Vector (T)
 peakTimeBin = zeros(nCells, 1);
@@ -61,18 +61,18 @@ if svmInput.getT
         [~, peakTimeBin(cell)] = max(squeeze(ETH(cell, :)));
     end
 end
-svmOutput.T = peakTimeBin;
+svmOutput.T1 = peakTimeBin;
 
-thresholdOtsu = graythresh(svmOutput.Q); %Otsu's method
-timeCells = svmOutput.Q > thresholdOtsu;
+thresholdOtsu = graythresh(svmOutput.Q1); %Otsu's method
+timeCells1 = svmOutput.Q1 > thresholdOtsu;
 
-svmOutput.timeCells = timeCells;
+svmOutput.timeCells1 = timeCells1;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method E scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(svmOutput.Q, nanTest_input);
+nanList = lookout4NaNs(svmOutput.Q1, nanTest_input);
 svmOutput.nanList = nanList;
 
 end

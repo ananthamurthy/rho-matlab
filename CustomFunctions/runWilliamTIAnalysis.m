@@ -7,22 +7,30 @@ nIterations = williamInput.nIterations;
 threshold = williamInput.threshold;
 
 %Preallocations
-Ispk = nan(nCells,1);
-Isec = nan(nCells,1);
-MI = nan(nCells,1);
+Ispk = nan(nCells,1); %Q1
+Isec = nan(nCells,1); %Q2
+MI = nan(nCells,1); %Q3
 Ispk_rand = nan(nCells, nIterations);
 Isec_rand = nan(nCells, nIterations);
 MI_rand = nan(nCells, nIterations);
 Itime = nan(nCells,size(DATA,3),1);
-timeCells = nan(nCells, 1);
+timeCells1 = nan(nCells, 1);
 timeCells2 = nan(nCells, 1);
 timeCells3 = nan(nCells, 1);
+%timeCells4 = nan(nCells, 1); %Unnecessary preallocation
+%timeCells5 = nan(nCells, 1); %Unnecessary preallocation
+%timeCells6 = nan(nCells, 1); %Unnecessary preallocation
 %time = nan(nCells, 1);
 
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
     [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell, :, :)));
 end
+
+%Crucial - sometimes the scores could be complex numbers.
+Q1 = real(Ispk);
+Q2 = real(Isec);
+Q3 = real(MI);
 
 %Generate circularly shifted randomized data
 controls.startFrame = williamInput.startFrame;
@@ -37,29 +45,44 @@ for i = 1:nIterations
     end
 end
 
-%Classify Time Cells
+%Crucial - sometimes the scores could be complex numbers.
+Q1_rand = real(Ispk_rand);
+Q2_rand = real(Isec_rand);
+Q3_rand = real(MI_rand);
+
+%Classify Time Cells - with complex values
 for cell = 1:nCells
-    score = (sum(Ispk_rand(cell, (Ispk(cell)>Ispk_rand(cell, :))))/williamInput.nIterations)*100;
-    if score > threshold
-        timeCells(cell) = 1;
+    score1 = (sum(Q1_rand(cell, (Q1(cell)>Q1_rand(cell, :))))/williamInput.nIterations)*100;
+    if score1 > threshold
+        timeCells1(cell) = 1;
     else
-        timeCells(cell) = 0;
+        timeCells1(cell) = 0;
     end
 
-    score2 = (sum(Isec_rand(cell, (Isec(cell)>Isec_rand(cell, :))))/williamInput.nIterations)*100;
+    score2 = (sum(Q2_rand(cell, (Q2(cell)>Q2_rand(cell, :))))/williamInput.nIterations)*100;
     if score2 > threshold
         timeCells2(cell) = 1;
     else
         timeCells2(cell) = 0;
     end
 
-    score3 = (sum(MI_rand(cell, (MI(cell)>MI_rand(cell, :))))/williamInput.nIterations)*100;
+    score3 = (sum(Q3_rand(cell, (Q3(cell)>Q3_rand(cell, :))))/williamInput.nIterations)*100;
     if score3 > threshold
         timeCells3(cell) = 1;
     else
         timeCells3(cell) = 0;
     end
 end
+
+%Using Otsu's method of finding threshold
+thresholdOtsu1 = graythresh(Q1); %Otsu's method
+timeCells4 = Q1 > thresholdOtsu1;
+
+thresholdOtsu2 = graythresh(Q2); %Otsu's method
+timeCells5 = Q2 > thresholdOtsu2;
+
+thresholdOtsu3 = graythresh(Q3); %Otsu's method
+timeCells6 = Q3 > thresholdOtsu3;
 
 if williamInput.getT
     %Get Time from Network Activity using Bayesian Learning
@@ -106,10 +129,9 @@ else
     YfitDiff_2D = 1;
 end
 williamOutput.Yfit = Yfit;
-%williamOutput.Q = Ispk;
-williamOutput.Q = real(Ispk);
-williamOutput.Q2 = real(Isec);
-williamOutput.Q3 = real(MI);
+williamOutput.Q1 = Q1;
+williamOutput.Q2 = Q2;
+williamOutput.Q3 = Q3;
 williamOutput.trainingTrials = trainingTrials;
 williamOutput.testingTrials = testingTrials;
 williamOutput.Yfit_actual = Yfit_actual;
@@ -117,15 +139,22 @@ williamOutput.YfitDiff = YfitDiff;
 williamOutput.Yfit_2D = Yfit_2D;
 williamOutput.Yfit_actual_2D = Yfit_actual_2D;
 williamOutput.YfitDiff_2D = YfitDiff_2D;
-williamOutput.timeCells = timeCells;
+williamOutput.timeCells1 = timeCells1;
 williamOutput.timeCells2 = timeCells2;
 williamOutput.timeCells3 = timeCells3;
+williamOutput.timeCells4 = timeCells4;
+williamOutput.timeCells5 = timeCells5;
+williamOutput.timeCells6 = timeCells6;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method B scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(williamOutput.Q, nanTest_input);
-williamOutput.nanList = nanList;
+nanList1 = lookout4NaNs(williamOutput.Q1, nanTest_input);
+nanList2 = lookout4NaNs(williamOutput.Q2, nanTest_input);
+nanList3 = lookout4NaNs(williamOutput.Q3, nanTest_input);
+williamOutput.nanList1 = nanList1;
+williamOutput.nanList2 = nanList2;
+williamOutput.nanList3 = nanList3;
 
 end
