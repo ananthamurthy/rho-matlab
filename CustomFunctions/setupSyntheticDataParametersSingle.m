@@ -48,7 +48,7 @@ for shuffle = 1:nShuffles
     sdcp(i).randomseed = 'shuffle';
     sdcp(i).addBackgroundSpikes4ptc = 1;
     sdcp(i).addBackgroundSpikes4oc = 1;
-    sdcp(i).backDistLambda = 5;
+    sdcp(i).backDistLambda = 2;
     sdcp(i).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', i, sdcp(i).maxHitTrialPercent, sdcp(i).hitTrialPercentAssignment, sdcp(i).eventTiming);
     rng(sdcp(i).randomseed)
 end

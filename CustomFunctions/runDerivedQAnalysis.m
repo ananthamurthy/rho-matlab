@@ -46,7 +46,7 @@ derivedQOutput.timeCells2 = timeCells2;
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method F scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(derivedQOutput.Q1, nanTest_input);
-derivedQOutput.nanList = nanList;
+nanList1 = lookout4NaNs(derivedQOutput.Q1, nanTest_input);
+derivedQOutput.nanList1 = nanList1;
 
 end

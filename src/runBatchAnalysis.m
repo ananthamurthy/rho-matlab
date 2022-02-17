@@ -65,6 +65,8 @@ trialDetails = getTrialDetails(db(1));
 if loadSyntheticData
     configSynth %in localCopies
     nDatasets = length(sdcp);
+else %Real Physiology Data
+    nDatasets = length(db);
 end
 
 %% Preallocation
@@ -240,8 +242,8 @@ if loadSyntheticData %Synthetic Data
             mBInput.getT = 0; %Set this off, unless you have GPU power on your machine
             [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
             mBOutput.normQ1 = (mBOutput.Q1)/max(mBOutput.Q1);
-            mBOutput.normQ1 = (mBOutput.Q2)/max(mBOutput.Q2);
-            mBOutput.normQ1 = (mBOutput.Q3)/max(mBOutput.Q3);
+            mBOutput.normQ2 = (mBOutput.Q2)/max(mBOutput.Q2);
+            mBOutput.normQ3 = (mBOutput.Q3)/max(mBOutput.Q3);
             mBOutput_batch(runi) = mBOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
         end
@@ -334,7 +336,7 @@ if loadSyntheticData %Synthetic Data
         end
     end
 else %Real Physiology Data
-    nDatasets = length(db);
+    %nDatasets = length(db);
     for runi = 1:nDatasets
         %This needs an update to verify proper handling of multiple real physiology datasets.
         %Load processed data (processed dfbf for dataset/session)
@@ -364,17 +366,19 @@ else %Real Physiology Data
             %disp('--> Method: A')
             %Method A - Mehrab's Reliability Analysis (Bhalla Lab)
             mAInput.cellList = 1:1:size(DATA,1); %using all cells
-            mAInput.onFrame = 1;
-            mAInput.offFrame = db(runi).nFrames;
+            mAInput.onFrame = sdcp(runi).startFrame;
+            mAInput.offFrame = sdcp(runi).endFrame;
+            %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db(1).samplingRate))/2; %in ms
             mAInput.ridgeHalfWidth = 100; %in ms
+            %fprintf('ridgeHalfWidth: %.4e\n', mAInput.ridgeHalfWidth)
             mAInput.nIterations = 5000; % number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
             mAInput.selectNonOverlappingTrials = 1; %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
             mAInput.earlyOnly = 0; %0 - uses all trials; 1 - uses only the first 5 trials of the session
             mAInput.startTrial = 1; %the analysis begins with this trial number (e.g. - 1: analysis on all trials)
             [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
-            mAOutput.normQ = (mAOutput.Q)/max(mAOutput.Q(~isinf(mAOutput.Q)));
+            mAOutput.normQ1 = (mAOutput.Q1)/max(mAOutput.Q1(~isinf(mAOutput.Q1)));
             mAOutput_batch(runi) = mAOutput;
-            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodA.mat' ], 'mAInput', 'mAOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
         end
         
         % ----
@@ -387,8 +391,8 @@ else %Real Physiology Data
             mBInput.distribution4Bayes = 'mvmn'; %options:'kernel', 'mv', 'mvmn', or 'normal'
             mBInput.saveModel = 0;
             mBInput.nIterations = 1000;
-            mBInput.startFrame = 1;
-            mBInput.endFrame = db(runi).nFrames;
+            mBInput.startFrame = sdcp(runi).startFrame;
+            mBInput.endFrame = sdcp(runi).endFrame;
             mBInput.threshold = 99; %in %
             if ~mBInput.saveModel
                 try
@@ -396,11 +400,13 @@ else %Real Physiology Data
                 catch
                 end
             end
-            mBInput.getT = 0;
+            mBInput.getT = 0; %Set this off, unless you have GPU power on your machine
             [mBOutput] = runWilliamTIAnalysis(DATA, mBInput);
-            mBOutput.normQ = (mBOutput.Q)/max(mBOutput.Q);
+            mBOutput.normQ1 = (mBOutput.Q1)/max(mBOutput.Q1);
+            mBOutput.normQ2 = (mBOutput.Q2)/max(mBOutput.Q2);
+            mBOutput.normQ3 = (mBOutput.Q3)/max(mBOutput.Q3);
             mBOutput_batch(runi) = mBOutput;
-            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodB.mat' ], 'mBInput', 'mBOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
         end
         
         % ----
@@ -410,14 +416,13 @@ else %Real Physiology Data
             mCInput.delta = 3;
             mCInput.skipFrames = [];
             mCInput.nIterations = 1000;
-            mCInput.startFrame = 1;
-            mCInput.endFrame = db(runi).nFrames;
+            mCInput.startFrame = sdcp(runi).startFrame;
+            mCInput.endFrame = sdcp(runi).endFrame;
             mCInput.threshold = 99; %in %
             [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
-            %mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
-            mCOutput.normQ2 = (mCOutput.Q2)/max(mCOutput.Q2);
+            mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
             mCOutput_batch(runi) = mCOutput;
-            %save([saveFolder db(runi).mouseName '_' db.date '_methodC.mat' ], 'mCInput', 'mCOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
         end
         
         % ----
@@ -426,15 +431,16 @@ else %Real Physiology Data
             %Method D - Arnaud Malvache' PCA based Analysis for Sequences
             mDInput.delta = 3;
             mDInput.skipFrames = [];
-            mDInput.gaussianSmoothing = 1; %logical
+            mDInput.gaussianSmoothing = 1; %logical; "is this necessary?"!!!!!!!!
             mDInput.nSamples = 5; %for Gaussian Kernel
-            mDInput.automatic = 0; %for selecting PC; logical
-            mDInput.timeVector = (1:db(runi).nFrames*size(DATA,2)) * (1/db(runi).samplingRate); %in seconds; %For derivative
-            mDInput.getT = 1;
+            mDInput.automatic = 1; %for selecting P; logical
+            mDInput.timeVector = (1:db(1).nFrames*size(DATA,2)) * (1/db(1).samplingRate); %in seconds; %For derivative
+            mDInput.getT = 0;
+            mDInput.use1PC = 1;
             [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
-            mDOutput.normQ = (mDOutput.Q) ./max(mDOutput.Q);
+            mDOutput.normQ1 = (mDOutput.Q1) ./max(mDOutput.Q1);
             mDOutput_batch(runi) = mDOutput;
-            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodD.mat' ], 'mDInput', 'mDOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
         end
         
         % ----
@@ -448,7 +454,7 @@ else %Real Physiology Data
             mEInput.whichTrials = 'alternate';
             mEInput.labelShuffle = 'off';
             mEInput.getT = 0;
-            if ops0.loadSyntheticData
+            if loadSyntheticData
                 mEInput.ptcList = sdo_batch(runi).ptcList;
                 mEInput.ocList = sdo_batch(runi).ocList;
             else
@@ -458,7 +464,6 @@ else %Real Physiology Data
                     mEInput.ocList = input('Enter Other Cell List: ');
                 end
             end
-            
             mEInput.saveModel = 0;
             if ~mEInput.saveModel
                 try
@@ -467,9 +472,9 @@ else %Real Physiology Data
                 end
             end
             [mEOutput] = runSVMClassification(DATA, mEInput);
-            mEOutput.normQ = (mEOutput.Q) ./max(mEOutput.Q);
+            mEOutput.normQ1 = (mEOutput.Q1) ./max(mEOutput.Q1);
             mEOutput_batch(runi) = mEOutput;
-            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodE.mat' ], 'mEInput', 'mEOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
         end
         
         % ----
@@ -482,14 +487,13 @@ else %Real Physiology Data
             mFInput.beta = 1;
             mFInput.gamma = 10;
             mFInput.nIterations = 1000;
-            mFInput.startFrame = 1;
-            mFInput.endFrame = db(runi).nFrames;
+            mFInput.startFrame = sdcp(runi).startFrame;
+            mFInput.endFrame = sdcp(runi).endFrame;
             mFInput.threshold = 99; %in %s
             [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
-            %mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
-            mFOutput.normQ2 = (mFOutput.Q2)/max(mFOutput.Q2);
+            mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
             mFOutput_batch(runi) = mFOutput;
-            %save([saveFolder db(runi).mouseName '_' db(runi).date '_methodF.mat' ], 'mFInput', 'mFOutput')
+            %save([saveFolder db(1).mouseName '_' db(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
         end
     end
 end

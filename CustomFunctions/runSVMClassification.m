@@ -72,7 +72,7 @@ svmOutput.timeCells1 = timeCells1;
 nanTest_input.nCells = nCells;
 nanTest_input.dataDesc = 'Method E scores';
 nanTest_input.dimensions = '1D';
-nanList = lookout4NaNs(svmOutput.Q1, nanTest_input);
-svmOutput.nanList = nanList;
+nanList1 = lookout4NaNs(svmOutput.Q1, nanTest_input);
+svmOutput.nanList1 = nanList1;
 
 end

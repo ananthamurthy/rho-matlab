@@ -28,7 +28,7 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 %%
 i = 0;
 %% Synthetic Data Parameters
-nShuffles = 3;
+nShuffles = 3; %typically 3
 for value = 0:1:5
     for shuffle = 1:nShuffles
         i = i + 1;

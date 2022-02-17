@@ -46,7 +46,7 @@ timeCells2 = Q1 > thresholdOtsu2;
 stcaOutput.Q1 = Q1;
 stcaOutput.T1 = peakTimeBin;
 stcaOutput.timeCells1 = timeCells1;
-stcaOutput.timeCells1 = timeCells2;
+stcaOutput.timeCells2 = timeCells2;
 
 %Lookout for NaNs
 nanTest_input.nCells = nCells;
