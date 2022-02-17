@@ -4,6 +4,6 @@ disp('Setting up parameters for harvest ...')
 %setupHarvestParams2 %Loads all options for PSA
 %setupHarvestParams3
 %setupHarvestParams4
-setupHarvestParams5
-%setupHarvestParams6
+%setupHarvestParams5
+setupHarvestParams6
 disp('... done!')
