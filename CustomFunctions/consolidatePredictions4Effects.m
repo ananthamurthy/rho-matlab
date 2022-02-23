@@ -1,16 +1,25 @@
-function [response, predictor] = getTheTable(sdo_batch, cData, input)
 
-% Prepare Look Up Table (LUT)
-disp('Creating Look Up Table ...')
+% close all
+% clear
+
+% tic
+function [Y, X] = consolidatePredictions4Effects(input, sdo_batch, cData, indices)
 
 nCells = input.nCells;
-nMethods = input.nMethods;
-nDatasets = input.nDatasets;
+nAlgos = input.nAlgos;
+nDatasets = length(indices);
+%figureDetails = compileFigureDetails(16, 2, 5, 0.5, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%Extra colormap options: inferno/plasma/viridis/magm
+%C = distinguishable_colors(nAlgos);
 
-preLUT = zeros(nCells*nDatasets, nMethods+2);
+% Prepare Look Up Table (lut)
+disp('Creating Confusion Matrix ...')
+preLUT = zeros(nCells*nDatasets, nAlgos+1);
+
+%reality = zeros(nDatasets, nCells);
 
 count = 0;
-for dnum = 1:nDatasets
+for dnum = indices(1):indices(nDatasets)
     count = count + 1;
     start = ((count-1)*nCells + 1);
     finish = count*nCells;
@@ -19,25 +28,7 @@ for dnum = 1:nDatasets
     reality = zeros(nCells, 1); %Preallocate
     reality(sdo_batch(dnum).ptcList) = 1; %Ground Truth
     
-    for column = 1:nMethods+2
-        if column == 1
-            preLUT(start:finish, column) = reality; %Ground Truth - True Class Labels
-        elseif column == 2
-            preLUT(start:finish, column) = squeeze(sdo_batch(dnum).Q);
-        elseif column == 3
-            preLUT(start:finish, column) = squeeze(cData.methodA.mAOutput_batch(dnum).Q); %scores
-        elseif column == 4
-            preLUT(start:finish, column) = squeeze(cData.methodB.mBOutput_batch(dnum).Q); %scores
-        elseif column == 5
-            preLUT(start:finish, column) = squeeze(cData.methodC.mCOutput_batch(dnum).Q2); %scores
-        elseif column == 6
-            preLUT(start:finish, column) = squeeze(cData.methodD.mDOutput_batch(dnum).Q); %scores
-        elseif column == 7
-            preLUT(start:finish, column) = squeeze(cData.methodE.mEOutput_batch(dnum).Q); %scores
-        elseif column == 8
-            preLUT(start:finish, column) = squeeze(cData.methodF.mFOutput_batch(dnum).Q2); %scores
-        end
-
+    for algo = 1:nAlgos+1
         if algo == 1
             preLUT(start:finish, algo) = reality;
         elseif algo == 2
@@ -71,7 +62,6 @@ for dnum = 1:nDatasets
         end
     end
 end
-
 if input.removeNaNs
     %Edit out NaNs as O
     reshapedLUT = reshape(preLUT, [], 1);
@@ -80,9 +70,11 @@ if input.removeNaNs
 else
     LUT = preLUT;
 end
+
+Y = LUT(:, 1); %Truth
+X = LUT(:, 2:input.nAlgos+1);
+
 disp('... done!')
 
-response = LUT(:, 1); % Ground Truth - True Class Labels
-predictor = LUT(:, 3:input.nMethods+2);
 end
 % toc

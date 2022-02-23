@@ -13,7 +13,7 @@ function randDATA = generateRandData(DATA, controls)
             if option == 0
                 shift = randi(startFrame);
             elseif option == 1
-                shift = randi(nFrames - endFrame);
+                shift = randi(nFrames - endFrame) + endFrame;
             end
             %fprintf('Cell: %i, Trial: %i, Option: %i, Shift: %i\n', cell, trial, option, shift)
             %numel(1:shift)

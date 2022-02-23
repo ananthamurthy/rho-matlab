@@ -16,8 +16,8 @@ generateSyntheticDataExample
 %% Subsequent plots
 %%
 input.nCells = 135;
-input.nAlgos = 8;
-input.nMethods = 6;
+input.nAlgos = 14; %detection algorithms
+input.nMethods = 8; %scoring methods
 
 workingOnServer = 2; %Only to select the batch for datasets
 
@@ -33,12 +33,12 @@ if workingOnServer == 1 %Bebinca
     
 elseif workingOnServer == 2 %Adama
     % Synthetic Dataset Details
-    input.gDate = 20211120; %generation date
+    input.gDate = 20220217; %generation date
     input.gRun = 1; %generation run number
-    input.nDatasets = 417;
+    input.nDatasets = 537;
     
     % Consolidated Analysis Details
-    input.cDate = 20211124; %consolidation date
+    input.cDate = 20220217; %consolidation date
     input.cRun = 1; %consolidation run number
 end
 
@@ -102,7 +102,7 @@ disp('... done!')
 
 input.removeNaNs = 0;
 input.saveFolder = saveFolder;
-[Y, X] = developConfusionMatrix(input, sdo_batch, cData);
+[Y, X] = consolidatePredictions(input, sdo_batch, cData);
 
 % TP, FN, FP, TN
 nCases = length(Y);
@@ -213,7 +213,7 @@ C = linspecer(input.nMethods);
 input.removeNaNs = 1;
 
 %Prepare the Look Up Table (LUT)
-[response, predictor] = getTheTable(sdo_batch, cData, input);
+[response, predictor] = consolidatePredictors(sdo_batch, cData, input); %NOTE: "response" is identical to "Y".
 
 %Normalize
 maximaN = zeros(input.nMethods, 1);
@@ -250,12 +250,11 @@ correlationMatrix = corrcoef(normPredictor, 'Rows', 'pairwise');
 %correlationMatrix = corrcoef(predictor);
 
 %Labels
-algoLabels = {'rR2B-Bo', 'TI-Bo', 'pAUC-Bo', 'pAUC-Ot', 'offPCA-Ot', 'SVM-Ot', 'Param-Bo', 'Param-Ot'};
-concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '=8'};
-metricLabels = {'Recall', 'Precision', 'F1 Score'};
-methodLabels = {'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
-methodLabels2 = {'A', 'B', 'C', 'D', 'E', 'F'};
-legends1 = {'TPR', 'FPR', 'TNR', 'FNR'};
+algoLabels = {'rR2B-Bo', 'rR2B-Ot', 'Ispk-Bo', 'Isec-Bo', 'MI-Bo', 'Ispk-Ot', 'Isec-Ot', 'MI-Ot', 'pAUC-Bo', 'pAUC-Ot', 'offPCA-Ot', 'SVM-Ot', 'Param-Bo', 'Param-Ot'};
+concordanceAlgoLabels = {'>=1', '>=2', '>=3', '>= 4', '>= 5', '>= 6', '>=7', '>=8', '>=9', '>=10', '>=11', '>=12', '>=13', '=14'};
+metricLabels = {' All TPs', ' All FPs', ' All TNs', ' All FNs'};
+metricLabels2 = {'Recall', 'Precision', 'F1 Score'};
+methodLabels = {'rR2B', 'Ispk', 'Isec', 'MI', 'pAUC', 'offPCA', 'SVM', 'Param.'}; %8 scoring methods
 procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 
 %% Plots - IV
@@ -284,9 +283,13 @@ for method = 1:input.nMethods
         subplotNum = 17;
     elseif method == 6
         subplotNum = 18;
+    elseif method == 7
+        subplotNum = 25;
+    elseif method == 8
+        subplotNum = 26;
     end
     
-    subplot(16, 2, subplotNum)
+    subplot(20, 2, subplotNum)
     h = histogram(ptcScores, ...
         'EdgeColor', C(2, :), ...
         'FaceColor', C(2, :));
@@ -303,31 +306,31 @@ for method = 1:input.nMethods
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     
-    if method == 1
-        %xlim([-0.005, 0.005])
-        xlim([-0.005, 0.005])
-    elseif method == 2
-        xlim([-0.005, 0.005])
-    elseif method == 3
-        xlim([0, 1])
-    elseif method == 4
-        xlim([-0.6, 0.6])
-    elseif method == 5
-        xlim([-0.5, 0.5])
-    elseif method == 6
-        xlim([0, 1])
-    end
+%     if method == 1
+%         %xlim([-0.005, 0.005])
+%         xlim([-0.005, 0.005])
+%     elseif method == 2
+%         xlim([-0.005, 0.005])
+%     elseif method == 3
+%         xlim([0, 1])
+%     elseif method == 4
+%         xlim([-0.6, 0.6])
+%     elseif method == 5
+%         xlim([-0.5, 0.5])
+%     elseif method == 6
+%         xlim([0, 1])
+%     end
 %     lgd = legend({'Time Cells'}, ...
 %             'Location', 'northwest');
 %         lgd.FontSize = figureDetails.fontSize-3;
     if method == 1 || method == 2
         lgd = legend({'Time Cells'}, ...
-            'Location', 'northwest');
+            'Location', 'northeast');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
     
-    subplot(16, 2, subplotNum+4)
+    subplot(20, 2, subplotNum+4)
     histogram(ocScores, ...
         'BinWidth', binWidth, ...
         'EdgeColor', C(1, :), ...
@@ -336,7 +339,7 @@ for method = 1:input.nMethods
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
     hold off
-    if method == 5 || method == 6
+    if method == 7 || method == 8
         xlabel('Binned Norm. Scores', ...
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
@@ -345,20 +348,20 @@ for method = 1:input.nMethods
 %         'FontSize', figureDetails.fontSize, ...
 %         'FontWeight', 'bold')
 
-    if method == 1
-        %xlim([-0.005, 0.005])
-        xlim([-0.005, 0.005])
-    elseif method == 2
-        xlim([-0.005, 0.005])
-    elseif method == 3
-        xlim([0, 1])
-    elseif method == 4
-        xlim([-0.6, 0.6])
-    elseif method == 5
-        xlim([-0.5, 0.5])
-    elseif method == 6
-        xlim([0, 1])
-    end
+%     if method == 1
+%         %xlim([-0.005, 0.005])
+%         xlim([-0.005, 0.005])
+%     elseif method == 2
+%         xlim([-0.005, 0.005])
+%     elseif method == 3
+%         xlim([0, 1])
+%     elseif method == 4
+%         xlim([-0.6, 0.6])
+%     elseif method == 5
+%         xlim([-0.5, 0.5])
+%     elseif method == 6
+%         xlim([0, 1])
+%     end
 %     lgd = legend({'Other Cells'}, ...
 %             'Location', 'northwest');
 %         lgd.FontSize = figureDetails.fontSize-3;
@@ -372,7 +375,7 @@ for method = 1:input.nMethods
 end
 hold off
 
-subplot(16, 2, [27, 29, 31])
+subplot(20, 2, [35, 37, 39])
 
 %for method = input.nMethods:-1:1
 for method = 1:input.nMethods
@@ -431,7 +434,7 @@ lgd1.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
 %subplot(3, 9, 24:26)
-subplot(16, 2, [28, 30, 32])
+subplot(20, 2, [36, 38, 40])
 h = heatmap(correlationMatrix, ...
     'Colormap', linspecer, ...
     'Title', 'Correlation Coefficients', ...
@@ -459,69 +462,11 @@ disp('Plotting Performance Metrics ...')
 fig5 = figure(5);
 clf
 set(fig5, 'Position', [600, 300, 900, 1200])
-title('Confusion Matrices and Performance Evalutation', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%subplot(7, 5, [1:5, 6:10])
-for algo = 1:input.nAlgos
-    
-    if algo == 1
-        subplot(12, 8, 1:2)
-    elseif algo == 2
-        subplot(12, 8, 3:4)
-	elseif algo == 3
-        subplot(12, 8, 5:6)
-	elseif algo == 4
-        subplot(12, 8, 7:8)
-    elseif algo == 5
-        subplot(12, 8, 17:18)
-    elseif algo == 6
-        subplot(12, 8, 19:20)
-    elseif algo == 7
-        subplot(12, 8, 21:22)
-    elseif algo == 8
-        subplot(12, 8, 23:24)
-    end
-    
-    imagesc(squeeze(confusionMatrix(algo, :, :)));
-    title(sprintf('%s', char(algoLabels(algo))), ...
-        'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold');
-    
-    xticks([1, 2])
-    xticklabels({'0', '1'})
-    yticks([1, 2])
-    yticklabels({'1', '0'})
-    colorbar
-    colormap(linspecer)
-    
-    if algo == 4 || algo == 8
-        set(colorbar,'visible','on')
-    else
-        set(colorbar, 'visible', 'off')
-    end
-    
-    if algo == 5
-        %h.XLabel = 'Prediction';
-        xlabel('Prediction', ...
-        'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold')
-    end
-    if algo == 5
-        %h.YLabel = 'Ground Truth';
-        ylabel('Ground Truth', ...
-        'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold')
-    end
-    
-    set(gca, 'FontSize', figureDetails.fontSize)
-end
-
-subplot(12, 8, (40:48))
-d = bar(results3);
+subplot(11, 8, (1:16))
+d = bar(results1);
 xlim([0 5])
 axis tight
-title('Predictive Performance Metrics', ...
+title('Predictive Performance Metrics - I', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 % xlabel('All Algorithms', ...
@@ -533,33 +478,55 @@ ylabel('Rate', ...
 xticklabels({'', '', '', '', '', '', '', '', })
 xticklabels(algoLabels)
 xtickangle(45)
-lgd = legend({'Recall', 'Precision', 'F1 Score'}, ...
-    'Location', 'southwest');
+lgd = legend(metricLabels, ...
+    'Location', 'southeastoutside');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
+subplot(11, 8, (25:40))
+d = bar(results3);
+xlim([0 5])
+axis tight
+title('Predictive Performance Metrics - II', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+% xlabel('All Algorithms', ...
+% 'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
+ylabel('Rate', ...
+    'FontSize', figureDetails.fontSize, ...
+    'FontWeight', 'bold')
+xticklabels({'', '', '', '', '', '', '', '', })
+xticklabels(algoLabels)
+xtickangle(45)
+lgd = legend(metricLabels2, ...
+    'Location', 'southeastoutside');
+lgd.FontSize = figureDetails.fontSize-3;
+set(gca, 'FontSize', figureDetails.fontSize)
 
+totalCells = length(sdo_batch)*nCells;
 allUnique = zeros(input.nAlgos, 3);
-allUnique(:, 1) = sum(unique1, 1);
-allUnique(:, 2) = sum(unique2, 1);
-allUnique(:, 3) = sum(unique3, 1);
-subplot(12, 8, (57:72))
+allUnique(:, 1) = (sum(unique1, 1)*100)/totalCells;
+allUnique(:, 2) = (sum(unique2, 1)*100)/totalCells;
+allUnique(:, 3) = (sum(unique3, 1)*100)/totalCells;
+subplot(11, 8, (49:64))
 bar(allUnique)
 xlim([1, 8])
 axis tight
-title('Uniquely Identified Time Cells', ...
+title('Unique Time Cell Predictions', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 % xlabel('All Algorithms', ...
 %     'FontSize', figureDetails.fontSize, ...
 %     'FontWeight', 'bold')
-ylabel('Counts', ...
+ylabel('Counts/Total (%)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xticklabels(algoLabels)
 xtickangle(45)
 %set(gca,'xtick',[])
-lgd = legend({'1/8 Algorithms', '2/8 Algorithms', '3/8 Algorithms'});
+lgd = legend({'1/14 Algo', '2/14 Algo', '3/14 Algo'}, ...
+    'Location', 'southeastoutside');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
@@ -588,18 +555,8 @@ stdRunTime(:, iCase) = std(runTime*60, 1);
 end
 disp('... done!')
 
-
 %Usage
-% usage = [10.07, 1.6, 5.2; ...
-%     23.5, 14.2, 45.3; ...
-%     23.5, 14.2, 45.4; ...
-%     23.5, 14.2, 45.4; ...
-%     23.9, 14.2, 45.9; ...
-%     23.7, 14.3, 45.6; ...
-%     23.6, 14.2, 45.3; ...
-%     ];
-
-subplot(12, 8, [81:84, 89:92] )
+subplot(11, 8, [73:75, 81:83] )
 b1 = bar(meanInUse);
 % hold on
 % er = errorbar(meanInUse', stdInUse', 'CapSize', 12);
@@ -618,25 +575,19 @@ ylabel('Workspace (MB)', ...
 xticks([1, 2, 3, 4, 5, 6, 7])
 ylim([0, 700])
 %yticks([0, 200, 400, 600])
-lgd = legend({'135 cells', '540 cells', '1350 cells'}, ...
-    'Location', 'southeastoutside');
-lgd.FontSize = figureDetails.fontSize-4;
+% lgd = legend({'135 cells', '540 cells', '1350 cells'}, ...
+%     'Location', 'southeastoutside');
+% lgd.FontSize = figureDetails.fontSize-4;
 xticklabels(procedureLabels)
 xtickangle(45)
 set(gca, 'FontSize', figureDetails.fontSize)
 
-subplot(12, 8, [86:88, 94:96])
+subplot(11, 8, [77:80, 85:88])
 %boxplot(runTime, procedureLabels)
 %errorbar(meanRunTime', stdRunTime', 'r*', 'CapSize', 10)
 b2 = bar(meanRunTime);
 axis tight
 set(gca,'YScale','log')
-% hold on
-% er = errorbar(meanRunTime', stdRunTime', 'CapSize', 12);
-% er.Color = [0 0 0];                            
-% er.LineStyle = 'none';
-% hold off
-%xlim([1, 7])
 xticks([1, 2, 3, 4, 5, 6, 7])
 set(gca,'YLim',[1e0 1e4],'YTick',10.^(0:4))
 %yticks([1, 10, 100, 100])
@@ -650,13 +601,11 @@ xlabel('Steps', ...
 ylabel('Time (sec)', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-% lgd = legend({'1x = 135 cells', '4x = 540 cells', '10x = 1350 cells'}, ...
-%     'Location', 'best');
-% lgd.FontSize = figureDetails.fontSize-4;
+lgd = legend({'135 cells', '540 cells', '1350 cells'}, ...
+    'Location', 'southeastoutside');
+lgd.FontSize = figureDetails.fontSize-3;
 xticklabels(procedureLabels)
 xtickangle(45)
-%set(gca,'xtick',[]) legend({'1/8 Algorithms', '2/8 Algorithms', '3/8
-%Algorithms'})
 set(gca, 'FontSize', figureDetails.fontSize)
 print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
     HOME_DIR2, ...
@@ -674,29 +623,29 @@ x = 1:input.nAlgos;
 joinBundledResults3 = [];
 nSets = 3;
 
-iNoise1 = (298:307); %low
-iNoise2 = (308:317); %medium
-iNoise3 = (318:327); %high
+iNoise1 = (418:427); %low
+iNoise2 = (428:437); %medium
+iNoise3 = (438:447); %high
 
-iEW1 = (328:337); %small
-iEW2 = (338:347); %medium
-iEW3 = (348:357); %large
+iEW1 = (448:457); %small
+iEW2 = (458:467); %medium
+iEW3 = (468:477); %large
 
-iImp1 = (358:367); %low
-iImp2 = (368:377); %medium
-iImp3 = (378:387); %high
+iImp1 = (478:487); %low
+iImp2 = (488:497); %medium
+iImp3 = (498:507); %high
 
-iHTR1 = (388:397); %low
-iHTR2 = (398:407); %medium
-iHTR3 = (408:417); %high
+iHTR1 = (508:517); %low
+iHTR2 = (518:527); %medium
+iHTR3 = (528:537); %high
 
 fig6 = figure(6);
 clf
 set(fig6, 'Position', [1500, 300, 900, 1200])
 
-[Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise1);
-[Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise2);
-[Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iNoise3);
+[Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iNoise1);
+[Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iNoise2);
+[Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iNoise3);
 
 nShuffles = 10; %same throughout
 for iSet = 1:nSets
@@ -773,9 +722,9 @@ xtickangle(45)
 set(gca, 'FontSize', figureDetails.fontSize)
 
 
-[Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW1);
-[Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW2);
-[Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iEW3);
+[Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW1);
+[Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW2);
+[Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW3);
 
 
 for iSet = 1:nSets
@@ -855,9 +804,9 @@ xtickangle(45)
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-[Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp1);
-[Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp2);
-[Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iImp3);
+[Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp1);
+[Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp2);
+[Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp3);
 
 for iSet = 1:nSets
     if iSet == 1
@@ -936,9 +885,9 @@ xtickangle(45)
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-[Y1, X1] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR1);
-[Y2, X2] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR2);
-[Y3, X3] = developConfusionMatrix4Effects(input, sdo_batch, cData, iHTR3);
+[Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR1);
+[Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR2);
+[Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR3);
 
 for iSet = 1:nSets
     if iSet == 1
@@ -1026,8 +975,8 @@ b1 = bar(meanJoinBundledResults3);
 b1.FaceColor = C(2, :);
 hold on
 er = errorbar(meanJoinBundledResults3, stderrJoinBundledResults3, 'CapSize', 12);
-er.Color = [0 0 0];                            
-er.LineStyle = 'none'; 
+er.Color = [0 0 0];
+er.LineStyle = 'none';
 hold off
 axis tight
 title('Baseline - Physiological Regime', ...
@@ -1041,12 +990,12 @@ xtickangle(45)
 set(gca, 'FontSize', figureDetails.fontSize)
 
 % Concordance
-[Y, X] = developConfusionMatrix(input, sdo_batch, cData);
+[Y, X] = consolidatePredictions(input, sdo_batch, cData);
 sumX = sum(X, 2);
 nCases = length(Y);
 
 % Now, for any cell, if sumX >= some threshold, we suggest calling it a Time Cell
-nConcordanceAlgos = 8; % since input.nAlgos = 8
+nConcordanceAlgos = 14; % since input.nAlgos = 8
 
 predictions = zeros(nCases, nConcordanceAlgos);
 
@@ -1061,12 +1010,12 @@ TNR = zeros(nConcordanceAlgos, 1); %Specificity or True Negative Rate
 FNR = zeros(nConcordanceAlgos, 1); %Miss Rate or False Negative Rate
 PPV = zeros(input.nAlgos, 1); %Precision or Positive Predictive Value
 
-results = zeros(nConcordanceAlgos, 3); %3 because we'll look at Recall, Precision, and F1 Score
+results4 = zeros(nConcordanceAlgos, 3); %3 because we'll look at Recall, Precision, and F1 Score
 
 for algo = 1:nConcordanceAlgos
-    
-    predictions(:, algo) = sumX >= algo;
-    
+
+    predictions(:, algo) = (sumX >= algo);
+
     for myCase = 1:nCases
         if Y(myCase) %Positive Cases
             if predictions(myCase, algo)
@@ -1082,27 +1031,50 @@ for algo = 1:nConcordanceAlgos
             end
         end
     end
-    
+
     TP = sum(allTP(:, algo));
     FN = sum(allFN(:, algo));
     FP = sum(allFP(:, algo));
     TN = sum(allTN(:, algo));
-    
-    TPR(algo) = TP/(TP + FN);
-    FPR(algo) = FP/(FP + TN);
-    TNR(algo) = TN/(TN + FP);
-    FNR(algo) = FN/(FN + TP);
-    PPV(algo) = TP/(TP + FP);
-    
-    results(algo, 1) = TPR(algo); %Recall
-    results(algo, 2) = PPV(algo); %Precision
-    results(algo, 3) = 2 * results(algo, 1) * results(algo, 2)/(results(algo, 1) + results(algo, 2)); %F1 Score
+
+    if TP ~= 0
+        TPR(algo) = TP/(TP + FN); %Recall
+        PPV(algo) = TP/(TP + FP); %Precision
+    else
+        TPR(algo) = 0; %Recall
+        PPV(algo) = 0; %Precision
+    end
+
+    if FP ~= 0
+        FPR(algo) = FP/(FP + TN);
+    else
+        FPR(algo) = 0;
+    end
+
+    if TN ~= 0
+        TNR(algo) = TN/(TN + FP);
+    else
+        TNR(algo) = 0;
+    end
+
+    if FN ~= 0
+        FNR(algo) = FN/(FN + TP);
+    else
+        FNR(algo) = 0;
+    end
+
+    results4(algo, 1) = TPR(algo); %Recall
+    results4(algo, 2) = PPV(algo); %Precision
+
+    if TP == 0
+        results4(algo, 3) = 0;
+    else
+        results4(algo, 3) = 2 * results4(algo, 1) * results4(algo, 2)/(results4(algo, 1) + results4(algo, 2)); %F1 Score
+    end
 end
 
-legendLabels = {'Recall', 'Precision', 'F1 Score'};
-
-subplot(11, 2, [19:22])
-d = bar(results);
+subplot(11, 2, (19:22))
+d = bar(results4);
 xlim([0 5])
 axis tight
 
@@ -1114,8 +1086,8 @@ ylabel('Rate', ...
     'FontWeight', 'bold')
 xticklabels(concordanceAlgoLabels)
 xtickangle(45)
-lgd = legend(legendLabels, ...
-    'Location', 'southwest');
+lgd = legend(metricLabels2, ...
+    'Location', 'southeastoutside');
 lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
