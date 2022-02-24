@@ -22,9 +22,15 @@ timeCells3 = nan(nCells, 1);
 %timeCells6 = nan(nCells, 1); %Unnecessary preallocation
 %time = nan(nCells, 1);
 
+if williamInput.limit2StimWindow == 1
+    myDATA = DATA(:, :, williamInput.startFrame:williamInput.endFrame); %cells, trials, frames
+else
+    myDATA = DATA;
+end
+
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
-    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(DATA(cell, :, :)));
+    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(myDATA(cell, :, :)));
 end
 
 %Crucial - sometimes the scores could be complex numbers.
@@ -38,10 +44,17 @@ controls.endFrame = williamInput.endFrame;
 
 for i = 1:nIterations
     %fprintf('>>> Randomized dataset: %i of %i ...\n', i, nIterations)
-    randDATA = generateRandData(DATA, controls);
+    randDATA = generateRandData(DATA, controls); %original, without sectioning stimulus window
+    
+    if williamInput.limit2StimWindow == 1
+        myRandDATA = randDATA(:, :, williamInput.startFrame:williamInput.endFrame); %cells, trials, frames
+    else
+        myRandDATA = DATA;
+    end
+
     %Calculate Temporal Information
     for cell = 1:nCells
-        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(randDATA(cell, :, :)));
+        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(myRandDATA(cell, :, :)));
     end
 end
 

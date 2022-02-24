@@ -26,17 +26,17 @@ if workingOnServer == 1 %Bebinca
     input.gDate = 20211103; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 417;
-    
+
     % Consolidated Analysis Details
     input.cDate = 20210918; %consolidation date @!!!!!
     input.cRun = 1; %consolidation run number
-    
+
 elseif workingOnServer == 2 %Adama
     % Synthetic Dataset Details
     input.gDate = 20220217; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 537;
-    
+
     % Consolidated Analysis Details
     input.cDate = 20220217; %consolidation date
     input.cRun = 1; %consolidation run number
@@ -105,89 +105,13 @@ input.saveFolder = saveFolder;
 [Y, X] = consolidatePredictions(input, sdo_batch, cData);
 
 % TP, FN, FP, TN
-nCases = length(Y);
+%nCases = length(Y);
+%confusionMatrix = zeros(input.nAlgos, 2, 2);
 
-%Preallocation
-allTP = zeros(nCases, input.nAlgos);
-allTN = zeros(nCases, input.nAlgos);
-allFP = zeros(nCases, input.nAlgos);
-allFN = zeros(nCases, input.nAlgos);
-TPR = zeros(input.nAlgos, 1); %Sensitivity
-FPR = zeros(input.nAlgos, 1); %Fall-out or False Positive Rate
-TNR = zeros(input.nAlgos, 1); %Specificity
-FNR = zeros(input.nAlgos, 1); %Miss Rate
-PPV = zeros(input.nAlgos, 1); %Positive Predictive Value
-NPV = zeros(input.nAlgos, 1); %Negative Predictive Value
-FDR = zeros(input.nAlgos, 1); %False Discovery Rate
-FOR = zeros(input.nAlgos, 1); %Flase Omission Rate
-PT = zeros(input.nAlgos, 1); %Prevalence Threshold
-TS = zeros(input.nAlgos, 1); %Threat Score or Critical Success Index (CSI)
-ACC = zeros(input.nAlgos, 1); %Accuracy
-BA = zeros(input.nAlgos, 1); %Balanced Accuracy
-
-results1 = zeros(input.nAlgos, 4);
-results2 = zeros(input.nAlgos, 4);
-results3 = zeros(input.nAlgos, 3);
-
-confusionMatrix = zeros(input.nAlgos, 2, 2);
-
-for algo = 1:input.nAlgos
-    for myCase = 1:nCases
-        if Y(myCase) %Positive Cases
-            if X(myCase, algo)
-                allTP(myCase, algo) = 1;
-            else
-                allFN(myCase, algo) = 1;
-            end
-        else %Negative Cases
-            if X(myCase, algo)
-                allFP(myCase, algo) = 1;
-            else
-                allTN(myCase, algo) = 1;
-            end
-        end
-    end
-    
-    TP = sum(allTP(:, algo));
-    FN = sum(allFN(:, algo));
-    FP = sum(allFP(:, algo));
-    TN = sum(allTN(:, algo));
-    
-    confusionMatrix(algo, 1, 1) = FN;
-    confusionMatrix(algo, 1, 2) = TP;
-    confusionMatrix(algo, 2, 1) = TN;
-    confusionMatrix(algo, 2, 2) = FP;
-    
-    TPR(algo) = TP/(TP + FN);
-    FPR(algo) = FP/(FP + TN);
-    TNR(algo) = TN/(TN + FP);
-    FNR(algo) = FN/(FN + TP);
-    
-    PPV(algo) = TP/(TP + FP);
-    NPV(algo) = TN/(TN + FN);
-    FDR(algo) = FP/(FP + TP);
-    FOR(algo) = FN/(FN + TN);
-    
-    PT(algo) = (sqrt(TPR(algo)*(-TNR(algo) +1)) + TNR(algo) - 1)/(TPR(algo) + TNR(algo) -1);
-    TS(algo) = TP/(TP + FN + FP);
-    
-    ACC(algo) = (TP + TN)/(TP + TN + FP + FN);
-    BA(algo) = (TPR(algo) + TNR(algo))/2;
-    
-    results1(algo, 1) = TPR(algo);
-    results1(algo, 2) = FPR(algo);
-    results1(algo, 3) = TNR(algo);
-    results1(algo, 4) = FNR(algo);
-    
-    results2(algo, 1) = TPR(algo);
-    results2(algo, 2) = TNR(algo);
-    results2(algo, 3) = FDR(algo);
-    results2(algo, 4) = FOR(algo);
-    
-    results3(algo, 1) = TPR(algo);
-    results3(algo, 2) = PPV(algo);
-    results3(algo, 3) = 2 * results3(algo, 1) * results3(algo, 2)/(results3(algo, 1) + results3(algo, 2));
-end
+clear results1
+clear results2
+clear results3
+[results1, ~, results3] = compareAgainstTruth(X, Y, input);
 
 % Search for uniquely identified Time Cells with some threshold
 unique1 = zeros(length(Y), input.nAlgos);
@@ -222,7 +146,7 @@ normPredictor = zeros(size(predictor));
 for method = 1:input.nMethods
     maximaN(method) = max(predictor(:, method));
     minimaN(method) = min(predictor(:, method));
-    
+
     posi = find(predictor(:, method) > 0);
     negi = find(predictor(:, method) < 0);
     normPredictor(posi, method) = predictor(posi, method)/maximaN(method);
@@ -239,7 +163,7 @@ nzPredictor = zeros(size(predictor));
 for method = 1:input.nMethods
     maximaZ(method) = max(zPredictor(:, method));
     minimaZ(method) = min(zPredictor(:, method));
-    
+
     posi = find(zPredictor(:, method) > 0);
     negi = find(zPredictor(:, method) < 0);
     nzPredictor(posi, method) = zPredictor(posi, method)/maximaN(method);
@@ -270,7 +194,7 @@ title(sprintf('Comparative Analysis (N=%i)', input.nDatasets), ...
 for method = 1:input.nMethods
     ptcScores = normPredictor(response == 1, method);
     ocScores = normPredictor(response == 0, method);
-    
+
     if method == 1
         subplotNum = 1;
     elseif method == 2
@@ -288,7 +212,7 @@ for method = 1:input.nMethods
     elseif method == 8
         subplotNum = 26;
     end
-    
+
     subplot(20, 2, subplotNum)
     h = histogram(ptcScores, ...
         'EdgeColor', C(2, :), ...
@@ -298,38 +222,38 @@ for method = 1:input.nMethods
         h.NumBins = 10000;
     end
     binWidth = h.BinWidth;
-%     ylabel('Counts', ...
-%         'FontSize', figureDetails.fontSize, ...
-%         'FontWeight', 'bold')
+    %     ylabel('Counts', ...
+    %         'FontSize', figureDetails.fontSize, ...
+    %         'FontWeight', 'bold')
     hold off
     title(sprintf('Method: %s', char(methodLabels(method))), ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
-    
-%     if method == 1
-%         %xlim([-0.005, 0.005])
-%         xlim([-0.005, 0.005])
-%     elseif method == 2
-%         xlim([-0.005, 0.005])
-%     elseif method == 3
-%         xlim([0, 1])
-%     elseif method == 4
-%         xlim([-0.6, 0.6])
-%     elseif method == 5
-%         xlim([-0.5, 0.5])
-%     elseif method == 6
-%         xlim([0, 1])
-%     end
-%     lgd = legend({'Time Cells'}, ...
-%             'Location', 'northwest');
-%         lgd.FontSize = figureDetails.fontSize-3;
+
+    %     if method == 1
+    %         %xlim([-0.005, 0.005])
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 2
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 3
+    %         xlim([0, 1])
+    %     elseif method == 4
+    %         xlim([-0.6, 0.6])
+    %     elseif method == 5
+    %         xlim([-0.5, 0.5])
+    %     elseif method == 6
+    %         xlim([0, 1])
+    %     end
+    %     lgd = legend({'Time Cells'}, ...
+    %             'Location', 'northwest');
+    %         lgd.FontSize = figureDetails.fontSize-3;
     if method == 1 || method == 2
         lgd = legend({'Time Cells'}, ...
             'Location', 'northeast');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
-    
+
     subplot(20, 2, subplotNum+4)
     histogram(ocScores, ...
         'BinWidth', binWidth, ...
@@ -344,34 +268,34 @@ for method = 1:input.nMethods
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
     end
-%     title(sprintf('Method: %s', char(methodLabels(method))), ...
-%         'FontSize', figureDetails.fontSize, ...
-%         'FontWeight', 'bold')
+    %     title(sprintf('Method: %s', char(methodLabels(method))), ...
+    %         'FontSize', figureDetails.fontSize, ...
+    %         'FontWeight', 'bold')
 
-%     if method == 1
-%         %xlim([-0.005, 0.005])
-%         xlim([-0.005, 0.005])
-%     elseif method == 2
-%         xlim([-0.005, 0.005])
-%     elseif method == 3
-%         xlim([0, 1])
-%     elseif method == 4
-%         xlim([-0.6, 0.6])
-%     elseif method == 5
-%         xlim([-0.5, 0.5])
-%     elseif method == 6
-%         xlim([0, 1])
-%     end
-%     lgd = legend({'Other Cells'}, ...
-%             'Location', 'northwest');
-%         lgd.FontSize = figureDetails.fontSize-3;
+    %     if method == 1
+    %         %xlim([-0.005, 0.005])
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 2
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 3
+    %         xlim([0, 1])
+    %     elseif method == 4
+    %         xlim([-0.6, 0.6])
+    %     elseif method == 5
+    %         xlim([-0.5, 0.5])
+    %     elseif method == 6
+    %         xlim([0, 1])
+    %     end
+    %     lgd = legend({'Other Cells'}, ...
+    %             'Location', 'northwest');
+    %         lgd.FontSize = figureDetails.fontSize-3;
     if method == 1 || method == 2
         lgd = legend({'Other Cells'}, ...
             'Location', 'northwest');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
-    
+
 end
 hold off
 
@@ -385,26 +309,26 @@ for method = 1:input.nMethods
     Mdl = fitglm(predictor(:, method), response, ...
         'Distribution', 'binomial', ...
         'Link', 'logit');
-    
+
     %Get the scores
     score_log = Mdl.Fitted.Probability;
-    
+
     %ROC Curve coordinates
     [Xlog, Ylog, Tlog, AUClog, optOP] = perfcurve(response, score_log, 1);
     %disp(Xlog)
     %disp(Ylog)
     %disp(optOP)
-    
+
     %     if isnan(Xlog) || isnan(Ylog)
     %         warning('Probably skipping ...')
     %     end
-    
+
     %Plots
     plot(Xlog, Ylog, '-.', ...
         'Color', C(method, :), ...
         'LineWidth', figureDetails.lineWidth)
     hold on
-    
+
     if input.plotOptimalPoint
         try
             plot(optOP(1), optOP(2), 'Color', C(method, :), 'o')
@@ -544,14 +468,14 @@ for iCase = 1:3
     elseif iCase == 3
         nShuffles = 10;
     end
-runtimeFilePath = [HOME_DIR 'rho-matlab/profile_nShuffles' num2str(nShuffles) '.mat'];
-load(runtimeFilePath)
+    runtimeFilePath = [HOME_DIR 'rho-matlab/profile_nShuffles' num2str(nShuffles) '.mat'];
+    load(runtimeFilePath)
 
-meanInUse(:, iCase) = mean(inUse, 1);
-stdInUse(:, iCase) = std(inUse, 1);
+    meanInUse(:, iCase) = mean(inUse, 1);
+    stdInUse(:, iCase) = std(inUse, 1);
 
-meanRunTime(:, iCase) = mean(runTime*60, 1);
-stdRunTime(:, iCase) = std(runTime*60, 1);
+    meanRunTime(:, iCase) = mean(runTime*60, 1);
+    stdRunTime(:, iCase) = std(runTime*60, 1);
 end
 disp('... done!')
 
@@ -560,8 +484,8 @@ subplot(11, 8, [73:75, 81:83] )
 b1 = bar(meanInUse);
 % hold on
 % er = errorbar(meanInUse', stdInUse', 'CapSize', 12);
-% er.Color = [0 0 0];                            
-% er.LineStyle = 'none'; 
+% er.Color = [0 0 0];
+% er.LineStyle = 'none';
 % hold off
 title('Memory Usage', ...
     'FontSize', figureDetails.fontSize, ...
@@ -621,6 +545,7 @@ disp('... Performance Metrics Plotted')
 disp('Plotting Sensitivity and Resource ...')
 x = 1:input.nAlgos;
 joinBundledResults3 = [];
+joinAllResults3 = [];
 nSets = 3;
 
 iNoise1 = (418:427); %low
@@ -662,23 +587,29 @@ for iSet = 1:nSets
 
     for shuffle = 1:nShuffles
         myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        clear results1
+        clear results2
+        clear results3
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
+        allResults3(shuffle, :, iSet, :) = results3;
     end
 end
-joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))];
+joinAllResults3 = [joinAllResults3; squeeze(allResults3(:, :, 1, :))]; %For baseline - Noise expts.
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))]; %For baseline - Noise expts.
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
 %set(b1,'FaceAlpha', 0.5)
-dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(70-10);
+
+dependence1 = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(70-10);
 var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
 var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
 sumVar = var1 + var2;
 for algo = 1:input.nAlgos
-    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(70-10);
+    dependence1_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(70-10);
 end
-dependence_stderr_pos = dependence_stderr_neg;
+dependence1_stderr_pos = dependence1_stderr_neg;
 subplot(11, 2, [7, 9])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -693,14 +624,14 @@ subplot(11, 2, [7, 9])
 
 
 %yyaxis right
-b2 = bar(dependence);
+b2 = bar(dependence1);
 b2.FaceColor = C(1, :);
 ylabel('\Delta F1 Score/\Delta Noise', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
 hold on
-er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er = errorbar(x, dependence1, dependence1_stderr_neg, dependence1_stderr_pos, 'CapSize', 12);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 hold off
@@ -721,7 +652,6 @@ xtickangle(45)
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW2);
 [Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW3);
@@ -738,25 +668,30 @@ for iSet = 1:nSets
         Xeffect = X3;
         Yeffect = Y3;
     end
-    
+
     for shuffle = 1:nShuffles
         myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        clear results1
+        clear results2
+        clear results3
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
+        allResults3(shuffle, :, iSet, :) = results3;
     end
 end
-joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))];
+joinAllResults3 = [joinAllResults3; squeeze(allResults3(:, :, 2, :))]; %For baseline - EW expts.
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))]; %For baseline - EW expts.
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(90-30);
+dependence2 = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(90-30);
 var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
 var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
 sumVar = var1 + var2;
 for algo = 1:input.nAlgos
-    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(90-30);
+    dependence2_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(90-30);
 end
-dependence_stderr_pos = dependence_stderr_neg;
+dependence2_stderr_pos = dependence2_stderr_neg;
 subplot(11, 2, [8, 10])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -776,14 +711,14 @@ subplot(11, 2, [8, 10])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence);
+b2 = bar(dependence2);
 b2.FaceColor = C(1, :);
 ylabel('\Delta F1 Score/\Delta EW', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
 hold on
-er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er = errorbar(x, dependence2, dependence2_stderr_neg, dependence2_stderr_pos, 'CapSize', 12);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 hold off
@@ -819,25 +754,30 @@ for iSet = 1:nSets
         Xeffect = X3;
         Yeffect = Y3;
     end
-    
+
     for shuffle = 1:nShuffles
         myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        clear results1
+        clear results2
+        clear results3
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
+        allResults3(shuffle, :, iSet, :) = results3;
     end
 end
-joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))];
+joinAllResults3 = [joinAllResults3; squeeze(allResults3(:, :, 1, :))]; %For baseline - Imprecision expts.
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 1))]; %For baseline - Imprecision expts.
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(66-0);
+dependence3 = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(66-0);
 var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
 var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
 sumVar = var1 + var2;
 for algo = 1:input.nAlgos
-    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(66-0);
+    dependence3_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(66-0);
 end
-dependence_stderr_pos = dependence_stderr_neg;
+dependence3_stderr_pos = dependence3_stderr_neg;
 subplot(11, 2, [13, 15])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -857,14 +797,14 @@ subplot(11, 2, [13, 15])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence);
+b2 = bar(dependence3);
 b2.FaceColor = C(1, :);
 ylabel('\Delta F1 Score/\Delta Imp.', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
 hold on
-er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er = errorbar(x, dependence3, dependence3_stderr_neg, dependence3_stderr_pos, 'CapSize', 12);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 hold off
@@ -900,25 +840,30 @@ for iSet = 1:nSets
         Xeffect = X3;
         Yeffect = Y3;
     end
-    
+
     for shuffle = 1:nShuffles
         myCells = ((input.nCells*(shuffle-1))+1):(input.nCells*shuffle);
+        clear results1
+        clear results2
+        clear results3
         [results1, results2, results3] = compareAgainstTruth(Xeffect(myCells, :), Yeffect(myCells), input);
         bundledResults3(shuffle, :, iSet) = results3(:, 3);
+        allResults3(shuffle, :, iSet, :) = results3;
     end
 end
-joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))];
+joinAllResults3 = [joinAllResults3; squeeze(allResults3(:, :, 2, :))]; %For baseline - HTR expts.
+joinBundledResults3 = [joinBundledResults3; squeeze(bundledResults3(:, :, 2))]; %For baseline - HTR expts.
 meanBundledResults3 = squeeze(mean(bundledResults3, 1, 'omitnan'));
 stdBundledResults3 = squeeze(std(bundledResults3, 1, 'omitnan'));
 
-dependence = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(99-33);
+dependence4 = (meanBundledResults3(:, 3) - meanBundledResults3(:, 1))/(99-33);
 var1 = var(bundledResults3(:, :, 3), 1, 'omitnan');
 var2 = var(bundledResults3(:, :, 1), 1, 'omitnan');
 sumVar = var1 + var2;
 for algo = 1:input.nAlgos
-    dependence_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(99-33);
+    dependence4_stderr_neg(algo, 1) = sqrt(sumVar(1, algo))/sqrt(size(bundledResults3, 1))/(99-33);
 end
-dependence_stderr_pos = dependence_stderr_neg;
+dependence4_stderr_pos = dependence4_stderr_neg;
 subplot(11, 2, [14, 16])
 % errorbar(meanBundledResults3', stdBundledResults3', ...
 %     'LineWidth', figureDetails.lineWidth, ...
@@ -938,14 +883,14 @@ subplot(11, 2, [14, 16])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence);
+b2 = bar(dependence4);
 b2.FaceColor = C(1, :);
 ylabel('\Delta F1 Score/\Delta HTR', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 %set(b2,'FaceAlpha', 0.5)
 hold on
-er = errorbar(x, dependence, dependence_stderr_neg, dependence_stderr_pos, 'CapSize', 12);
+er = errorbar(x, dependence4, dependence4_stderr_neg, dependence4_stderr_pos, 'CapSize', 12);
 er.Color = [0 0 0];
 er.LineStyle = 'none';
 hold off
@@ -966,30 +911,38 @@ xtickangle(45)
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
+meanJoinAllResults3 = squeeze(mean(joinAllResults3, 1, 'omitnan'));
+stderrJoinAllResults3 = squeeze(std(joinAllResults3, 1, 'omitnan')/sqrt(size(joinAllResults3, 1)));
 meanJoinBundledResults3 = squeeze(mean(joinBundledResults3, 1, 'omitnan'));
 stderrJoinBundledResults3 = squeeze(std(joinBundledResults3, 1, 'omitnan')/sqrt(size(joinBundledResults3, 1)));
-
 subplot(11, 2, (1:4))
 %yyaxis left
-b1 = bar(meanJoinBundledResults3);
-b1.FaceColor = C(2, :);
-hold on
-er = errorbar(meanJoinBundledResults3, stderrJoinBundledResults3, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
+b1 = bar(meanJoinAllResults3);
+% b1 = bar(meanJoinBundledResults3);
+% b1.FaceColor = C(2, :);
+% hold on
+% er = errorbar(meanJoinBundledResults3, stderrJoinBundledResults3, 'CapSize', 12);
+% er.Color = [0 0 0];
+% er.LineStyle = 'none';
+% hold off
 axis tight
 title('Baseline - Physiological Regime', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel('F1 Score', ...
+ylabel('Rate', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
+% ylabel('F1 Score', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
 xticklabels(algoLabels);
 xtickangle(45)
+lgd = legend(metricLabels2, ...
+    'Location', 'southeastoutside');
+lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
 
-% Concordance
+% Concordance - slightly different algorithm from just using compareAgainstTruth()
 [Y, X] = consolidatePredictions(input, sdo_batch, cData);
 sumX = sum(X, 2);
 nCases = length(Y);
@@ -1103,6 +1056,7 @@ print(sprintf('%s/Resource-%i-%i-%i-%i-%i_%i', ...
 
 disp('... Sensitivity and Resource Plotted.')
 
+%%
 elapsedTime2 = toc;
 fprintf('Elapsed Time: %.4f seconds\n', elapsedTime2)
 disp('... All Done!')

@@ -161,7 +161,6 @@ fig1 = figure(1);
 clf
 set(fig1, 'Position', [100, 300, 900, 1200])
 
-
 C = linspecer(6);
 for myCase = 1:8
     %cell = randi(100);
@@ -246,9 +245,9 @@ ylabel(sprintf('All Cells + Back. + %i%% Noise', sdcp(9).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
-ylabel(z,'dF/F (%)', ...
-        'FontSize', figureDetails.fontSize, ...
-        'FontWeight', 'bold')
+% ylabel(z,'dF/F (%)', ...
+%         'FontSize', figureDetails.fontSize, ...
+%         'FontWeight', 'bold')
 colormap(linspecer)
 set(gca, 'FontSize', figureDetails.fontSize)
 

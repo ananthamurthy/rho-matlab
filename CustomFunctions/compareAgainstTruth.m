@@ -53,8 +53,9 @@ for algo = 1:input.nAlgos
 %     fprintf('--> TN = %i\n', TN);
     
     if TP == 0
-        TPR(algo) = 0;
-        PPV(algo) = 0;
+        %warning('TP = 0 for algo: %i', algo)
+        TPR(algo) = 0; %Recall
+        PPV(algo) = 0; %Precision
         TS(algo) = 0;
     else
         TPR(algo) = TP/(TP + FN); %Recall
@@ -101,15 +102,13 @@ for algo = 1:input.nAlgos
     results2(algo, 3) = FDR(algo);
     results2(algo, 4) = FOR(algo);
     
-    results3(algo, 1) = TPR(algo);
-    results3(algo, 2) = PPV(algo);
+    results3(algo, 1) = TPR(algo); %Recall
+    results3(algo, 2) = PPV(algo); %Precision
 
-    if TPR(algo) == 0 %results3(algo, 1) == 0
-        results3(algo, 3) = 0;
-    elseif PPV(algo) == 0 %results3(algo, 2) == 0
+    if TP == 0 || TPR(algo) == 0 || PPV(algo) == 0
         results3(algo, 3) = 0;
     else
-        results3(algo, 3) = 2 * results3(algo, 1) * results3(algo, 2)/(results3(algo, 1) + results3(algo, 2));
+        results3(algo, 3) = (2 * TPR(algo) * PPV(algo))/(TPR(algo) + PPV(algo)); %F1 Score
     end
 
     % NaN check - Recall
