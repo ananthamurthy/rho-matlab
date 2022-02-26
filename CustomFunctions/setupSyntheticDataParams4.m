@@ -27,7 +27,7 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 %}
 %% Physiology with Background Activity
 
-N = 3; %typically 30 or 10
+N = 5; %typically 30 or 10
 count = 0;
 % Noise
 for shuffles = 1:N
