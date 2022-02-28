@@ -19,19 +19,19 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-workingOnServer = 2; %Only to select the batch for datasets
+datasetCatalog = 0; %Only to select the batch for datasets
 
-if workingOnServer == 1 %Bebinca
-    % Synthetic Dataset Details
-    input.gDate = 20211103; %generation date
+if datasetCatalog == 0
+    %Synthetic Dataset Details
+    input.gDate = 20220226; %generation date
     input.gRun = 1; %generation run number
-    input.nDatasets = 417;
+    input.nDatasets = 60;
 
     % Consolidated Analysis Details
-    input.cDate = 20210918; %consolidation date @!!!!!
-    input.cRun = 1; %consolidation run number
+    input.cDate = 20220226; %consolidation date
+    input.cRun = 1; %consoildation run number
 
-elseif workingOnServer == 2 %Adama
+elseif datasetCatalog == 1
     % Synthetic Dataset Details
     input.gDate = 20220217; %generation date
     input.gRun = 1; %generation run number
@@ -42,7 +42,7 @@ elseif workingOnServer == 2 %Adama
     input.cRun = 1; %consolidation run number
 end
 
-%workingOnServer = 0; %Current
+workingOnServer = 0; %Current
 diaryOn         = 0;
 
 % Directory config
@@ -55,8 +55,8 @@ elseif workingOnServer == 2
     HOME_DIR2 = '/media/ananth/Storage/';
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 else
-    HOME_DIR = '/Users/ananth/Documents/';
-    HOME_DIR2 = '/Users/ananth/Desktop/';
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 %Additinal search paths
@@ -579,21 +579,40 @@ joinBundledResults3 = [];
 joinAllResults3 = [];
 nSets = 3;
 
-iNoise1 = (418:427); %low
-iNoise2 = (428:437); %medium
-iNoise3 = (438:447); %high
+if datasetCatalog == 0
+    iNoise1 = (1:5); %low
+    iNoise2 = (6:10); %medium
+    iNoise3 = (11:15); %high
 
-iEW1 = (448:457); %small
-iEW2 = (458:467); %medium
-iEW3 = (468:477); %large
+    iEW1 = (16:20); %small
+    iEW2 = (21:25); %medium
+    iEW3 = (26:30); %large
 
-iImp1 = (478:487); %low
-iImp2 = (488:497); %medium
-iImp3 = (498:507); %high
+    iImp1 = (31:35); %low
+    iImp2 = (36:40); %medium
+    iImp3 = (41:45); %high
 
-iHTR1 = (508:517); %low
-iHTR2 = (518:527); %medium
-iHTR3 = (528:537); %high
+    iHTR1 = (46:50); %low
+    iHTR2 = (51:55); %medium
+    iHTR3 = (56:60); %high
+    
+elseif datasetCatalog == 1
+    iNoise1 = (418:427); %low
+    iNoise2 = (428:437); %medium
+    iNoise3 = (438:447); %high
+
+    iEW1 = (448:457); %small
+    iEW2 = (458:467); %medium
+    iEW3 = (468:477); %large
+
+    iImp1 = (478:487); %low
+    iImp2 = (488:497); %medium
+    iImp3 = (498:507); %high
+
+    iHTR1 = (508:517); %low
+    iHTR2 = (518:527); %medium
+    iHTR3 = (528:537); %high
+end
 
 fig6 = figure(6);
 clf
@@ -603,7 +622,12 @@ set(fig6, 'Position', [1500, 300, 900, 1200])
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iNoise2);
 [Y3, X3] = consolidatePredictions4Effects(input, sdo_batch, cData, iNoise3);
 
-nShuffles = 10; %same throughout
+if datasetCatalog == 0
+    nShuffles = 5; %same throughout
+else
+    nShuffles = 10; %same throughout
+end
+
 for iSet = 1:nSets
     if iSet == 1
         Xeffect = X1;
