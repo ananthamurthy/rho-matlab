@@ -13,7 +13,7 @@ MI = nan(nCells,1); %Q3
 Ispk_rand = nan(nCells, nIterations);
 Isec_rand = nan(nCells, nIterations);
 MI_rand = nan(nCells, nIterations);
-Itime = nan(nCells,size(DATA,3),1);
+
 timeCells1 = nan(nCells, 1);
 timeCells2 = nan(nCells, 1);
 timeCells3 = nan(nCells, 1);
@@ -28,6 +28,7 @@ else
     myDATA = DATA;
 end
 
+Itime = nan(nCells,size(myDATA,3),1);
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
     [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(myDATA(cell, :, :)));
