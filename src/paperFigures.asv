@@ -6,7 +6,7 @@
 % Load the Consolidated Analysis Details and look for patterns in the plots.
 
 close all
-%clear
+clear
 
 tic
 addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions'))
@@ -81,27 +81,23 @@ plotAnalysedQs = 1;
 plotDatasetCheck = 0;
 
 % Load Synthetic Data
-if ~exist("sdo_batch", "var")
-    disp('Loading synthetic datasets ...')
-    synthDataFilePath = sprintf('%s/synthDATA_%i_gRun%i_batch_%i.mat', ...
-        saveFolder, ...
-        input.gDate, ...
-        input.gRun, ...
-        input.nDatasets);
-    load(synthDataFilePath)
-    disp('... done!')
-end
+disp('Loading synthetic datasets ...')
+synthDataFilePath = sprintf('%s/synthDATA_%i_gRun%i_batch_%i.mat', ...
+    saveFolder, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets);
+load(synthDataFilePath)
+disp('... done!')
 
 % Load Analysis Results
-if ~exist("cData", "var")
-    disp('Loading analysis results ...')
-    analysisFilePath = sprintf('%s/synthDATA_Analysis_%i_cRun%i_cData.mat', ...
-        saveFolder, ...
-        input.cDate, ...
-        input.cRun);
-    load(analysisFilePath)
-    disp('... done!')
-end
+disp('Loading analysis results ...')
+analysisFilePath = sprintf('%s/synthDATA_Analysis_%i_cRun%i_cData.mat', ...
+    saveFolder, ...
+    input.cDate, ...
+    input.cRun);
+load(analysisFilePath)
+disp('... done!')
 
 %%
 input.removeNaNs = 0;
@@ -132,7 +128,7 @@ for obs = 1:length(Y)
 end
 
 input.plotOptimalPoint = 0;
-figureDetails = compileFigureDetails(11, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 %Extra colormap options: inferno/plasma/viridis/magma
 %C = distinguishable_colors(input.nMethods);
 C = linspecer(input.nMethods);
@@ -394,7 +390,7 @@ clf
 set(fig5, 'Position', [600, 300, 900, 1200])
 subplot(11, 8, [1:4, 9:12])
 d1 = bar(results1(:, 1:2));
-d1(1).FaceColor = C(3,:);
+d1(1).FaceColor = C(2,:);
 d1(2).FaceColor = C(1,:);
 xlim([0 5])
 axis tight
@@ -417,7 +413,7 @@ set(gca, 'FontSize', figureDetails.fontSize)
 
 subplot(11, 8, [5:8, 13:16])
 d2 = bar(results1(:, 3:4));
-d2(1).FaceColor = C(2,:);
+d2(1).FaceColor = 'black';
 d2(2).FaceColor = C(1,:);
 xlim([0 5])
 axis tight
@@ -432,7 +428,7 @@ ylabel('Rate', ...
     'FontWeight', 'bold')
 xticklabels({'', '', '', '', '', '', '', '', })
 xticklabels(algoLabels)
-xtickangle(45)  
+xtickangle(45)
 lgd = legend(metricLabels_neg, ...
     'Location', 'southeastoutside');
 lgd.FontSize = figureDetails.fontSize-3;
