@@ -35,9 +35,9 @@ for cell = 1:nCells
 end
 
 %Crucial - sometimes the scores could be complex numbers.
-Q1 = real(Ispk);
-Q2 = real(Isec);
-Q3 = real(MI);
+Q1 = abs(Ispk);
+Q2 = abs(Isec);
+Q3 = abs(MI);
 
 %Generate circularly shifted randomized data
 controls.startFrame = williamInput.startFrame;
@@ -60,9 +60,9 @@ for i = 1:nIterations
 end
 
 %Crucial - sometimes the scores could be complex numbers.
-Q1_rand = real(Ispk_rand);
-Q2_rand = real(Isec_rand);
-Q3_rand = real(MI_rand);
+Q1_rand = abs(Ispk_rand);
+Q2_rand = abs(Isec_rand);
+Q3_rand = abs(MI_rand);
 
 %Classify Time Cells - with complex values
 for cell = 1:nCells
