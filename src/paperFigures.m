@@ -19,16 +19,16 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-datasetCatalog = 0; %Only to select the batch for datasets
+datasetCatalog = 1; %Only to select the batch for datasets
 
 if datasetCatalog == 0
     %Synthetic Dataset Details
-    input.gDate = 20220226; %generation date
+    input.gDate = 20220301; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 60;
 
     % Consolidated Analysis Details
-    input.cDate = 20220226; %consolidation date
+    input.cDate = 20220301; %consolidation date - vs 20220226
     input.cRun = 1; %consoildation run number
 
 elseif datasetCatalog == 1
@@ -297,7 +297,7 @@ for method = 1:input.nMethods
     %         lgd.FontSize = figureDetails.fontSize-3;
     if method == 1 || method == 2
         lgd = legend({'Other Cells'}, ...
-            'Location', 'northwest');
+            'Location', 'northeast');
         lgd.FontSize = figureDetails.fontSize-3;
     end
     set(gca, 'FontSize', figureDetails.fontSize)
