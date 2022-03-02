@@ -36,8 +36,8 @@ end
 
 %Crucial - sometimes the scores could be complex numbers.
 Q1 = real(Ispk);
-Q2 = abs(Isec);
-Q3 = abs(MI);
+Q2 = real(Isec);
+Q3 = real(MI);
 
 %Generate circularly shifted randomized data
 controls.startFrame = williamInput.startFrame;
@@ -61,8 +61,8 @@ end
 
 %Crucial - sometimes the scores could be complex numbers.
 Q1_rand = real(Ispk_rand);
-Q2_rand = abs(Isec_rand);
-Q3_rand = abs(MI_rand);
+Q2_rand = real(Isec_rand);
+Q3_rand = real(MI_rand);
 
 %Classify Time Cells - with complex values
 for cell = 1:nCells
