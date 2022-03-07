@@ -11,7 +11,7 @@ early_only = mehrabInput.earlyOnly;
 pk_behav_trial = mehrabInput.startTrial;
 
 %Preallocation
-timeCells1 = nan(nCells, 1); %Will include Time Cells and Other Cells
+timeCells1 = nan(nCells, 1); %Includes Time Cells and Other Cells
 timeCells2 = nan(nCells, 1);
 
 %Trial specifics

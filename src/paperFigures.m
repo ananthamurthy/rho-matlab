@@ -19,16 +19,18 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-datasetCatalog = 1; %Only to select the batch for datasets
+datasetCatalog = 0; %Only to select the batch for datasets
+workingOnServer = 2; %Current
+diaryOn         = 0;
 
 if datasetCatalog == 0
     %Synthetic Dataset Details
-    input.gDate = 20220301; %generation date
+    input.gDate = 20220303; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 60;
 
     % Consolidated Analysis Details
-    input.cDate = 20220301; %consolidation date - vs 20220226
+    input.cDate = 20220303; %consolidation date - vs 20220226
     input.cRun = 1; %consoildation run number
 
 elseif datasetCatalog == 1
@@ -42,11 +44,7 @@ elseif datasetCatalog == 1
     input.cRun = 1; %consolidation run number
 end
 
-workingOnServer = 0; %Current
-diaryOn         = 0;
-
 % Directory config
-
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
