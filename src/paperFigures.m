@@ -19,13 +19,13 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-datasetCatalog = 0; %Only to select the batch for datasets
 workingOnServer = 2; %Current
 diaryOn         = 0;
 
+datasetCatalog = 1; %Only to select the batch for datasets
 if datasetCatalog == 0
     %Synthetic Dataset Details
-    input.gDate = 20220303; %generation date
+    input.gDate = 20220307; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 60;
 
@@ -35,7 +35,7 @@ if datasetCatalog == 0
 
 elseif datasetCatalog == 1
     % Synthetic Dataset Details
-    input.gDate = 20220217; %generation date
+    input.gDate = 20220308; %generation date
     input.gRun = 1; %generation run number
     input.nDatasets = 537;
 
