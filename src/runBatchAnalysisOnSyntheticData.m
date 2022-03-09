@@ -8,7 +8,7 @@
 % gRun: run number for data generation (multiple runs could happen on the
 % same day)
 
-function [memoryUsage, totalMem, elapsedTime] = runBatchAnalysis(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, ...
+function [memoryUsage, totalMem, elapsedTime] = runBatchAnalysisOnSyntheticData(sdcpStart, sdcpEnd, runA, runB, runC, runD, runE, runF, ...
     gDate, gRun, workingOnServer, diaryOn, profilerTest)
 if profilerTest
     profile on
