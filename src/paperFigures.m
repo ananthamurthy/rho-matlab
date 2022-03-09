@@ -51,11 +51,11 @@ if workingOnServer == 1
 elseif workingOnServer == 2
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/media/ananth/Storage/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 else
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/home/ananth/Desktop/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 end
 %Additinal search paths
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))

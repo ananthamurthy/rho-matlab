@@ -53,7 +53,7 @@ fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
 if workingOnServer == 1
     saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
 else
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 end
 
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');

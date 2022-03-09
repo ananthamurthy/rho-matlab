@@ -35,17 +35,29 @@ for iexp = 1:nDatasets
 
     fprintf('Total cells: %i\n', size(myRawData,1))
     [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myRawData);
-
-    if curateCalciumEventLibrary
-        disp('Curating Library ...')
-        eventLibrary_2D = curateLibrary(DATA_2D);
-        save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
-        disp('... done!')
-    end
-
+    
     if saveData
-        save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], ...
-            'dfbf', 'baselines', 'dfbf_2D')
+        saveFolder = '/home/ananth/Desktop/Work/Analysis/Imaging/';
+        
+        if curateCalciumEventLibrary
+            disp('Curating Library ...')
+            eventLibrary_2D = curateLibrary(dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
+            try
+                save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+            catch
+                save(strcat(saveFolder, db.mouse_name, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+            end
+            disp('... done!')
+        end
+
+
+        disp('Saving dF/F traces ...')
+        try
+            save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
+        catch
+            save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
+        end
+        disp('... done!')
     end
 end
 toc
