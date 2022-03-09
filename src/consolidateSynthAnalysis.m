@@ -4,7 +4,7 @@
 % cDate: Harvest Date
 % cRun: Harvest Number
 
-function [memoryUsage, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, myProfilerTest)
+function [memoryUsage, totalMem, elapsedTime] = consolidateSynthAnalysis(cDate, cRun, workingOnServer, diaryOn, myProfilerTest)
 if myProfilerTest
     profile on
 end

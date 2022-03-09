@@ -26,25 +26,25 @@ for myProcedure = startProcedure:nProcedures
         [~, totalMem, ~, elapsedTime] = generateSyntheticData(gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 2
         disp('[INFO] Running Analysis by A ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 1, 0, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 1, 0, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 3
         disp('[INFO] Running Analysis by B ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 1, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 0, 1, 0, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 4
         disp('[INFO] Running Analysis by C ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 0, 0, 1, 0, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 5
         disp('[INFO] Running Analysis by D ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 0, 1, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 0, 0, 0, 1, 0, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 6
         disp('[INFO] Running Analysis by E ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 0, 0, 1, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 0, 0, 0, 0, 1, 0, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 7
         disp('[INFO] Running Analysis by F ...')
-        [~, totalMem, elapsedTime] = runBatchAnalysis(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, profilerTest);
+        [~, totalMem, elapsedTime] = runBatchAnalysisOnSynthData(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 8
         disp('[INFO] Running Harvest ...')
-        [~, totalMem, elapsedTime] = consolidateBatch(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
+        [~, totalMem, elapsedTime] = consolidateSynthAnalysis(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
         %[~, totalMem, elapsedTime] = consolidateBatch(gDate, gRun, workingOnServer, diaryOn, profilerTest); %using cDate = gDate; cRun = gRun; for small batches.
     end
     sprintf('Procedure: %s, nDatasets: %i, Time: %d sec, Mem.: %.4f MB\n', char(procedureLabels(myProcedure)), nTotalDatasets, elapsedTime, totalMem)
