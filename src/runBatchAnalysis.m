@@ -39,7 +39,7 @@ end
 %Additinal search paths
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
-make_db %in localCopies
+make_db_real2synth %in localCopies
 
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
