@@ -6,10 +6,6 @@ function [Y, X] = consolidatePredictions(input, sdo_batch, cData)
 
 nCells = input.nCells;
 nAlgos = input.nAlgos;
-nDatasets = input.nDatasets;
-%figureDetails = compileFigureDetails(16, 2, 5, 0.5, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
-%Extra colormap options: inferno/plasma/viridis/magm
-%C = distinguishable_colors(nAlgos);
 
 % Prepare Look Up Table (lut)
 disp('Creating Confusion Matrix ...')
