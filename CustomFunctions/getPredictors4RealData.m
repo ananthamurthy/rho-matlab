@@ -11,6 +11,7 @@ nMethods = input.nMethods;
 predictors = zeros(nCells, nMethods);
 
 for column = 1:nMethods
+    try
     if column == 1
         predictors(:, column) = squeeze(cData.methodA.mAOutput_batch(dnum).Q1); %scores
     elseif column == 2
@@ -25,6 +26,9 @@ for column = 1:nMethods
         predictors(:, column) = squeeze(cData.methodD.mDOutput_batch(dnum).Q1); %scores
     elseif column == 7
         predictors(:, column) = squeeze(cData.methodF.mFOutput_batch(dnum).Q1); %scores
+    end
+    catch
+        size(cData.methodA.mAOutput_batch(dnum).Q1)
     end
 end
 

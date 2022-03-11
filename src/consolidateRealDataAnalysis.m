@@ -28,7 +28,7 @@ end
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
 
-make_db_real2synth %in localCopies
+%make_db_real2synth %in localCopies
 %make_db_realBatch %in localCopies
 
 if diaryOn
@@ -40,14 +40,15 @@ if diaryOn
     diary on
 end
 
-fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
-    db.mouseName, ...
-    db.sessionType, ...
-    db.session, ...
-    db.date)
-trialDetails = getTrialDetails(db(1));
+%fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
+%    db.mouseName, ...
+%    db.sessionType, ...
+%    db.session, ...
+%    db.date)
+%trialDetails = getTrialDetails(db(1));
 
 %% Load Harvest config details
+saveFolder = saveDirec;
 configHarvest4RealData %in localCopies
 
 %% Consolidate analysis outputs

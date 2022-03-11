@@ -2,6 +2,7 @@
 
 function [inUse, runTime] = analyzeRealData(cDate, cRun, nTotalDatasets, workingOnServer, diaryOn, profilerTest)
 
+%workingOnServer = 0;
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
     %saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
@@ -20,7 +21,7 @@ nProcedures = 6;
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
 %profilerTest = 0; %Keep this to 0, to avoid going into profile testing mode (see doMemoryTest.m)
-startProcedure = 1;
+startProcedure = 6;
 for myProcedure = startProcedure:nProcedures
     if myProcedure == 1
         disp('[INFO] Running Analysis by A ...')

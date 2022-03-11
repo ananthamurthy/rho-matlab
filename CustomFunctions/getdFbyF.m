@@ -1,16 +1,32 @@
 % TITLE - Custom code to wrap around dodFbyF()
 % AUTHOR - Kambadur Ananthamurthy
 
-
 %profile on
 tic
 close all
 %clear all
 clear
 
+workingOnServer = 0;
+
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    %saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/media/ananth/Storage/';
+    %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+else
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+end
+
 %% Addpaths
 addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions')) % my custom functions
 addpath(genpath('/home/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
+addpath(genpath('/home/ananth/Documents/rho-matlab/localCopies'))
+
 %% Operations
 curateCalciumEventLibrary = 1;
 saveData                  = 1;
@@ -19,44 +35,38 @@ make_db_realBatch
 nDatasets = length(db);
 
 for iexp = 1:nDatasets
-    %Load Fluorescence Data - This is the ouput after running Suite2P's
-    %master_file.m
+    %Load Fluorescence Data - This is the ouput after running Suite2P
     try
         load(sprintf('/home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
             db(iexp).mouseName, db(iexp).date, db(iexp).expts, ...
             db(iexp).mouseName, db(iexp).date, db(iexp).nplanes))
     catch
-        load(sprintf('/home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
-            db(iexp).mouse_name, db(iexp).date, db(iexp).expts, ...
-            db(iexp).mouse_name, db(iexp).date, db(iexp).nplanes))
+        fprintf('File not found: /home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat\n', ...
+            db(iexp).mouseName, db(iexp).date, db(iexp).expts, ...
+            db(iexp).mouseName, db(iexp).date, db(iexp).nplanes)
+        error('Unable to load Raw Flourescence Traces')
     end
 
     myRawData = Fcell{1,1};
 
     fprintf('Total cells: %i\n', size(myRawData,1))
     [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myRawData);
-    
+
     if saveData
         saveFolder = '/home/ananth/Desktop/Work/Analysis/Imaging/';
-        
+
         if curateCalciumEventLibrary
             disp('Curating Library ...')
             eventLibrary_2D = curateLibrary(dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
-            try
-                save(strcat(saveFolder, db.mouseName, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
-            catch
-                save(strcat(saveFolder, db.mouse_name, '_', db.date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
-            end
+
+            save(strcat(saveFolder, db(iexp).mouseName, '_', db(iexp).date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
             disp('... done!')
         end
 
 
         disp('Saving dF/F traces ...')
-        try
-            save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
-        catch
-            save([saveFolder db(iexp).mouse_name '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
-        end
+        save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
+
         disp('... done!')
     end
 end

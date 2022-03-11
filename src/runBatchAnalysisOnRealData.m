@@ -57,8 +57,6 @@ if diaryOn
     diary on
 end
 
-trialDetails = getTrialDetails(db(1));
-
 %% Preallocation
 %Method A
 s.Q1 = [];
@@ -151,13 +149,15 @@ clear s
 %for runi = 1:nDatasets
 for runi = starti:endi
     fprintf('Current Dataset - %s_%i_%i | Date: %s\n', ...
-        db(runi).mouseName, ...
-        db(runi).sessionType, ...
-        db(runi).session, ...
-        db(runi).date)
+        db0(runi).mouseName, ...
+        db0(runi).sessionType, ...
+        db0(runi).session, ...
+        db0(runi).date)
+
+    trialDetails = getTrialDetails(db0(runi));
 
     %Load processed data (processed dfbf for dataset/session)
-    myData = load([saveFolder db(runi).mouseName '_' db(runi).date '.mat']);
+    myData = load([saveDirec db0(runi).mouseName '_' db0(runi).date '.mat']);
     nCells = size(myData.dfbf_2D, 1); %even myData.dfbf will work
     nanTest_input.nCells = nCells;
     %anTest_input.dataDesc = sprintf('Loaded Physiology Dataset %i', runi);
@@ -188,9 +188,9 @@ for runi = starti:endi
         %disp('--> Method: A')
         %Method A - Mehrab's Reliability Analysis (Bhalla Lab)
         mAInput.cellList = 1:1:size(DATA,1); %using all cells
-        mAInput.onFrame = db(runi).startFrame;
-        mAInput.offFrame = db(runi).endFrame;
-        %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db(1).samplingRate))/2; %in ms
+        mAInput.onFrame = db0(runi).startFrame;
+        mAInput.offFrame = db0(runi).endFrame;
+        %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db0(1).samplingRate))/2; %in ms
         mAInput.ridgeHalfWidth = 100; %in ms
         %fprintf('ridgeHalfWidth: %.4e\n', mAInput.ridgeHalfWidth)
         mAInput.nIterations = 5000; % number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
@@ -200,7 +200,7 @@ for runi = starti:endi
         [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
         mAOutput.normQ1 = (mAOutput.Q1)/max(mAOutput.Q1(~isinf(mAOutput.Q1)));
         mAOutput_batch(runi) = mAOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
     end
 
     % ----
@@ -213,8 +213,8 @@ for runi = starti:endi
         mBInput.distribution4Bayes = 'mvmn'; %options:'kernel', 'mv', 'mvmn', or 'normal'
         mBInput.saveModel = 0;
         mBInput.nIterations = 1000;
-        mBInput.startFrame = db(runi).startFrame;
-        mBInput.endFrame = db(runi).endFrame;
+        mBInput.startFrame = db0(runi).startFrame;
+        mBInput.endFrame = db0(runi).endFrame;
         mBInput.limit2StimWindow = 1;
         mBInput.threshold = 99; %in %
         if ~mBInput.saveModel
@@ -229,7 +229,7 @@ for runi = starti:endi
         mBOutput.normQ2 = (mBOutput.Q2)/max(mBOutput.Q2);
         mBOutput.normQ3 = (mBOutput.Q3)/max(mBOutput.Q3);
         mBOutput_batch(runi) = mBOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodB.mat' ], 'mBInput', 'mBOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodb0.mat' ], 'mBInput', 'mBOutput')
     end
 
     % ----
@@ -239,13 +239,13 @@ for runi = starti:endi
         mCInput.delta = 3;
         mCInput.skipFrames = [];
         mCInput.nIterations = 1000;
-        mCInput.startFrame = db(runi).startFrame;
-        mCInput.endFrame = db(runi).endFrame;
+        mCInput.startFrame = db0(runi).startFrame;
+        mCInput.endFrame = db0(runi).endFrame;
         mCInput.threshold = 99; %in %
         [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
         mCOutput_batch(runi) = mCOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodC.mat' ], 'mCInput', 'mCOutput')
     end
 
     % ----
@@ -257,13 +257,13 @@ for runi = starti:endi
         mDInput.gaussianSmoothing = 1; %logical; "is this necessary?"!!!!!!!!
         mDInput.nSamples = 5; %for Gaussian Kernel
         mDInput.automatic = 1; %for selecting P; logical
-        mDInput.timeVector = (1:db(1).nFrames*size(DATA,2)) * (1/db(1).samplingRate); %in seconds; %For derivative
+        mDInput.timeVector = (1:db0(1).nFrames*size(DATA,2)) * (1/db0(1).samplingRate); %in seconds; %For derivative
         mDInput.getT = 0;
         mDInput.use1PC = 1;
         [mDOutput] = runSeqBasedTCAnalysis(DATA, mDInput);
         mDOutput.normQ1 = (mDOutput.Q1) ./max(mDOutput.Q1);
         mDOutput_batch(runi) = mDOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodD.mat' ], 'mDInput', 'mDOutput')
     end
 
     % ----
@@ -297,7 +297,7 @@ for runi = starti:endi
         [mEOutput] = runSVMClassification(DATA, mEInput);
         mEOutput.normQ1 = (mEOutput.Q1) ./max(mEOutput.Q1);
         mEOutput_batch(runi) = mEOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodE.mat' ], 'mEInput', 'mEOutput')
     end
 
     % ----
@@ -310,13 +310,13 @@ for runi = starti:endi
         mFInput.beta = 1;
         mFInput.gamma = 10;
         mFInput.nIterations = 1000;
-        mFInput.startFrame = db(runi).startFrame;
-        mFInput.endFrame = db(runi).endFrame;
+        mFInput.startFrame = db0(runi).startFrame;
+        mFInput.endFrame = db0(runi).endFrame;
         mFInput.threshold = 99; %in %s
         [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
         mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
         mFOutput_batch(runi) = mFOutput;
-        %save([saveFolder db(1).mouseName '_' db(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
+        %save([saveDirec db0(1).mouseName '_' db0(1).date '_methodF.mat' ], 'mFInput', 'mFOutput')
     end
 end
 elapsedTime = toc;
