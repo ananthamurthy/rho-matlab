@@ -18,19 +18,18 @@ if workingOnServer == 1
 elseif workingOnServer == 2
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/media/ananth/Storage/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 else
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/home/ananth/Desktop/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 %Additinal search paths
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+
 make_db_real2synth %in localCopies
 %make_db_realBatch %in localCopies
-
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 if diaryOn
     if workingOnServer == 1
@@ -100,7 +99,7 @@ for job = 1:length(params)
 end
 
 filename = ['realDATA_Analysis_' num2str(cDate) '_cRun' num2str(cRun) '_cData.mat' ];
-fullPath4Save = strcat(saveFolder, filename);
+fullPath4Save = strcat(saveDirec, filename);
 
 disp('Saving everything ...')
 

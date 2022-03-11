@@ -3,7 +3,7 @@
 % DETAILS: 537 uniquely tagged synthetic datasets were analysed on the basis
 % of a variety of numerical procedures. Cells in each dataset were given
 % analog scores on the same basis.
-% Load the Consolidated Analysis Details and look for patterns in the plots.
+% Load the Consolidated Analysis and look for patterns in the plots.
 
 close all
 %clear
