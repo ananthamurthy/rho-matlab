@@ -8,7 +8,7 @@
 % gRun: run number for data generation (multiple runs could happen on the
 % same day)
 
-function [memoryUsage, totalMem, elapsedTime] = runBatchAnalysisOnRealData(runA, runB, runC, runD, runE, runF, workingOnServer, diaryOn, profilerTest)
+function [memoryUsage, totalMem, elapsedTime] = runBatchAnalysisOnRealData(starti, endi, runA, runB, runC, runD, runE, runF, workingOnServer, diaryOn, profilerTest)
 
 if profilerTest
     profile on
@@ -44,7 +44,7 @@ addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
 
 %make_db_real2synth %in localCopies
 make_db_realBatch %in localCopies
-nDatasets = length(db);
+nDatasets = endi-starti+1;
 
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
@@ -150,14 +150,14 @@ mFOutput_batch = repmat(s, 1, nDatasets);
 clear s
 %% Main script
 
-for runi = 1:nDatasets
+%for runi = 1:nDatasets
+for runi = starti:endi
     fprintf('Current Dataset - %s_%i_%i | Date: %s\n', ...
         db(runi).mouseName, ...
         db(runi).sessionType, ...
         db(runi).session, ...
         db(runi).date)
 
-    %This needs an update to verify proper handling of multiple real physiology datasets.
     %Load processed data (processed dfbf for dataset/session)
     myData = load([saveFolder db(runi).mouseName '_' db(runi).date '.mat']);
     nCells = size(myData.dfbf_2D, 1); %even myData.dfbf will work
@@ -190,8 +190,8 @@ for runi = 1:nDatasets
         %disp('--> Method: A')
         %Method A - Mehrab's Reliability Analysis (Bhalla Lab)
         mAInput.cellList = 1:1:size(DATA,1); %using all cells
-        mAInput.onFrame = sdcp(runi).startFrame;
-        mAInput.offFrame = sdcp(runi).endFrame;
+        mAInput.onFrame = db(runi).startFrame;
+        mAInput.offFrame = db(runi).endFrame;
         %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db(1).samplingRate))/2; %in ms
         mAInput.ridgeHalfWidth = 100; %in ms
         %fprintf('ridgeHalfWidth: %.4e\n', mAInput.ridgeHalfWidth)
@@ -215,8 +215,8 @@ for runi = 1:nDatasets
         mBInput.distribution4Bayes = 'mvmn'; %options:'kernel', 'mv', 'mvmn', or 'normal'
         mBInput.saveModel = 0;
         mBInput.nIterations = 1000;
-        mBInput.startFrame = sdcp(runi).startFrame;
-        mBInput.endFrame = sdcp(runi).endFrame;
+        mBInput.startFrame = db(runi).startFrame;
+        mBInput.endFrame = db(runi).endFrame;
         mBInput.limit2StimWindow = 1;
         mBInput.threshold = 99; %in %
         if ~mBInput.saveModel
@@ -241,8 +241,8 @@ for runi = 1:nDatasets
         mCInput.delta = 3;
         mCInput.skipFrames = [];
         mCInput.nIterations = 1000;
-        mCInput.startFrame = sdcp(runi).startFrame;
-        mCInput.endFrame = sdcp(runi).endFrame;
+        mCInput.startFrame = db(runi).startFrame;
+        mCInput.endFrame = db(runi).endFrame;
         mCInput.threshold = 99; %in %
         [mCOutput] = runSimpleTCAnalysis(DATA, mCInput);
         mCOutput.normQ1 = (mCOutput.Q1)/max(mCOutput.Q1);
@@ -312,8 +312,8 @@ for runi = 1:nDatasets
         mFInput.beta = 1;
         mFInput.gamma = 10;
         mFInput.nIterations = 1000;
-        mFInput.startFrame = sdcp(runi).startFrame;
-        mFInput.endFrame = sdcp(runi).endFrame;
+        mFInput.startFrame = db(runi).startFrame;
+        mFInput.endFrame = db(runi).endFrame;
         mFInput.threshold = 99; %in %s
         [mFOutput] = runDerivedQAnalysis(DATA, mFInput);
         mFOutput.normQ1 = (mFOutput.Q1)/max(mFOutput.Q1);
@@ -341,11 +341,12 @@ profile off
 % analysis would have been run.
 if saveData
     disp('Saving everything ...')
-    %rightNow = datestr(datetime('now'));
-    %rightNow_noSpace = rightNow(find(~isspace(rightNow)));
+    rightNow = datestr(datetime('now'));
+    rightNow_noSpace = rightNow(find(~isspace(rightNow)));
     if runA
         save([saveFolder db.mouseName '_' ...
-            db.date 'realDataAnalysis_methodA_batch.mat' ], ...
+            db.date 'realDataAnalysis_methodA_batch_' num2str(starti) '-' ...
+            num2str(endi) '.mat' ], ...
             'mAInput', ...
             'mAOutput_batch', ...
             'elapsedTime', ...
@@ -356,7 +357,8 @@ if saveData
     end
 
     if runB
-        save([saveFolder 'realDataAnalysis_methodB_batch.mat' ], ...
+        save([saveFolder 'realDataAnalysis_methodB_batch_' num2str(starti) '-' ...
+            num2str(endi) '.mat' ], ...
             'mBInput', ...
             'mBOutput_batch', ...
             'elapsedTime', ...
@@ -366,7 +368,8 @@ if saveData
     end
 
     if runC
-        save([saveFolder 'realDataAnalysis_methodC_batch.mat' ], ...
+        save([saveFolder 'realDataAnalysis_methodC_batch_' num2str(starti) '-' ...
+            num2str(endi) '.mat' ], ...
             'mCInput', ...
             'mCOutput_batch', ...
             'elapsedTime', ...
@@ -377,7 +380,8 @@ if saveData
     end
 
     if runD
-        save([saveFolder 'realDataAnalysis_methodD_batch.mat' ], ...
+        save([saveFolder 'realDataAnalysis_methodD_batch_' num2str(starti) '-' ...
+            num2str(endi) '.mat' ], ...
             'mDInput', ...
             'mDOutput_batch', ...
             'elapsedTime', ...
@@ -387,19 +391,9 @@ if saveData
             '-v7.3')
     end
 
-    if runE
-        save([saveFolder 'realDataAnalysis_methodE_batch.mat' ], ...
-            'mEInput', ...
-            'mEOutput_batch', ...
-            'elapsedTime', ...
-            'memoryUsage', ...
-            'totalMem', ...
-            'profilerStats', ...
-            '-v7.3')
-    end
-
     if runF
-        save([saveFolder 'realDataAnalysis_methodF_batch.mat' ], ...
+        save([saveFolder 'realDataAnalysis_methodF_batch_' num2str(starti) '-' ...
+            num2str(endi) '.mat' ], ...
             'mFInput', ...
             'mFOutput_batch', ...
             'elapsedTime', ...

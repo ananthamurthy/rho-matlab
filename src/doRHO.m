@@ -1,4 +1,7 @@
-function [inUse, runTime] = doFullExperiment(gDate, gRun, cDate, cRun, nTotalDatasets, workingOnServer, diaryOn, profilerTest)
+%NOTE: this script is to do the full experiment of RHO, i.e.- Synthesis and
+%Analysis.
+
+function [inUse, runTime] = doRHO(gDate, gRun, cDate, cRun, nTotalDatasets, workingOnServer, diaryOn, profilerTest)
 
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
