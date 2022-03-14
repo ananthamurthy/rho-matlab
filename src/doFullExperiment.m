@@ -18,7 +18,7 @@ nProcedures = 8; %8 for everything, 7 to skip Harvest.
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
 %profilerTest = 0; %Keep this to 0, to avoid going into profile testing mode (see doMemoryTest.m)
-startProcedure = 1;
+startProcedure = 7;
 for myProcedure = startProcedure:nProcedures
     if myProcedure == 1
         disp('[INFO] Running Synthesis ...')

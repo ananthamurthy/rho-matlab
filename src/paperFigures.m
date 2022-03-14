@@ -40,7 +40,7 @@ elseif datasetCatalog == 1
     input.nDatasets = 537;
 
     % Consolidated Analysis Details
-    input.cDate = 20220217; %consolidation date
+    input.cDate = 20220308; %consolidation date
     input.cRun = 1; %consolidation run number
 end
 
