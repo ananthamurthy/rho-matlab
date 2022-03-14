@@ -1,4 +1,4 @@
-%Dataset is "db". This has all the information about the dataset
+%Dataset is "db" for Suite2P users. This has all the information about the dataset
 %Data has the raw fluorescence traces
 
 function [dfbf, baselines, dfbf_2D] = dodFbyF(dataset, DATA)

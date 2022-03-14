@@ -9,10 +9,10 @@ close all
 clear
 
 %% Addpaths
-addpath(genpath('/Users/ananth/Documents/MATLAB/CustomFunctions')) % my custom functions
-addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
-addpath(genpath('/Users/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
-addpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
+addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions')) % my custom functions
+%addpath(genpath('/Users/ananth/Documents/MATLAB/ImagingAnalysis')) % Additional functions
+addpath(genpath('/home/ananth/Desktop/Work/Analysis/Imaging')) % analysis output
+%addpath('/home/ananth/Documents/MATLAB/ImagingAnalysis/Suite2P-ananth/localCopies')
 %% Operations
 ops0.multiDayAnalysis          = 0; %For chronic tracking experiments; usually set to 0
 ops0.fig                       = 1;
@@ -26,7 +26,7 @@ ops0.findTimeCells             = 1;
 ops0.curateCalciumEventLibrary = 1;
 ops0.saveData                  = 0;
 %% Dataset
-make_db
+make_db_realBatch
 %% Synthetic Data Parameters
 if ops0.loadSyntheticData
     setupSyntheticDataParameters

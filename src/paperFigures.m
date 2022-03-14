@@ -3,7 +3,7 @@
 % DETAILS: 537 uniquely tagged synthetic datasets were analysed on the basis
 % of a variety of numerical procedures. Cells in each dataset were given
 % analog scores on the same basis.
-% Load the Consolidated Analysis Details and look for patterns in the plots.
+% Load the Consolidated Analysis and look for patterns in the plots.
 
 close all
 %clear
@@ -51,11 +51,11 @@ if workingOnServer == 1
 elseif workingOnServer == 2
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/media/ananth/Storage/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 else
     HOME_DIR = '/home/ananth/Documents/';
     HOME_DIR2 = '/home/ananth/Desktop/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 end
 %Additinal search paths
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))

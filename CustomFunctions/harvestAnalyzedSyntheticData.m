@@ -1,4 +1,4 @@
-function jobData = harvestAnalyzedData(db, params)
+function jobData = harvestAnalyzedSyntheticData(db, params)
 
 if params.trim
     filename = sprintf('%s_%s_synthDataAnalysis_%i_gRun%i_method%s_batch_%i-%i_trimRun%i_trimmed.mat', ...
