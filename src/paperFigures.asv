@@ -240,21 +240,18 @@ for method = 1:input.nMethods
         'FontWeight', 'bold')
 
     if method == 1
-        xlim([-0.001, 0.003])
+        %xlim([-0.005, 0.005])
+        xlim([-0.005, 0.005])
     elseif method == 2
-        xlim([-0.005, 0.05])
+        xlim([-0.005, 0.005])
     elseif method == 3
-        xlim([-0.1, 0.3])
+        xlim([0, 1])
     elseif method == 4
-        xlim([-0.1, 0.5])
+        xlim([-0.6, 0.6])
     elseif method == 5
-        xlim([-0.005, 1])
-    elseif method == 6
-        xlim([-0.25, 0.25])
-    elseif method == 7
         xlim([-0.5, 0.5])
-    elseif method == 8
-        xlim([-0.005, 1])
+    elseif method == 6
+        xlim([0, 1])
     end
 
     if method == 1 || method == 2
@@ -278,24 +275,24 @@ for method = 1:input.nMethods
             'FontSize', figureDetails.fontSize, ...
             'FontWeight', 'bold')
     end
+    %     title(sprintf('Method: %s', char(methodLabels(method))), ...
+    %         'FontSize', figureDetails.fontSize, ...
+    %         'FontWeight', 'bold')
 
-    if method == 1
-        xlim([-0.001, 0.003])
-    elseif method == 2
-        xlim([-0.005, 0.05])
-    elseif method == 3
-        xlim([-0.1, 0.3])
-    elseif method == 4
-        xlim([-0.1, 0.5])
-    elseif method == 5
-        xlim([-0.005, 1])
-    elseif method == 6
-        xlim([-0.25, 0.25])
-    elseif method == 7
-        xlim([-0.5, 0.5])
-    elseif method == 8
-        xlim([-0.005, 1])
-    end
+    %     if method == 1
+    %         %xlim([-0.005, 0.005])
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 2
+    %         xlim([-0.005, 0.005])
+    %     elseif method == 3
+    %         xlim([0, 1])
+    %     elseif method == 4
+    %         xlim([-0.6, 0.6])
+    %     elseif method == 5
+    %         xlim([-0.5, 0.5])
+    %     elseif method == 6
+    %         xlim([0, 1])
+    %     end
 
     if method == 1 || method == 2
         lgd = legend({'Other Cells'}, ...

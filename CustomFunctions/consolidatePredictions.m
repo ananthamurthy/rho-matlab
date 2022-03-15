@@ -9,12 +9,12 @@ nAlgos = input.nAlgos;
 
 % Prepare Look Up Table (lut)
 disp('Creating Confusion Matrix ...')
-preLUT = zeros(nCells*nDatasets, nAlgos+1);
+preLUT = zeros(nCells*input.nDatasets, nAlgos+1);
 
-%reality = zeros(nDatasets, nCells);
+%reality = zeros(input.nDatasets, nCells);
 
 count = 0;
-for dnum = 1:nDatasets
+for dnum = 1:input.nDatasets
     count = count + 1;
     start = ((count-1)*nCells + 1);
     finish = count*nCells;
