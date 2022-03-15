@@ -11,9 +11,17 @@ function randDATA = generateRandData(DATA, controls)
         for trial = 1:nTrials
             option = round(rand);
             if option == 0
-                shift = randi(startFrame);
+                if startFrame ~= 1
+                    shift = randi(startFrame);
+                else
+                    shift = randi(nFrames-1);
+                end
             elseif option == 1
-                shift = randi(nFrames - endFrame) + endFrame;
+                if endFrame ~= nFrames
+                    shift = randi(nFrames - endFrame) + endFrame;
+                else
+                    shift = randi(round(nFrames/2)-1);
+                end
             end
             %fprintf('Cell: %i, Trial: %i, Option: %i, Shift: %i\n', cell, trial, option, shift)
             %numel(1:shift)
