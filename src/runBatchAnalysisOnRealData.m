@@ -216,6 +216,7 @@ for runi = starti:endi
         mBInput.startFrame = db0(runi).startFrame;
         mBInput.endFrame = db0(runi).endFrame;
         mBInput.limit2StimWindow = 1;
+        mBInput.activityFilter = 1;
         mBInput.threshold = 99; %in %
         if ~mBInput.saveModel
             try

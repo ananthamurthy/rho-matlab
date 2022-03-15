@@ -45,7 +45,7 @@ for cell = 1:nCells
                 activityTrials(trial) = 1;
             end
         end
-        if sum(activityTrials) >= (0.25*nTrials) %1/4th of all trials in session (Mau et al., 2018)
+        if sum(activityTrials) >= (0.25*nTrials)
             activityPass(cell) = 1;
         end
     end
@@ -85,63 +85,36 @@ Q3_rand = real(MI_rand);
 for cell = 1:nCells
     score1 = (sum(Q1_rand(cell, (Q1(cell)>Q1_rand(cell, :))))/williamInput.nIterations)*100;
     if score1 > threshold
-        if williamInput.activityFilter
-            if activityPass(cell)
-                timeCells1(cell) = 1;
-            end
-        else
-            timeCells1(cell) = 1;
-        end
+        
+        timeCells1(cell) = 1;
     else
         timeCells1(cell) = 0;
     end
 
     score2 = (sum(Q2_rand(cell, (Q2(cell)>Q2_rand(cell, :))))/williamInput.nIterations)*100;
     if score2 > threshold
-        if williamInput.activityFilter
-            if activityPass(cell)
-                timeCells2(cell) = 1;
-            end
-        else
-            timeCells2(cell) = 1;
-        end
+        timeCells2(cell) = 1;
     else
         timeCells2(cell) = 0;
     end
 
     score3 = (sum(Q3_rand(cell, (Q3(cell)>Q3_rand(cell, :))))/williamInput.nIterations)*100;
     if score3 > threshold
-        if williamInput.activityFilter
-            if activityPass(cell)
-                timeCells3(cell) = 1;
-            end
-        else
-            timeCells3(cell) = 1;
-        end
+        timeCells3(cell) = 1;
     else
         timeCells3(cell) = 0;
     end
 end
 
 %Using Otsu's method of finding threshold
-rejects = find(~activityPass);
 thresholdOtsu1 = graythresh(Q1); %Otsu's method
 timeCells4 = Q1 > thresholdOtsu1;
-if williamInput.activityFilter
-    timeCells4(rejects) = 0;
-end
 
 thresholdOtsu2 = graythresh(Q2); %Otsu's method
 timeCells5 = Q2 > thresholdOtsu2;
-if williamInput.activityFilter
-    timeCells5(rejects) = 0;
-end
 
 thresholdOtsu3 = graythresh(Q3); %Otsu's method
 timeCells6 = Q3 > thresholdOtsu3;
-if williamInput.activityFilter
-    timeCells5(rejects) = 0;
-end
 
 if williamInput.getT
     %Get Time from Network Activity using Bayesian Learning
