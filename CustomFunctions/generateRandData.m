@@ -14,13 +14,13 @@ function randDATA = generateRandData(DATA, controls)
                 if startFrame ~= 1
                     shift = randi(startFrame);
                 else
-                    shift = randi(round(nFrames/2));
+                    shift = randi(nFrames-1);
                 end
             elseif option == 1
                 if endFrame ~= nFrames
                     shift = randi(nFrames - endFrame) + endFrame;
                 else
-                    shift = randi(round(nFrames/2));
+                    shift = randi(round(nFrames/2)-1);
                 end
             end
             %fprintf('Cell: %i, Trial: %i, Option: %i, Shift: %i\n', cell, trial, option, shift)
