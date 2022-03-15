@@ -235,6 +235,7 @@ if loadSyntheticData %Synthetic Data
             mBInput.startFrame = sdcp(runi).startFrame;
             mBInput.endFrame = sdcp(runi).endFrame;
             mBInput.limit2StimWindow = 1;
+            mBInput.activityFilter = 1;
             mBInput.threshold = 99; %in %
             if ~mBInput.saveModel
                 try
