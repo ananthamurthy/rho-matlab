@@ -32,25 +32,25 @@ curateCalciumEventLibrary = 1;
 saveData                  = 1;
 %% Dataset
 make_db_realBatch
-nDatasets = length(db);
+nDatasets = length(db0);
 
 for iexp = 1:nDatasets
     %Load Fluorescence Data - This is the ouput after running Suite2P
     try
         load(sprintf('/home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
-            db(iexp).mouseName, db(iexp).date, db(iexp).expts, ...
-            db(iexp).mouseName, db(iexp).date, db(iexp).nplanes))
+            db0(iexp).mouseName, db0(iexp).date, db0(iexp).expts, ...
+            db0(iexp).mouseName, db0(iexp).date, db0(iexp).nplanes))
     catch
         fprintf('File not found: /home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat\n', ...
-            db(iexp).mouseName, db(iexp).date, db(iexp).expts, ...
-            db(iexp).mouseName, db(iexp).date, db(iexp).nplanes)
+            db0(iexp).mouseName, db0(iexp).date, db0(iexp).expts, ...
+            db0(iexp).mouseName, db0(iexp).date, db0(iexp).nplanes)
         error('Unable to load Raw Flourescence Traces')
     end
 
     myRawData = Fcell{1,1};
 
     fprintf('Total cells: %i\n', size(myRawData,1))
-    [dfbf, baselines, dfbf_2D] = dodFbyF(db(iexp), myRawData);
+    [dfbf, baselines, dfbf_2D] = dodFbyF(db0(iexp), myRawData);
 
     if saveData
         saveFolder = '/home/ananth/Desktop/Work/Analysis/Imaging/';
@@ -59,13 +59,13 @@ for iexp = 1:nDatasets
             disp('Curating Library ...')
             eventLibrary_2D = curateLibrary(dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
 
-            save(strcat(saveFolder, db(iexp).mouseName, '_', db(iexp).date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
+            save(strcat(saveFolder, db0(iexp).mouseName, '_', db0(iexp).date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
             disp('... done!')
         end
 
 
         disp('Saving dF/F traces ...')
-        save([saveFolder db(iexp).mouseName '_' db(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
+        save([saveFolder db0(iexp).mouseName '_' db0(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
 
         disp('... done!')
     end

@@ -8,11 +8,18 @@ tic
 datasetCatalog = 1;
 
 if datasetCatalog == 1
-    input.cDate = 20220311;
-    input.cRun = 2;
-    input.nDatasets = 5;
+    input.cDate = 20220322;
+    input.cRun = 1;
+    input.nDatasets = 3;
     input.nMethods = 7; %Real datasets are not analyzed by SVM, currently.
     input.nAlgos = 13;
+
+else
+	input.cDate = 20220311;
+	input.cRun = 2;
+	input.nDatasets = 5;
+	input.nMethods = 7;
+	input.nAlgos = 13;
 end
 
 figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)

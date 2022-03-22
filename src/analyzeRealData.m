@@ -21,7 +21,7 @@ nProcedures = 6;
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
 %profilerTest = 0; %Keep this to 0, to avoid going into profile testing mode (see doMemoryTest.m)
-startProcedure = 6;
+startProcedure = 1;
 for myProcedure = startProcedure:nProcedures
     if myProcedure == 1
         disp('[INFO] Running Analysis by A ...')
