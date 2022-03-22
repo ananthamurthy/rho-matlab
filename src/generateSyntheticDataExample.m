@@ -9,7 +9,7 @@
 disp('Generating Example Schematics ...')
 gDate = 20211020;
 gRun = 1;
-workingOnServer = 2;
+workingOnServer = 0;
 
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';
@@ -18,8 +18,8 @@ elseif workingOnServer == 2
     HOME_DIR2 = '/media/ananth/Storage/';
     %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 else
-    HOME_DIR = '/Users/ananth/Documents/';
-    HOME_DIR2 = '/Users/ananth/Desktop/';
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
 end
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions'))) % my custom functions
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies'))) % Scripts to config files
