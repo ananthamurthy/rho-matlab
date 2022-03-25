@@ -66,10 +66,3 @@ ESSENTIAL STEPS:
 
         b) "cRun" (typically 1), which is the run number (useful if multiple consolidations were launched on the same day).
 
-7. Use "plotConfusionMatrix.m" for all the datasets pooled together, or "plotConfusionMatrix_split.m" to plot the physiology splits.
-
-      // Make sure to use the correct gDate, gRun, nDatasets, cDate, and cRun
-
-8. Use "rocCurves.m" for the Linear Regression results.
-
-      // Make sure to use the correct gDate, gRun, nDatasets, cDate, and cRun
