@@ -1,5 +1,8 @@
 %NOTE: make sure to use the same value for nShuffles in the function call
 %as in setupSyntheticDataParametersSingle.m
+
+%NOTE: Keep nShuffles to the same value as in
+%setupSyntheticDataParametersSingle.m
 function [inUse, runTime] = doMemoryTest(gDate, nSets, nShuffles, nProcedures, plotFigure, workingOnServer, diaryOn)
 
 if workingOnServer == 1
