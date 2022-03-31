@@ -47,6 +47,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'gaussian';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -69,6 +72,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'gaussian';
     sdcp(count).noisePercent = 30;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -91,6 +97,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'gaussian';
     sdcp(count).noisePercent = 60;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -114,6 +123,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -136,6 +148,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -158,6 +173,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -181,6 +199,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -203,6 +224,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -225,6 +249,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -248,6 +275,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -270,6 +300,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
@@ -292,6 +325,9 @@ for shuffles = 1:N
     sdcp(count).noise = 'none';
     sdcp(count).noisePercent = 10;
     sdcp(count).randomseed = 'shuffle';
+    sdcp(count).addBackgroundSpikes4ptc = 0;
+    sdcp(count).addBackgroundSpikes4oc = 0;
+    sdcp(count).backDistLambda = unifrnd(0.8, 1.6);
     sdcp(count).comment = sprintf('%i | Max Hit Trial Percent: %i; Trial Assignment: %s; Event Timing: %s', count, sdcp(count).maxHitTrialPercent, sdcp(count).hitTrialPercentAssignment, sdcp(count).eventTiming);
     rng(sdcp(count).randomseed)
 end
