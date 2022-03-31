@@ -2,37 +2,38 @@
 % clear
 
 % tic
-function [Y, X] = consolidatePredictions(input, sdo_batch, cData)
+function [Y, X] = consolidatePredictions4Real(input, cData)
 
-nCells = input.nCells;
+%nCells = input.nCells;
 nAlgos = input.nAlgos;
 
 % Prepare Look Up Table (lut)
 disp('Creating Confusion Matrix ...')
-preLUT = zeros(nCells*input.nDatasets, nAlgos+1);
+%preLUT = zeros(nCells*input.nDatasets, nAlgos+1);
 
 %reality = zeros(input.nDatasets, nCells);
 
 count = 0;
+
 for dnum = 1:input.nDatasets
     count = count + 1;
+    nCells = length(cData.methodA.mAOutput_batch(dnum).nanList1);
     start = ((count-1)*nCells + 1);
     finish = count*nCells;
     %fprintf('Start = %i, Finish = %i\n', start, finish)
-    
-    if exist("sdo_batch", 'var')
-        reality = zeros(nCells, 1); %Preallocate
-        reality(sdo_batch(dnum).ptcList) = 1; %Ground Truth
-    else
-        reality = nan(nCells, 1);
-    end
 
+    reality = nan(nCells, 1);
     for algo = 1:nAlgos+1
         if algo == 1
             preLUT(start:finish, algo) = reality;
         elseif algo == 2
-            preLUT(start:finish, algo) = squeeze(cData.methodA.mAOutput_batch(dnum).timeCells1);
-        elseif algo == 3
+            try
+                preLUT(start:finish, algo) = squeeze(cData.methodA.mAOutput_batch(dnum).timeCells1);
+            catch
+                fprintf('Dataset: %i has a problem.\n', dnum)
+                continue
+            end
+            elseif algo == 3
             preLUT(start:finish, algo) = squeeze(cData.methodA.mAOutput_batch(dnum).timeCells2);
         elseif algo == 4
             preLUT(start:finish, algo) = squeeze(cData.methodB.mBOutput_batch(dnum).timeCells1);
@@ -53,10 +54,8 @@ for dnum = 1:input.nDatasets
         elseif algo == 12
             preLUT(start:finish, algo) = squeeze(cData.methodD.mDOutput_batch(dnum).timeCells1);
         elseif algo == 13
-            preLUT(start:finish, algo) = squeeze(cData.methodE.mEOutput_batch(dnum).timeCells1);
-        elseif algo == 14
             preLUT(start:finish, algo) = squeeze(cData.methodF.mFOutput_batch(dnum).timeCells1);
-        elseif algo == 15
+        elseif algo == 14
             preLUT(start:finish, algo) = squeeze(cData.methodF.mFOutput_batch(dnum).timeCells2);
         end
     end

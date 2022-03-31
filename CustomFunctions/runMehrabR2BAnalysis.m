@@ -28,10 +28,12 @@ for cell_noi = 1:length(cell_list)
     cell_no = cell_list(cell_noi);
     traces = squeeze(dff_data_mat(CS_onset_frame:(US_onset_frame-1), cell_no, :));
     pks = nanmax(traces);
+    %pks = max(traces, [], 'omitnan');
     if isnan(pks)
         error('Method A: Nan found in pks')
     end
     pk_list_t(cell_noi, 1) = mean(pks);
+    
     if isnan(pk_list_t(cell_noi, 1))
         error('Method A: Nan found in pk_list_t mean for cell: %i', cell_no)
     end
