@@ -194,7 +194,7 @@ metricLabels2 = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'rR2B', 'Ispk', 'Isec', 'MI', 'pAUC', 'offPCA', 'SVM', 'Param.'}; %8 scoring methods
 procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 
-%% Plots - I [Unphys.]
+%% Unphysiological Regime
 
 disp('Plotting Scores and Comparisions ...')
 fig1 = figure(1);
@@ -392,7 +392,7 @@ print(sprintf('%s/unphys_ComparingScores-%i-%i-%i-%i-%i_%i', ...
 
 disp('... Scores and Comparisons Plotted')
 
-%% Plots - II [Unphys.]
+%% Unphysiological Regime
 
 disp('Plotting Performance Metrics ...')
 %results1 is ordered as TP, FP, TN, FN

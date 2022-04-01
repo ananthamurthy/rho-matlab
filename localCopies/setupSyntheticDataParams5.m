@@ -29,7 +29,7 @@ rng('seed', 'generator')  %See help rng for details; Typically: 'default' or 'sh
 i = 0;
 %% Synthetic Data Parameters
 nShuffles = 3; %typically 3
-for value = 0:0.2:1.2
+for value = 0:0.03:0.27
     for shuffle = 1:nShuffles
         i = i + 1;
         sdcp(i).timeCellPercent = 50;

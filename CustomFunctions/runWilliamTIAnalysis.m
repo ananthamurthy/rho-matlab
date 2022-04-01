@@ -81,13 +81,15 @@ Q1_rand = real(Ispk_rand);
 Q2_rand = real(Isec_rand);
 Q3_rand = real(MI_rand);
 
-%Classify Time Cells - with complex values
+%Classify Time Cells
 for cell = 1:nCells
     score1 = (sum(Q1_rand(cell, (Q1(cell)>Q1_rand(cell, :))))/williamInput.nIterations)*100;
     if score1 > threshold
         if williamInput.activityFilter
             if activityPass(cell)
                 timeCells1(cell) = 1;
+            else
+                timeCells1(cell) = 0; %Failed by activity filter
             end
         else
             timeCells1(cell) = 1;

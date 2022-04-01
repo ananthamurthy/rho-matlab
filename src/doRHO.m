@@ -16,12 +16,16 @@ else
     %saveDirec = strcat(HOME_DIR2, 'Work/Analysis/Imaging/');
 end
 
-procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC/Std (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'}; %All; 8 procedures
+%Additinal search paths
+addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions'))
+addpath(genpath('/home/ananth/Documents/rho-matlab/localCopies'))
+
+procedureLabels = {'Synthesis', 'R2B (A)', 'TI (B)', 'Peak AUC (C)', 'PCA (D)', 'SVM (E)', 'Param. Eqs. (F)', 'Harvest'}; %All; 8 procedures
 nProcedures = 8; %8 for everything, 7 to skip Harvest.
 runTime = zeros(nProcedures, 1);
 inUse = zeros(nProcedures, 1);
 %profilerTest = 0; %Keep this to 0, to avoid going into profile testing mode (see doMemoryTest.m)
-startProcedure = 1;
+startProcedure = 8;
 for myProcedure = startProcedure:nProcedures
     if myProcedure == 1
         disp('[INFO] Running Synthesis ...')
@@ -47,8 +51,7 @@ for myProcedure = startProcedure:nProcedures
         [~, totalMem, elapsedTime] = runBatchAnalysisOnSyntheticData(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, gDate, gRun, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 8
         disp('[INFO] Running Harvest ...')
-        [~, totalMem, elapsedTime] = consolidateSyntheticAnalysis(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
-        %[~, totalMem, elapsedTime] = consolidateBatch(gDate, gRun, workingOnServer, diaryOn, profilerTest); %using cDate = gDate; cRun = gRun; for small batches.
+        [~, totalMem, elapsedTime] = consolidateSyntheticDataAnalysis(cDate, cRun, workingOnServer, diaryOn, profilerTest);
     end
     sprintf('Procedure: %s, nDatasets: %i, Time: %d sec, Mem.: %.4f MB\n', char(procedureLabels(myProcedure)), nTotalDatasets, elapsedTime, totalMem)
 

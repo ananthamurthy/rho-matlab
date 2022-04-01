@@ -5,5 +5,6 @@ disp('Setting up parameters for harvest ...')
 %setupHarvestParamsforSynthData3
 %setupHarvestParamsforSynthData4
 %setupHarvestParamsforSynthData5
-setupHarvestParamsforSynthData6
+%setupHarvestParamsforSynthData6
+setupHarvestParamsforSynthData7
 disp('... done!')

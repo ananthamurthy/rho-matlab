@@ -5,6 +5,7 @@
 % cRun: Harvest Number
 
 function [memoryUsage, totalMem, elapsedTime] = consolidateSyntheticDataAnalysis(cDate, cRun, workingOnServer, diaryOn, myProfilerTest)
+
 if myProfilerTest
     profile on
 end
@@ -24,9 +25,11 @@ else
     HOME_DIR2 = '/home/ananth/Desktop/';
     saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
 end
+
 %Additinal search paths
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
 addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+
 make_db_real2synth %in localCopies
 %make_db_realBatch %in localCopies
 
@@ -49,12 +52,12 @@ fprintf('Reference Dataset - %s_%i_%i | Date: %s\n', ...
 trialDetails = getTrialDetails(db(1));
 
 %% Load Harvest config details
-configHarvest %in localCopies
+configHarvest4SynthData %in localCopies
 
 %% Consolidate analysis outputs
 for job = 1:length(params)
     fprintf('Parsing output from job: %i\n', job)
-    jobData = harvestAnalyzedData(db, params(job));
+    jobData = harvestAnalyzedSyntheticData(db, params(job));
     if strcmpi(params(job).methodList, 'A')
         if ~params(job).trim
             cData.methodA.mAInput = jobData.mAInput;

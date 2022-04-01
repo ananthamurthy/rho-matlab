@@ -40,8 +40,7 @@ for myProcedure = startProcedure:nProcedures
         [~, totalMem, elapsedTime] = runBatchAnalysisOnRealData(1, nTotalDatasets, 0, 0, 0, 0, 0, 1, workingOnServer, diaryOn, profilerTest);
     elseif myProcedure == 6
         disp('[INFO] Running Harvest ...')
-        [~, totalMem, elapsedTime] = consolidateRealDataAnalysis(cDate, cRun, workingOnServer, diaryOn, profilerTest); %Ideal case; requires knowing when the main analysis will be complete.
-        %[~, totalMem, elapsedTime] = consolidateBatch(recDate, recRun, workingOnServer, diaryOn, profilerTest); %using cDate = recDate; cRun = recRun; for small batches.
+        [~, totalMem, elapsedTime] = consolidateRealDataAnalysis(cDate, cRun, workingOnServer, diaryOn, profilerTest);
     end
     sprintf('Procedure: %s, nDatasets: %i, Time: %d sec, Mem.: %.4f MB\n', char(procedureLabels(myProcedure)), nTotalDatasets, elapsedTime, totalMem)
 
