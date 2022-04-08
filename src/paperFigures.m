@@ -19,7 +19,7 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-workingOnServer = 0; %Current
+workingOnServer = 2; %Current
 diaryOn         = 0;
 
 datasetCatalog = 1; %Only to select the batch for datasets
