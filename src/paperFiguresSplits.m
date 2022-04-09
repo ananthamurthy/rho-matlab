@@ -2623,7 +2623,7 @@ for algo = 1:input.nAlgos
     
     subplot(7, 2, algo)
     theta = linspace(0, 2*pi, nParams);
-    rho = transpose(depSum/max(depSum));
+    rho = transpose(depSum(algo, :)/max(depSum(algo, :)));
     secplot(theta, rho);
     ax = gca;
     %ax.RTickLabel = num2cell(sort(dependence4));
