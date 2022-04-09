@@ -10,7 +10,7 @@ close all
 
 tic
 
-doPolarPlots = 1; %0: off, 1: on
+doPolarPlots = 0; %0: off, 1: on
 input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
@@ -684,6 +684,7 @@ metricLabels_otherCells = {'True Neg', 'False Pos'};
 metricLabels2 = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'rR2B', 'Ispk', 'Isec', 'MI', 'pAUC', 'offPCA', 'SVM', 'Param.'}; %8 scoring methods
 procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
+paramLabels = {'Noise (%)', 'EW (%ile)', 'Imp. (frames)', 'HTR (%)'};
 
 %% Plots - III [Canon.]
 
@@ -1582,6 +1583,43 @@ print(sprintf('%s/canon_Resource-%i-%i-%i-%i-%i_%i', ...
 disp('... Sensitivity and Resource Plotted.')
 
 %%
+%% [Canon.] The Summary Figure
+nParams = 4;
+depSum = zeros(input.nAlgos, nParams);
+fig9 = figure(9);
+clf
+set(fig9, 'Position', [100, 100, 1200, 800])
+for algo = 1:input.nAlgos
+    depSum(algo, 1) = dependence1(algo, 1);
+    depSum(algo, 2) = dependence2(algo, 1);
+    depSum(algo, 3) = dependence3(algo, 1);
+    depSum(algo, 4) = dependence4(algo, 1);
+    %depSum(algo, 5) = dependence5(algo, 1);
+    
+    subplot(7, 2, algo)
+    theta = linspace(0, 2*pi, nParams);
+    rho = transpose(depSum/max(depSum));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence4));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = paramLabels;
+    title(sprintf('%s', algoLabels{algo}), ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
+
+print(sprintf('%s/canon_Summary-%i-%i-%i-%i-%i_%i', ...
+    HOME_DIR2, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets, ...
+    input.cDate, ...
+    input.cRun, ...
+    workingOnServer), ...
+    '-dpng')
 %%
 %% Physiological Regime - nCells = 120 datasets * 135 = 16200
 clear Y
@@ -2569,3 +2607,41 @@ print(sprintf('%s/phys_Resource-%i-%i-%i-%i-%i_%i', ...
     '-dpng')
 
 disp('... Sensitivity and Resource Plotted.')
+
+%% [Phys.] The Summary Figure
+nParams = 4;
+depSum = zeros(input.nAlgos, nParams);
+fig9 = figure(9);
+clf
+set(fig9, 'Position', [100, 100, 1200, 800])
+for algo = 1:input.nAlgos
+    depSum(algo, 1) = dependence1(algo, 1);
+    depSum(algo, 2) = dependence2(algo, 1);
+    depSum(algo, 3) = dependence3(algo, 1);
+    depSum(algo, 4) = dependence4(algo, 1);
+    %depSum(algo, 5) = dependence5(algo, 1);
+    
+    subplot(7, 2, algo)
+    theta = linspace(0, 2*pi, nParams);
+    rho = transpose(depSum/max(depSum));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence4));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = paramLabels;
+    title(sprintf('%s', algoLabels{algo}), ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
+
+print(sprintf('%s/phys_Summary-%i-%i-%i-%i-%i_%i', ...
+    HOME_DIR2, ...
+    input.gDate, ...
+    input.gRun, ...
+    input.nDatasets, ...
+    input.cDate, ...
+    input.cRun, ...
+    workingOnServer), ...
+    '-dpng')
