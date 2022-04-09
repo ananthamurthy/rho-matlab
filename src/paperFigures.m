@@ -9,20 +9,34 @@ close all
 %clear
 
 tic
-addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions'))
-%% Plots - I
 
-%generateSyntheticDataExample
-%% Subsequent plots
-
+%%
 input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
 workingOnServer = 2; %Current
-diaryOn         = 0;
+% Directory config
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/media/ananth/Storage/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+else
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+end
+%Additinal search paths
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+make_db
 
-datasetCatalog = 1; %Only to select the batch for datasets
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
+
+datasetCatalog = 0; %Only to select the batch for datasets
 if datasetCatalog == 0
     %Synthetic Dataset Details
     input.gDate = 20220307; %generation date
@@ -44,26 +58,7 @@ elseif datasetCatalog == 1
     input.cRun = 1; %consolidation run number
 end
 
-% Directory config
-if workingOnServer == 1
-    HOME_DIR = '/home/bhalla/ananthamurthy/';
-    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
-elseif workingOnServer == 2
-    HOME_DIR = '/home/ananth/Documents/';
-    HOME_DIR2 = '/media/ananth/Storage/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
-else
-    HOME_DIR = '/home/ananth/Documents/';
-    HOME_DIR2 = '/home/ananth/Desktop/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
-end
-%Additinal search paths
-addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
-addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
-make_db
-
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
-
+diaryOn = 0;
 if diaryOn
     if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/benchmarksDiary'))
@@ -101,7 +96,6 @@ if ~exist("cData", "var")
     disp('... done!')
 end
 
-%%
 input.removeNaNs = 0;
 input.saveFolder = saveFolder;
 [Y, X] = consolidatePredictions(input, sdo_batch, cData);
@@ -190,7 +184,11 @@ metricLabels2 = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'rR2B', 'Ispk', 'Isec', 'MI', 'pAUC', 'offPCA', 'SVM', 'Param.'}; %8 scoring methods
 procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 
-%% Plots - IV
+
+%% Example Schematic
+%generateSyntheticDataExample
+
+%% Scores and Comparison - Unphysiological Regime
 
 disp('Plotting Scores and Comparisions ...')
 fig4 = figure(4);
@@ -388,7 +386,7 @@ print(sprintf('%s/ComparingScores-%i-%i-%i-%i-%i_%i', ...
 
 disp('... Scores and Comparisons Plotted')
 
-%% Plots - V
+%% Performance Metrics
 
 disp('Plotting Performance Metrics ...')
 %results1 is ordered as TP, FP, TN, FN
@@ -590,7 +588,7 @@ print(sprintf('%s/PerformanceEvaluation-%i-%i-%i_%i', ...
 
 disp('... Performance Metrics Plotted')
 
-%% Plots VI
+%% Sensitivity and Resource
 
 disp('Plotting Sensitivity and Resource ...')
 x = 1:input.nAlgos;
@@ -1104,7 +1102,6 @@ subplot(11, 2, (19:22))
 d = bar(results4);
 xlim([0 5])
 axis tight
-
 xlabel('Classification Concordance Threshold', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')

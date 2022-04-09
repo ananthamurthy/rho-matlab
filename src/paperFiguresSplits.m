@@ -9,18 +9,36 @@ close all
 %clear
 
 tic
-addpath(genpath('/home/ananth/Documents/rho-matlab/CustomFunctions'))
-%% Plots - I
 
-%generateSyntheticDataExample
-%% Subsequent plots
-
+doPolarPlots = 1; %0: off, 1: on
 input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
 workingOnServer = 2; %Current
-diaryOn         = 0;
+% Directory config
+if workingOnServer == 1
+    HOME_DIR = '/home/bhalla/ananthamurthy/';
+    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
+elseif workingOnServer == 2
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/media/ananth/Storage/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+else
+    HOME_DIR = '/home/ananth/Documents/';
+    HOME_DIR2 = '/home/ananth/Desktop/';
+    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
+end
+%Additinal search paths
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
+addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
+
+%% Example Schematic
+%generateSyntheticDataExample
+%%
+make_db
+
+saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
 datasetCatalog = 1; %Only to select the batch for datasets
 if datasetCatalog == 0
@@ -44,26 +62,7 @@ elseif datasetCatalog == 1
     input.cRun = 1; %consolidation run number
 end
 
-% Directory config
-if workingOnServer == 1
-    HOME_DIR = '/home/bhalla/ananthamurthy/';
-    saveDirec = strcat(HOME_DIR, 'Work/Analysis/Imaging/');
-elseif workingOnServer == 2
-    HOME_DIR = '/home/ananth/Documents/';
-    HOME_DIR2 = '/media/ananth/Storage/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
-else
-    HOME_DIR = '/home/ananth/Documents/';
-    HOME_DIR2 = '/home/ananth/Desktop/';
-    saveDirec = strcat(HOME_DIR2, 'Work/Analysis/RHO/');
-end
-%Additinal search paths
-addpath(genpath(strcat(HOME_DIR, 'rho-matlab/CustomFunctions')))
-addpath(genpath(strcat(HOME_DIR, 'rho-matlab/localCopies')))
-make_db
-
-saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
-
+diaryOn = 0;
 if diaryOn
     if workingOnServer == 1
         diary (strcat(HOME_DIR, '/logs/benchmarksDiary'))
@@ -1190,35 +1189,50 @@ subplot(8, 2, [7, 9])
 % h.XDisplayLabels = {'10', '40', '70'};
 % h.YDisplayLabels = algoLabels;
 
-
 %yyaxis right
-b2 = bar(dependence1);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta Noise', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence1, dependence1_stderr_neg, dependence1_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('Noise (%)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+if doPolarPlots == 0
+    b2 = bar(dependence1);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta Noise', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence1, dependence1_stderr_neg, dependence1_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('Noise (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
+
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence1/min(dependence1));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence1));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('Noise (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW2);
@@ -1279,33 +1293,48 @@ subplot(8, 2, [8, 10])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence2);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta EW', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence2, dependence2_stderr_neg, dependence2_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('EW (%ile)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence2);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta EW', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence2, dependence2_stderr_neg, dependence2_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('EW (%ile)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence2/min(dependence2));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence2));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('EW (%ile)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp2);
@@ -1365,33 +1394,48 @@ subplot(8, 2, [13, 15])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence3);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta Imp.', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence3, dependence3_stderr_neg, dependence3_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('Imp. (frames)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence3);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta Imp.', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence3, dependence3_stderr_neg, dependence3_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('Imp. (frames)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence3/min(dependence3));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence3));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('Imp. (frames)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR2);
@@ -1451,33 +1495,48 @@ subplot(8, 2, [14, 16])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence4);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta HTR', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence4, dependence4_stderr_neg, dependence4_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('HTR (%)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence4);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta HTR', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence4, dependence4_stderr_neg, dependence4_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('HTR (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence4/max(dependence4));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence4));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('HTR (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 meanJoinAllResults3 = squeeze(mean(joinAllResults3, 1, 'omitnan'));
 stderrJoinAllResults3 = squeeze(std(joinAllResults3, 1, 'omitnan')/sqrt(size(joinAllResults3, 1)));
@@ -2120,35 +2179,49 @@ subplot(8, 2, [7, 9])
 % h.XDisplayLabels = {'10', '40', '70'};
 % h.YDisplayLabels = algoLabels;
 
-
 %yyaxis right
-b2 = bar(dependence1);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta Noise', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence1, dependence1_stderr_neg, dependence1_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('Noise (%)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence1);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta Noise', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence1, dependence1_stderr_neg, dependence1_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('Noise (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence1/min(dependence1));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence1));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('Noise (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iEW2);
@@ -2209,33 +2282,48 @@ subplot(8, 2, [8, 10])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence2);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta EW', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence2, dependence2_stderr_neg, dependence2_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('EW (%ile)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence2);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta EW', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence2, dependence2_stderr_neg, dependence2_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('EW (%ile)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence2/min(dependence2));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence2));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('EW (%ile)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iImp2);
@@ -2295,6 +2383,7 @@ subplot(8, 2, [13, 15])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
+if doPolarPlots == 0
 b2 = bar(dependence3);
 b2.FaceColor = C(1, :);
 ylabel('\Delta F1 Score/\Delta Imp.', ...
@@ -2322,6 +2411,20 @@ xtickangle(45)
 %lgd = legend(algoLabels);
 %lgd.FontSize = figureDetails.fontSize-3;
 set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence3/min(dependence3));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence3));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('Imp. (frames)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 [Y1, X1] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR1);
 [Y2, X2] = consolidatePredictions4Effects(input, sdo_batch, cData, iHTR2);
@@ -2381,33 +2484,48 @@ subplot(8, 2, [14, 16])
 % set(b1,'FaceAlpha', 0.5)
 
 %yyaxis right
-b2 = bar(dependence4);
-b2.FaceColor = C(1, :);
-ylabel('\Delta F1 Score/\Delta HTR', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-%set(b2,'FaceAlpha', 0.5)
-hold on
-er = errorbar(x, dependence4, dependence4_stderr_neg, dependence4_stderr_pos, 'CapSize', 12);
-er.Color = [0 0 0];
-er.LineStyle = 'none';
-hold off
-axis tight
-title('HTR (%)', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
-xticklabels(algoLabels);
-% xticks([1, 2, 3])
-% xticklabels({'10', '40', '70'})
-xtickangle(45)
-%h.XLabel = 'Noise (as %)';
-% xlabel('Noise (as %)', ...
-%     'FontSize', figureDetails.fontSize, ...
-%     'FontWeight', 'bold')
+if doPolarPlots == 0
+    b2 = bar(dependence4);
+    b2.FaceColor = C(1, :);
+    ylabel('\Delta F1 Score/\Delta HTR', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    %set(b2,'FaceAlpha', 0.5)
+    hold on
+    er = errorbar(x, dependence4, dependence4_stderr_neg, dependence4_stderr_pos, 'CapSize', 12);
+    er.Color = [0 0 0];
+    er.LineStyle = 'none';
+    hold off
+    axis tight
+    title('HTR (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    xticklabels(algoLabels);
+    % xticks([1, 2, 3])
+    % xticklabels({'10', '40', '70'})
+    xtickangle(45)
+    %h.XLabel = 'Noise (as %)';
+    % xlabel('Noise (as %)', ...
+    %     'FontSize', figureDetails.fontSize, ...
+    %     'FontWeight', 'bold')
 
-%lgd = legend(algoLabels);
-%lgd.FontSize = figureDetails.fontSize-3;
-set(gca, 'FontSize', figureDetails.fontSize)
+    %lgd = legend(algoLabels);
+    %lgd.FontSize = figureDetails.fontSize-3;
+    set(gca, 'FontSize', figureDetails.fontSize)
+else
+    theta = linspace(0, 2*pi, input.nAlgos);
+    rho = transpose(dependence4/max(dependence4));
+    secplot(theta, rho);
+    ax = gca;
+    %ax.RTickLabel = num2cell(sort(dependence4));
+    ax.ThetaGrid = 'off';
+    ax.ThetaTick = rad2deg(theta);
+    ax.ThetaTickLabel = algoLabels;
+    title('HTR (%)', ...
+        'FontSize', figureDetails.fontSize, ...
+        'FontWeight', 'bold')
+    set(gca, 'FontSize', figureDetails.fontSize)
+end
 
 meanJoinAllResults3 = squeeze(mean(joinAllResults3, 1, 'omitnan'));
 stderrJoinAllResults3 = squeeze(std(joinAllResults3, 1, 'omitnan')/sqrt(size(joinAllResults3, 1)));

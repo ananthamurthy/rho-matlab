@@ -7,7 +7,7 @@
 % gRun: run number of data generation (multiple runs could occur on the same date)
 
 disp('Generating Example Schematics ...')
-gDate = 20211020;
+gDate = erase(datestr(now, 29), '-'); % Format: yyyymmdd
 gRun = 1;
 workingOnServer = 0;
 
