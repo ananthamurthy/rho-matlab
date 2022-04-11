@@ -78,6 +78,8 @@ s.T1 = [];
 s.timeCells1 = []; %Bootstrap
 s.timeCells2 = []; %Otsu's
 s.nanList1 = [];
+s.negList1 = zeros(nDatasets, size(sdo_batch(1).syntheticDATA, 1); %%!!
+s.negList2 = zeros(nDatasets, size(sdo_batch(1).syntheticDATA, 1), 5000); %%!!
 s.normQ1 = [];
 mAOutput_batch = repmat(s, 1, nDatasets);
 clear s
@@ -216,6 +218,7 @@ if loadSyntheticData %Synthetic Data
             mAInput.selectNonOverlappingTrials = 1; %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
             mAInput.earlyOnly = 0; %0 - uses all trials; 1 - uses only the first 5 trials of the session
             mAInput.startTrial = 1; %the analysis begins with this trial number (e.g. - 1: analysis on all trials)
+            mAInput.runi = runi;
             [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
             mAOutput.normQ1 = (mAOutput.Q1)/max(mAOutput.Q1(~isinf(mAOutput.Q1)));
             mAOutput_batch(runi) = mAOutput;

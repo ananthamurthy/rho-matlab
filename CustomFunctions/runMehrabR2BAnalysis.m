@@ -124,6 +124,13 @@ for cell_noi = 1:length(cell_list)
     else
         ridge_int = (nansum(trace( (pk_f - ridge_h_width_f):(pk_f + ridge_h_width_f) )));
         ridge_int = ridge_int./(2.*ridge_h_width_f + 1); %normalising by number of points considered
+        
+        if ridge_int < 0
+            di = mehrabInput.runi;
+            %warning('Dataset: %i, Cell: %i has a Negative Ridge', di, cell)
+            negList1(di, cell) = 1;
+        end
+
         trace_x = trace;
         trace_x((pk_f - ridge_h_width_f):(pk_f + ridge_h_width_f)) = [];
         
@@ -186,6 +193,11 @@ for cell_noi = 1:length(cell_list)
                 %pkf = pkf(1, 1); % appears to be unused; commenting out for now
                 ridge_int = (nansum(s_trace_av( (pk_f - ridge_h_width_f):(pk_f + ridge_h_width_f) )));
                 ridge_int = ridge_int./(2.*ridge_h_width_f + 1);                                    %normalising by number of points considered
+                
+                if ridge_int < 0
+                    negList2(runi, cell, iter_r) = 1;
+                end
+
                 trace_x = s_trace_av;
                 trace_x((pk_f - ridge_h_width_f):(pk_f + ridge_h_width_f)) = [];
                 bk_int = nansum(trace_x);
@@ -248,5 +260,7 @@ nanTest_input.dataDesc = 'Method A scores';
 nanTest_input.dimensions = '1D';
 nanList1 = lookout4NaNs(mehrabOutput.Q1, nanTest_input);
 mehrabOutput.nanList1 = nanList1;
+mehrabOutput.negList1 = negList1;
+mehrabOutput.negList2 = negList2;
 
 end
