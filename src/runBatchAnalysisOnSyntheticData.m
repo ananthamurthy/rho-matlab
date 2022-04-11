@@ -78,8 +78,8 @@ s.T1 = [];
 s.timeCells1 = []; %Bootstrap
 s.timeCells2 = []; %Otsu's
 s.nanList1 = [];
-s.negList1 = zeros(nDatasets, 135); %%!!
-s.negList2 = zeros(nDatasets, 135, 5000); %%!!
+s.negList1 = zeros(537, 135); %Boolean for emperical
+s.negList2 = zeros(nDatasets, 135); %Out of 5000 for surrogate 
 s.normQ1 = [];
 mAOutput_batch = repmat(s, 1, nDatasets);
 clear s

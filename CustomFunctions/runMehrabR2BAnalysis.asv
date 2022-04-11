@@ -2,7 +2,6 @@ function [mehrabOutput] = runMehrabR2BAnalysis(DATA, mehrabInput, trialDetails)
 
 negList1 = zeros(537, 135);
 negList2 = zeros(537, 135);
-di = mehrabInput.runi;
 
 cell_list = mehrabInput.cellList;
 nCells = length(cell_list);
@@ -130,8 +129,9 @@ for cell_noi = 1:length(cell_list)
         ridge_int = ridge_int./(2.*ridge_h_width_f + 1); %normalising by number of points considered
         
         if ridge_int < 0
+            di = mehrabInput.runi;
             %warning('Dataset: %i, Cell: %i has a Negative Ridge', di, cell)
-            negList1(di, cell_noi) = 1;
+            negList1(di, cell) = 1;
         end
 
         trace_x = trace;
@@ -210,7 +210,7 @@ for cell_noi = 1:length(cell_list)
                 rrb_ratio_vec(1, iter_r) = ridge_int./abs(bk_int);
                 
             end
-            negList2(di, cell_noi) = surr_iter_problems;
+            negList2 = l
             rrb_ratio_vec_final(1, cell_noi) = nanmean(rrb_ratio_vec, 2);
             
             if isnan(rrb_ratio_vec_final(1, cell_noi))
