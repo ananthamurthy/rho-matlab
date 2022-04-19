@@ -2,6 +2,7 @@ function [williamOutput] = runWilliamTIAnalysis(DATA, williamInput)
 nCells = size(DATA, 1);
 nTrials = size(DATA, 2);
 nFrames = size(DATA, 3);
+delta = williamInput.delta;
 
 nIterations = williamInput.nIterations;
 threshold = williamInput.threshold;
@@ -28,23 +29,42 @@ else
     myDATA = DATA;
 end
 
+nBins = nFrames/delta;
+raster = zeros(nCells, nTrials, nFrames);
+binnedRaster = zeros(nCells, nTrials, nBins);
+
+for cell = 1:nCells
+    for trial = 1:nTrials
+        trialMean = mean(squeeze(myDATA(cell, trial, :)));
+        trialStd = std(squeeze(myDATA(cell, trial, :)));
+        
+        %rasterization
+        raster(cell, trial, :) = myDATA(cell, trial, :) > (trialMean + (2*trialStd));
+        
+        %Binning
+        bin = 0;
+        for frame = 1:nFrames
+            bin = bin + 1;
+            binnedRaster(cell, trial, bin) = sum(squeeze(raster(cell, trial, (frame: frame+delta-1))));
+        end
+    end
+end
+
 Itime = nan(nCells,size(myDATA,3),1);
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
-    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(myDATA(cell, :, :)));
-    
+    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(binnedRaster(cell, :, :)));
+
     if williamInput.activityFilter
         activityTrials = zeros(nTrials, 1);
         activityPass = zeros(nCells, 1);
 
         for trial = 1:nTrials
-            trialMean = mean(squeeze(myDATA(cell, trial, :)));
-            trialStd = std(squeeze(myDATA(cell, trial, :)));
-
-            if sum(myDATA(cell, trial, :) > trialMean + (2*trialStd)) ~= 0
+            if ~isempty(find(raster(cell, trial, :), 1))
                 activityTrials(trial) = 1;
             end
         end
+
         if sum(activityTrials) >= (0.25*nTrials) %1/4th of all trials in session (Mau et al., 2018)
             activityPass(cell) = 1;
         end
@@ -52,8 +72,8 @@ for cell = 1:nCells
 end
 
 %Crucial - sometimes the scores could be complex numbers.
-Q1 = real(Ispk);
-Q2 = real(Isec);
+Q1 = Ispk;
+Q2 = Isec;
 Q3 = real(MI);
 
 %Generate circularly shifted randomized data
@@ -72,7 +92,22 @@ for i = 1:nIterations
 
     %Calculate Temporal Information
     for cell = 1:nCells
-        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(myRandDATA(cell, :, :)));
+        for trial = 1:nTrials
+            trialMean = mean(squeeze(myRandDATA(cell, trial, :)));
+            trialStd = std(squeeze(myRandDATA(cell, trial, :)));
+
+            %rasterization
+            raster(cell, trial, :) = myRandDATA(cell, trial, :) > (trialMean + (2*trialStd));
+
+            %Binning
+            bin = 0;
+            for frame = 1:nFrames
+                bin = bin + 1;
+                binnedRaster(cell, trial, bin) = sum(squeeze(raster(cell, trial, (frame: frame+delta-1))));
+            end
+        end
+
+        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(binnedRaster(cell, :, :)));
     end
 end
 
