@@ -24,37 +24,39 @@ timeCells3 = nan(nCells, 1);
 %time = nan(nCells, 1);
 
 if williamInput.limit2StimWindow == 1
-    myDATA = DATA(:, :, williamInput.startFrame:williamInput.endFrame); %cells, trials, frames
+    myDATA = DATA(:, :, williamInput.startFrame:williamInput.endFrame-1); %cells, trials, frames
+    nSelectedFrames = williamInput.endFrame - williamInput.startFrame;
 else
     myDATA = DATA;
+    nSelectedFrames = nFrames; %size(DATA, 3)
 end
 
-nBins = nFrames/delta;
-raster = zeros(nCells, nTrials, nFrames);
-binnedDATA = zeros(nCells, nTrials, nBins);
+nBins = floor(size(myDATA, 3)/delta);
+%fprintf('nBins: %i',nBins)
+raster = zeros(nCells, nTrials, nSelectedFrames);
+binnedRaster = zeros(nCells, nTrials, nBins);
 
 for cell = 1:nCells
     for trial = 1:nTrials
-        %Binning
-        bin = 0;
-        for frame = 1:nFrames
-            bin = bin + 1;
-            binnedDATA(cell, trial, bin) = trapz(squeeze(myDATA(cell, trial, (frame: frame+delta-1))));
-        end
-
-        trialMean = mean(squeeze(binnedDATA(cell, trial, :)));
-        trialStd = std(squeeze(binnedDATA(cell, trial, :)));
+        trialMean = mean(squeeze(myDATA(cell, trial, :)));
+        trialStd = std(squeeze(myDATA(cell, trial, :)));
        
         %rasterization
-        raster(cell, trial, :) = binnedDATA(cell, trial, :) > (trialMean + (2*trialStd));
-                
+        raster(cell, trial, :) = myDATA(cell, trial, :) > (trialMean + (2*trialStd));
+
+        %Binning
+        bin = 0;
+        for frame = 1:delta:nSelectedFrames
+            bin = bin + 1;
+            binnedRaster(cell, trial, bin) = sum(raster(cell, trial, (frame:(frame+delta-1))));
+        end
     end
 end
 
-Itime = nan(nCells,size(myDATA,3),1);
+Itime = nan(nCells, nBins);
 %Quality (Q) or Temporal Information
 for cell = 1:nCells
-    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(raster(cell, :, :)));
+    [MI(cell), Isec(cell), Ispk(cell), Itime(cell, :)] = tempInfoOneNeuron(squeeze(binnedRaster(cell, :, :)));
 
     if williamInput.activityFilter
         activityTrials = zeros(nTrials, 1);
@@ -86,29 +88,32 @@ for i = 1:nIterations
     randDATA = generateRandData(DATA, controls); %original, without sectioning stimulus window
     
     if williamInput.limit2StimWindow == 1
-        myRandDATA = randDATA(:, :, williamInput.startFrame:williamInput.endFrame); %cells, trials, frames
+        myRandDATA = randDATA(:, :, williamInput.startFrame:williamInput.endFrame-1); %cells, trials, frames
+        nSelectedFrames = williamInput.endFrame - williamInput.startFrame;
     else
         myRandDATA = DATA;
+        nSelectedFrames = nFrames; %size(DATA, 3)
     end
 
     %Calculate Temporal Information
     for cell = 1:nCells
         for trial = 1:nTrials
-            %Binning
-            bin = 0;
-            for frame = 1:nFrames
-                bin = bin + 1;
-                binnedDATA(cell, trial, bin) = trapz(squeeze(raster(cell, trial, (frame: frame+delta-1))));
-            end
-
-            trialMean = mean(squeeze(binnedDATA(cell, trial, :)));
-            trialStd = std(squeeze(binnedDATA(cell, trial, :)));
+           
+            trialMean = mean(squeeze(myRandDATA(cell, trial, :)));
+            trialStd = std(squeeze(myRandDATA(cell, trial, :)));
 
             %rasterization
-            raster(cell, trial, :) = binnedDATA(cell, trial, :) > (trialMean + (2*trialStd));
+            raster(cell, trial, :) = myRandDATA(cell, trial, :) > (trialMean + (2*trialStd));
+
+            %Binning
+            bin = 0;
+            for frame = 1:delta:nSelectedFrames
+                bin = bin + 1;
+                binnedRaster(cell, trial, bin) = sum(raster(cell, trial, (frame:(frame+delta-1))));
+            end
         end
 
-        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(raster(cell, :, :)));
+        [MI_rand(cell, i), Isec_rand(cell, i), Ispk_rand(cell, i), ~] = tempInfoOneNeuron(squeeze(binnedRaster(cell, :, :)));
     end
 end
 

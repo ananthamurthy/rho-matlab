@@ -234,7 +234,7 @@ if loadSyntheticData %Synthetic Data
             mBInput.labelShuffle = 'off';
             mBInput.distribution4Bayes = 'mvmn'; %options:'kernel', 'mv', 'mvmn', or 'normal'
             mBInput.saveModel = 0;
-            mBInput.nIterations = 1000;
+            mBInput.nIterations = 100;
             mBInput.startFrame = sdcp(runi).startFrame;
             mBInput.endFrame = sdcp(runi).endFrame;
             mBInput.limit2StimWindow = 1;
