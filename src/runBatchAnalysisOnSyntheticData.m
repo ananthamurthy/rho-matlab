@@ -67,7 +67,7 @@ trialDetails = getTrialDetails(db(1));
 
 %% Load Synthetic Dataset config details
 if loadSyntheticData
-    configSynth %in localCopies
+    %configSynth %in localCopies
     nDatasets = length(sdcp);
 end
 
