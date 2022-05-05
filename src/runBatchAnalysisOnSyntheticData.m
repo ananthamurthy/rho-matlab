@@ -67,7 +67,7 @@ trialDetails = getTrialDetails(db(1));
 
 %% Load Synthetic Dataset config details
 if loadSyntheticData
-    %configSynth %in localCopies
+    configSynth %in localCopies
     nDatasets = length(sdcp);
 end
 
@@ -212,14 +212,14 @@ if loadSyntheticData %Synthetic Data
             mAInput.onFrame = sdcp(runi).startFrame;
             mAInput.offFrame = sdcp(runi).endFrame;
             %mAInput.ridgeHalfWidth = ((mAInput.offFrame - mAInput.onFrame) * (1000/db(1).samplingRate))/2; %in ms
-            mAInput.ridgeHalfWidth = 100; %in ms
+            mAInput.ridgeHalfWidth = 250; %in ms
             %fprintf('ridgeHalfWidth: %.4e\n', mAInput.ridgeHalfWidth)
             mAInput.nIterations = 5000; % number of iterations of randomisation used to find averaged r-shifted rb ratio - might have to go as high as 3000.
             mAInput.selectNonOverlappingTrials = 1; %1 - non-overlapping trial sets used for kernel estimation and rb ratio calculation, 0 - all trials used for both
             mAInput.earlyOnly = 0; %0 - uses all trials; 1 - uses only the first 5 trials of the session
             mAInput.startTrial = 1; %the analysis begins with this trial number (e.g. - 1: analysis on all trials)
             mAInput.runi = runi;
-            [mAOutput] = runMehrabR2BAnalysis(DATA, mAInput, trialDetails);
+            [mAOutput] = runMehrabR2BAnalysis2(DATA, mAInput, trialDetails);
             mAOutput.normQ1 = (mAOutput.Q1)/max(mAOutput.Q1(~isinf(mAOutput.Q1)));
             mAOutput_batch(runi) = mAOutput;
             %save([saveFolder db(1).mouseName '_' db(1).date '_methodA.mat' ], 'mAInput', 'mAOutput')
