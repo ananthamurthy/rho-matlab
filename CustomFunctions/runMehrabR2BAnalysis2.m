@@ -22,7 +22,6 @@ timeCells2 = nan(nCells, 1);
 frame_time = 1000/trialDetails.frameRate;
 ridge_h_width_f = floor(ridge_h_width/frame_time); %in frames
 
-
 dff_data_mat = permute(DATA, [3 1 2]);
 no_trials = size(dff_data_mat, 3);
 
@@ -247,7 +246,7 @@ end
 
 Q1 = rb_ratio_vec'; %Important to transpose.
 ratioR2BvR = (rb_ratio_vec./rrb_ratio_vec_final)'; %Important to transpose; Ratio of Ridge/Background Ratios for emperical vs random
-timeCells1 = ratioR2BvR > 1;
+timeCells1 = ratioR2BvR > 3;
 
 %Using Otsu's method of finding threshold
 thresholdOtsu = graythresh(Q1); %Otsu's method
