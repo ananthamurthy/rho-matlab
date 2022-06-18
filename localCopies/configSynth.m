@@ -10,5 +10,6 @@ else
     %setupSyntheticDataParams5 %Loads all options for studying the dependence of Predictive Performance with Background Activity
     %setupSyntheticDataParams6 %Loads all options for PSA, canonical Time Cells, and Time Cells with Background Activity [Total N = 537]
     %setupSyntheticDataParams7 %Loads all options for canonical Time Cells and Time Cells with Background [Total N = N*12]
-    setupSyntheticDataParams8 %Loads all options for PSA, canonical Time Cells, and Time Cells with Background Activity [Total N = 537]
+    %setupSyntheticDataParams8 %Loads all options for PSA, canonical Time Cells, and Time Cells with Background Activity [Total N = 537]
+    setupSyntheticDataParams9 %Loads all options for PSA, canonical Time Cells, and Time cells with Background Activity [Total N = 567]
 end
