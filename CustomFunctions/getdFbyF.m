@@ -29,12 +29,15 @@ addpath(genpath('/home/ananth/Documents/rho-matlab/localCopies'))
 
 %% Operations
 curateCalciumEventLibrary = 1;
+bundleDatasets            = 1; %0: save each set of analysis outputs separately. 1: bundle and save as "realData"
 saveData                  = 1;
 %% Dataset
 make_db_realBatch
 nDatasets = length(db0);
 
 for iexp = 1:nDatasets
+    fprintf('[INFO] Working on Dataset: %i ...\n', iexp)
+
     %Load Fluorescence Data - This is the ouput after running Suite2P
     try
         load(sprintf('/home/ananth/Desktop/Work/Analysis/Imaging/%s/%s/%i/F_%s_%s_plane%i.mat', ...
@@ -50,25 +53,36 @@ for iexp = 1:nDatasets
     myRawData = Fcell{1,1};
 
     fprintf('Total cells: %i\n', size(myRawData,1))
-    [dfbf, baselines, dfbf_2D] = dodFbyF(db0(iexp), myRawData);
+    if bundleDatasets
+        [realData(iexp).dfbf, realData(iexp).baselines, realData(iexp).dfbf_2D] = dodFbyF(db0(iexp), myRawData);
+    else
+        [dfbf, baselines, dfbf_2D] = dodFbyF(db0(iexp), myRawData);
+    end
 
     if saveData
         saveFolder = '/home/ananth/Desktop/Work/Analysis/Imaging/';
 
         if curateCalciumEventLibrary
             disp('Curating Library ...')
-            eventLibrary_2D = curateLibrary(dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
-
+            if bundleDatasets
+                eventLibrary_2D = curateLibrary(realData(iexp).dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
+            else
+                eventLibrary_2D = curateLibrary(dfbf_2D); %eventLibrary_2D = curateLibrary(DATA_2D);
+            end
             save(strcat(saveFolder, db0(iexp).mouseName, '_', db0(iexp).date, '_eventLibrary_2D.mat'), 'eventLibrary_2D')
             disp('... done!')
         end
 
-
         disp('Saving dF/F traces ...')
-        save([saveFolder db0(iexp).mouseName '_' db0(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
-
+        if bundleDatasets
+            save([saveFolder 'realData.mat' ], 'realData')
+        else
+            save([saveFolder db0(iexp).mouseName '_' db0(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
+        end
+    
         disp('... done!')
     end
+    disp('... done!')
 end
 toc
 disp('All done!')

@@ -184,7 +184,6 @@ metricLabels2 = {'Recall', 'Precision', 'F1 Score'};
 methodLabels = {'rR2B', 'Ispk', 'Isec', 'MI', 'pAUC', 'offPCA', 'SVM', 'Param.'}; %8 scoring methods
 procedureLabels = {'Synth.', 'rR2B', 'TI', 'pAUC', 'offPCA', 'SVM', 'Param.'};
 
-
 %% Example Schematic
 %generateSyntheticDataExample
 

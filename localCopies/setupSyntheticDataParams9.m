@@ -649,7 +649,7 @@ end
 
 %% Physiology with Background Activity
 
-%N = 10;
+N = 10;
 % Noise
 for shuffles = 1:N
     count = count + 1;
