@@ -31,6 +31,7 @@ addpath(genpath('/home/ananth/Documents/rho-matlab/localCopies'))
 curateCalciumEventLibrary = 1;
 bundleDatasets            = 1; %0: save each set of analysis outputs separately. 1: bundle and save as "realData"
 saveData                  = 1;
+outputVersion             = 1; %0: usual .m or .mat; 1: -v7.3; only for dF/F curves
 %% Dataset
 make_db_realBatch
 nDatasets = length(db0);
@@ -75,11 +76,14 @@ for iexp = 1:nDatasets
 
         disp('Saving dF/F traces ...')
         if bundleDatasets
-            save([saveFolder 'realData.mat' ], 'realData')
+            if outputVersion == 0
+                save([saveFolder 'realData0.mat' ], 'realData')
+            elseif outputVersion == 1
+                save([saveFolder 'realData.mat' ], 'realData', '-v7.3')
+            end
         else
             save([saveFolder db0(iexp).mouseName '_' db0(iexp).date '.mat' ], 'dfbf', 'baselines', 'dfbf_2D')
         end
-    
         disp('... done!')
     end
     disp('... done!')
