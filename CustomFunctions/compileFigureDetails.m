@@ -1,7 +1,7 @@
 % AUTHOR - Kambadur Ananthmurthy
 
 function figureDetails = compileFigureDetails(fontSize, lineWidth, markerSize, transparency, colorMap)
-
+disp('Compiling figures related parameters ...')
 figureDetails.fontSize       = fontSize;
 figureDetails.lineWidth      = lineWidth;
 figureDetails.markerSize     = markerSize;
@@ -26,3 +26,4 @@ elseif strcmpi(colorMap, 'jet')
 else
     figureDetails.colorMap    = colorMap;
 end
+disp('... done!')

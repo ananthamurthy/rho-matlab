@@ -156,7 +156,7 @@ for runi = 1:1:nDatasets
 end
 
 %% Plots
-figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
+%figureDetails = compileFigureDetails(12, 2, 5, 0.2, 'inferno'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 fig1 = figure(1);
 clf
 set(fig1, 'Position', [100, 300, 900, 1200])
@@ -190,7 +190,8 @@ for myCase = 1:8
     
     if mod(myCase, 2) ~= 0
         for trial =  1:5
-            plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(2, :), 'LineWidth', figureDetails.lineWidth)
+            %plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(2, :), 'LineWidth', figureDetails.lineWidth)
+            plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0 0.4470 0.7410], 'LineWidth', figureDetails.lineWidth)
             set(gca,'YTick',[-200 200])
             xlim([1 246])
             ylim([-200 1500])
@@ -208,7 +209,8 @@ for myCase = 1:8
     else
         if myCase == 1 %High Noise
             for trial = 1:1
-                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', figureDetails.lineWidth)
+                %plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', figureDetails.lineWidth)
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0.8500 0.3250 0.0980], 'LineWidth', figureDetails.lineWidth)
                 set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
@@ -218,6 +220,7 @@ for myCase = 1:8
         else
             for trial = 1:5
                 plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', figureDetails.lineWidth)
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0.8500 0.3250 0.0980], 'LineWidth', figureDetails.lineWidth)
                 set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
