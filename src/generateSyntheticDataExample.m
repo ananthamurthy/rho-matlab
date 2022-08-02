@@ -247,22 +247,22 @@ end
 
 subplot(8,2, [13, 15])
 if normalizeEachCell
-    myDatasetTrialAvg = mean(sdo_batch(9).syntheticDATA, 2);
+    myDatasetTrialAvg = mean(sdo_batch(11).syntheticDATA, 2);
     for celli = 1:size(myDatasetTrialAvg, 1)
         maxVal = max(squeeze(myDatasetTrialAvg(celli, :)));
         myDatasetTrialAvg(celli, :) = myDatasetTrialAvg(celli, :)/maxVal;
     end
     imagesc(squeeze(myDatasetTrialAvg)*100);
 else
-    imagesc(squeeze(mean(sdo_batch(9).syntheticDATA, 2)*100));
+    imagesc(squeeze(mean(sdo_batch(11).syntheticDATA, 2)*100));
 end
-title('Trial-Avg. Synthetic Calcium Traces', ...
+title('Trial-Avg. Synth. Calcium Traces', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xlabel('Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel(sprintf('Cells (@%i%% Noise + Back.)', sdcp(11).noisePercent), ...
+ylabel(sprintf('Cells (@%i%% Noise)', sdcp(11).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
@@ -280,22 +280,22 @@ set(gca, 'FontSize', figureDetails.fontSize)
 
 subplot(8,2, [14, 16])
 if normalizeEachCell
-    myDatasetTrialAvg = mean(sdo_batch(10).syntheticDATA, 2);
+    myDatasetTrialAvg = mean(sdo_batch(12).syntheticDATA, 2);
     for celli = 1:size(myDatasetTrialAvg, 1)
         maxVal = max(squeeze(myDatasetTrialAvg(celli, :)));
         myDatasetTrialAvg(celli, :) = myDatasetTrialAvg(celli, :)/maxVal;
     end
     imagesc(squeeze(myDatasetTrialAvg)*100);
 else
-    imagesc(squeeze(mean(sdo_batch(10).syntheticDATA, 2)*100));
+    imagesc(squeeze(mean(sdo_batch(12).syntheticDATA, 2)*100));
 end
-title('Trial-Avg. Synthetic Calcium Traces', ...
+title('Trial-Avg. Synth. Calcium Traces', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 xlabel('Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel(sprintf('Cells (@%i%% Noise + Back.)', sdcp(12).noisePercent), ...
+ylabel(sprintf('Cells (@%i%% Noise)', sdcp(12).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
