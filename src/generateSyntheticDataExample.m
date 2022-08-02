@@ -188,9 +188,9 @@ for myCase = 1:10
     elseif myCase == 8
         myText = sprintf('Hit Trial Ratio: High (%i%%)', sdcp(myCase).maxHitTrialPercent);
     elseif myCase == 9
-        myText = sprintf('Back. Activity: Low (\lambda = %.1f)', sdcp(myCase).backDistLambda);
+        myText = ['Background: Low (\lambda = ' sprintf('%.1f)', sdcp(myCase).backDistLambda)];
     elseif myCase == 10
-        myText = sprintf('Back. Activity: High (\lambda = %.1f)', sdcp(myCase).backDistLambda);
+        myText = ['Background: High (\lambda = ' sprintf('%.1f)', sdcp(myCase).backDistLambda)];
     end
 
     subplot(8,2, myCase)
@@ -311,7 +311,7 @@ end
 colormap(linspecer)
 set(gca, 'FontSize', figureDetails.fontSize)
 
-print(sprintf('%s/figs/Examples', ...
+print(sprintf('%s/figs/1-Examples', ...
     HOME_DIR2), ...
     '-dpng')
 
