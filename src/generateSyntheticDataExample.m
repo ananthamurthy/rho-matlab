@@ -34,6 +34,15 @@ ops0.diary           = 0;
 
 %figureDetails = compileFigureDetails(16, 2, 10, 0.5, 'jet'); %(fontSize, lineWidth, markerSize, transparency, colorMap)
 ops0.onlyProbeTrials = 0;
+C = magma(8);
+
+%selectedRGBs = [4, 1, 3, 5];
+selectedRGBs = [5, 1, 7, 8];
+C1 = zeros(length(selectedRGBs), 3);
+for rgbi = 1:length(selectedRGBs)
+    C1(rgbi, :) = C(selectedRGBs(rgbi), :);
+end
+C1rev = C1(length(selectedRGBs):-1:1, :);
 
 if ops0.diary
     if workingOnServer == 1
@@ -164,7 +173,6 @@ fig1 = figure(1);
 clf
 set(fig1, 'Position', [100, 300, 900, 1200])
 
-C = linspecer(6);
 for myCase = 1:10
     %cell = randi(100);
     cell = 50;
@@ -193,12 +201,10 @@ for myCase = 1:10
         myText = ['Background: High (\lambda = ' sprintf('%.1f)', sdcp(myCase).backDistLambda)];
     end
 
-    subplot(8,2, myCase)
-
+    subplot(7, 2, myCase)
     if mod(myCase, 2) ~= 0
         for trial =  1:5
-            %plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(2, :), 'LineWidth', figureDetails.lineWidth)
-            plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0 0.4470 0.7410], 'LineWidth', figureDetails.lineWidth)
+            plot((a(trial, :)*100) + (trial-1)*250, 'Color', C1(2, :), 'LineWidth', figureDetails.lineWidth)
             set(gca,'YTick',[-200 200])
             xlim([1 246])
             ylim([-200 1500])
@@ -216,8 +222,7 @@ for myCase = 1:10
     else
         if myCase == 1 %High Noise
             for trial = 1:1
-                %plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', figureDetails.lineWidth)
-                plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0.8500 0.3250 0.0980], 'LineWidth', figureDetails.lineWidth)
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C1(1, :), 'LineWidth', figureDetails.lineWidth)
                 set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
@@ -226,8 +231,7 @@ for myCase = 1:10
             hold off
         else
             for trial = 1:5
-                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C(1, :), 'LineWidth', figureDetails.lineWidth)
-                plot((a(trial, :)*100) + (trial-1)*250, 'Color', [0.8500 0.3250 0.0980], 'LineWidth', figureDetails.lineWidth)
+                plot((a(trial, :)*100) + (trial-1)*250, 'Color', C1(1, :), 'LineWidth', figureDetails.lineWidth)
                 set(gca,'YTick',[-200 200])
                 xlim([1 246])
                 ylim([-200 1500])
@@ -245,7 +249,7 @@ for myCase = 1:10
     clear a
 end
 
-subplot(8,2, [13, 15])
+subplot(7, 2, [11, 13])
 if normalizeEachCell
     myDatasetTrialAvg = mean(sdo_batch(11).syntheticDATA, 2);
     for celli = 1:size(myDatasetTrialAvg, 1)
@@ -256,13 +260,13 @@ if normalizeEachCell
 else
     imagesc(squeeze(mean(sdo_batch(11).syntheticDATA, 2)*100));
 end
-title('Trial-Avg. Synth. Calcium Traces', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
+% title('Trial-Avg. Synth. Calcium Traces', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
 xlabel('Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel(sprintf('Cells (@%i%% Noise)', sdcp(11).noisePercent), ...
+ylabel(sprintf('Cells (@ %i%% Noise)', sdcp(11).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
@@ -275,10 +279,10 @@ z = colorbar;
 %         'FontSize', figureDetails.fontSize, ...
 %         'FontWeight', 'bold')
 % end
-colormap(linspecer)
+colormap(magma)
 set(gca, 'FontSize', figureDetails.fontSize)
 
-subplot(8,2, [14, 16])
+subplot(7, 2, [12, 14])
 if normalizeEachCell
     myDatasetTrialAvg = mean(sdo_batch(12).syntheticDATA, 2);
     for celli = 1:size(myDatasetTrialAvg, 1)
@@ -289,18 +293,18 @@ if normalizeEachCell
 else
     imagesc(squeeze(mean(sdo_batch(12).syntheticDATA, 2)*100));
 end
-title('Trial-Avg. Synth. Calcium Traces', ...
-    'FontSize', figureDetails.fontSize, ...
-    'FontWeight', 'bold')
+% title('Trial-Avg. Synth. Calcium Traces', ...
+%     'FontSize', figureDetails.fontSize, ...
+%     'FontWeight', 'bold')
 xlabel('Frames', ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
-ylabel(sprintf('Cells (@%i%% Noise)', sdcp(12).noisePercent), ...
+ylabel(sprintf('Cells (@ %i%% Noise)', sdcp(12).noisePercent), ...
     'FontSize', figureDetails.fontSize, ...
     'FontWeight', 'bold')
 z = colorbar;
 if normalizeEachCell
-    ylabel(z,'Norm. dF/F (%)', ...
+    ylabel(z,'Trial-Avg. Norm. dF/F (%)', ...
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
 else
@@ -308,7 +312,7 @@ else
         'FontSize', figureDetails.fontSize, ...
         'FontWeight', 'bold')
 end
-colormap(linspecer)
+colormap(magma)
 set(gca, 'FontSize', figureDetails.fontSize)
 
 print(sprintf('%s/figs/1-Examples', ...
