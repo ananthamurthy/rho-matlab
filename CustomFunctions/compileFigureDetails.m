@@ -1,10 +1,11 @@
 % AUTHOR - Kambadur Ananthmurthy
 
-function figureDetails = compileFigureDetails(fontSize, lineWidth, markerSize, transparency, colorMap)
+function figureDetails = compileFigureDetails(fontSize, lineWidth, markerSize, capSize, transparency, colorMap)
 disp('Compiling figures related parameters ...')
 figureDetails.fontSize       = fontSize;
 figureDetails.lineWidth      = lineWidth;
 figureDetails.markerSize     = markerSize;
+figureDetails.capSize        = capSize;
 figureDetails.transparency   = transparency;
 
 if strcmpi(colorMap, 'magma')
