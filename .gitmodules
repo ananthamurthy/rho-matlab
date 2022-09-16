@@ -1,0 +1,3 @@
+[submodule "paperFigures"]
+	path = paperFigures
+	url = https://github.com/ananthamurthy/paperFigures.git
