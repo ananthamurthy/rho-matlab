@@ -1,8 +1,7 @@
 # rho-matlab
 The code base is to use pre-existing physiology data from calcium imaging to generate synthetic data, and analyse for Time Cells using 6 methods (8 algorithms).
 
->> DEMO
-OPTION 1 (Terminal call)
+>> DEMO OPTION 1 (Terminal call)
 As a demo one call call the synthesisDemo.m script located in "../rho-matlab/demos/", which uses the configuration file (may be edited) "setupSynthDataParams4Demo.m". The idea here is to have the most straightforward code run possible, for first time users.
 
 1. Open a terminal window and type the following command after the system prompt (replacing $PATH with your local directory path to "TimeCellAnalysis"):
@@ -17,7 +16,7 @@ For example:
 $ cd /home/ananth/Documents/TimeCellAnalysis/rho-matlab/demos
 $ ls
 
-OPTION 2 (Live Script)
+>> DEMO OPTION 2 (Live Script)
 As a demo for the synthetic generation code, run "syntheticData_live.mlx" located as "../rho-matlab/demos/syntheticData_live.mlx", which uses the configuration file (may be edited) "setupSyntheticDataParametersSingle.m", located as "../rho-matlab/localCopies/setupSyntheticDataParametersSingle.m". This demo uses the configuration parameters to generate synthetic data and profile the data with supplementary figures. The idea here is to also get the user familiar with the typical locations for different files used during the run, for users familiar with MATLAB wishing to understand how the synthesis algorithm script works.
 
 >> USING THE FULL SYNTHESIS REPOSITORY (RHO-MATLAB)
