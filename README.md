@@ -4,7 +4,8 @@ The code base is to use pre-existing physiology data from calcium imaging to gen
 DEMO OPTION 1 (Terminal call)
 As a demo one can call the "synthesisDemo.m" script located in "../rho-matlab/demos/", which uses the configuration file (may be edited) "setupSynthDataParams4Demo.m" (same directory). The idea here is to have the most straightforward code run possible, for first time users.
 
-1. Open a terminal window and navigate to the your local directory where the "TimeCellAnalysis" repository was cloned, and step into "rho-matlab/demos":
+1. Open a terminal window and navigate to the your local directory where the "TimeCellAnalysis" repository was cloned, and step into "rho-matlab/demos".
+For example:
 $ cd /home/ananth/Documents/TimeCellAnalysis/rho-matlab/demos
 
 2. Run the following command:
