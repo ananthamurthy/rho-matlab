@@ -17,6 +17,7 @@ SYNTHESIS DEMO OPTION 2 (Live Script)
 As a demo for the synthetic generation code, run "syntheticData_live.mlx" located as "../rho-matlab/demos/syntheticData_live.mlx", which uses the configuration file (may be edited) "setupSyntheticDataParametersSingle.m", located as "../rho-matlab/localCopies/setupSyntheticDataParametersSingle.m". This demo uses the configuration parameters to generate synthetic data and profile the data with supplementary figures. The idea here is to also get the user familiar with the typical locations for different files used during the run, for users familiar with MATLAB wishing to understand how the synthesis algorithm script works.
 
 USING THE FULL SYNTHESIS AND ANALYSIS REPOSITORY (RHO-MATLAB)
+
 NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing Python/C++ implementations (see https://github.com/BhallaLab/TimeCellAnalysis).
 
 Before you begin:
