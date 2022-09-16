@@ -1,14 +1,14 @@
 # rho-matlab
 The code base is to use pre-existing physiology data from calcium imaging to generate synthetic data, and analyse for Time Cells using 6 methods (8 algorithms).
 
->> DEMO OPTION 1 (Terminal call)
-As a demo one call call the synthesisDemo.m script located in "../rho-matlab/demos/", which uses the configuration file (may be edited) "setupSynthDataParams4Demo.m". The idea here is to have the most straightforward code run possible, for first time users.
+DEMO OPTION 1 (Terminal call)
+As a demo one can call the "synthesisDemo.m" script located in "../rho-matlab/demos/", which uses the configuration file (may be edited) "setupSynthDataParams4Demo.m" (same directory). The idea here is to have the most straightforward code run possible, for first time users.
 
-1. Open a terminal window and type the following command after the system prompt (replacing $PATH with your local directory path to "TimeCellAnalysis"):
+1. Open a terminal window and type the following command after the system prompt (replacing $PATH with your local directory path to "TimeCellAnalysis") and hit return:
 $ matlab -nodisplay -nosplash -sd "$PATH/rho-matlab/demos" -r "try synthesisDemo; quit"
 
 For example:
-$ matlab -nodisplay -nosplash -sd "/home/ananth/Documents/TimeCellAnalysis/rho-matlab/demos" -r "try synthesisDemo;  quit"
+$ matlab -nodisplay -nosplash -sd "/home/ananth/Documents/TimeCellAnalysis/rho-matlab/demos" -r "try synthesisDemo; quit"
 
 2. Navigate to the "TimeCellAnalysis" folder, and then to "rho-matlab/demos" to find the freshly synthesized dataset "synthData-demo.mat", along with support figures visualizing the various control parameter effects.
 
@@ -16,10 +16,10 @@ For example:
 $ cd /home/ananth/Documents/TimeCellAnalysis/rho-matlab/demos
 $ ls
 
->> DEMO OPTION 2 (Live Script)
+DEMO OPTION 2 (Live Script)
 As a demo for the synthetic generation code, run "syntheticData_live.mlx" located as "../rho-matlab/demos/syntheticData_live.mlx", which uses the configuration file (may be edited) "setupSyntheticDataParametersSingle.m", located as "../rho-matlab/localCopies/setupSyntheticDataParametersSingle.m". This demo uses the configuration parameters to generate synthetic data and profile the data with supplementary figures. The idea here is to also get the user familiar with the typical locations for different files used during the run, for users familiar with MATLAB wishing to understand how the synthesis algorithm script works.
 
->> USING THE FULL SYNTHESIS REPOSITORY (RHO-MATLAB)
+USING THE FULL SYNTHESIS REPOSITORY (RHO-MATLAB)
 Before you begin:
 All data used has been processed for cell masks and roi detection using Suite-2p (https://www.suite2p.org).
 Any other cell detection system will also work, but with appropriate modifications.
