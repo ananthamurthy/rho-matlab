@@ -1,7 +1,7 @@
 # rho-matlab
-The code base is to use pre-existing physiology data from calcium imaging to generate synthetic data, and analyse for Time Cells using 6 methods (8 algorithms).
+The code base is to use pre-existing physiology data from calcium imaging to generate synthetic data, and analyse for Time Cells using various analysis algorithms. The analysis algorithms have since been updated to much faster and better performing Python/C++ implementations (see https://github.com/BhallaLab/TimeCellAnalysis). Here, we look at how to synthesize dF/F datasets (as cells, trials, frames).
 
-DEMO OPTION 1 (Terminal call)
+SYNTHESIS DEMO OPTION 1 (Terminal call)
 As a demo one can call the "synthesisDemo.m" script located in "../rho-matlab/demos/", which uses the configuration file (may be edited) "setupSynthDataParams4Demo.m" (same directory). The idea here is to have the most straightforward code run possible, for first time users.
 
 1. Open a terminal window and navigate to the your local directory where the "TimeCellAnalysis" repository was cloned, and step into "rho-matlab/demos".
@@ -13,10 +13,12 @@ $ matlab -nodisplay -nosplash -r "synthesisDemo; quit"
 
 The freshly synthesized dataset "synthData-demo.mat" along with support figures visualizing the various control parameter effects will be generated in the same directory, once the code run finishes.
 
-DEMO OPTION 2 (Live Script)
+SYNTHESIS DEMO OPTION 2 (Live Script)
 As a demo for the synthetic generation code, run "syntheticData_live.mlx" located as "../rho-matlab/demos/syntheticData_live.mlx", which uses the configuration file (may be edited) "setupSyntheticDataParametersSingle.m", located as "../rho-matlab/localCopies/setupSyntheticDataParametersSingle.m". This demo uses the configuration parameters to generate synthetic data and profile the data with supplementary figures. The idea here is to also get the user familiar with the typical locations for different files used during the run, for users familiar with MATLAB wishing to understand how the synthesis algorithm script works.
 
-USING THE FULL SYNTHESIS REPOSITORY (RHO-MATLAB)
+USING THE FULL SYNTHESIS AND ANALYSIS REPOSITORY (RHO-MATLAB)
+NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing Python/C++ implementations (see https://github.com/BhallaLab/TimeCellAnalysis).
+
 Before you begin:
 All data used has been processed for cell masks and roi detection using Suite-2p (https://www.suite2p.org).
 Any other cell detection system will also work, but with appropriate modifications.
