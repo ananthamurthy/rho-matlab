@@ -20,6 +20,9 @@ USING THE FULL SYNTHESIS AND ANALYSIS REPOSITORY (RHO-MATLAB)
 
 NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing Python/C++ implementations (see https://github.com/BhallaLab/TimeCellAnalysis).
 
+TABLE OF IMPORTANT MATLAB SCRIPTS
+<TBA>. For now: https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab
+
 Before you begin:
 All data used has been processed for cell masks and roi detection using Suite-2p (https://www.suite2p.org).
 Any other cell detection system will also work, but with appropriate modifications.
