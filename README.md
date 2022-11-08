@@ -95,7 +95,7 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 <br>
 
 ## MISCELLANEOUS NOTES:<br>
-All data used has been processed for cell masks and roi detection using Suite-2p (https://www.suite2p.org).
+All data used has been processed for cell masks and roi detection using [Suite-2p](https://www.suite2p.org).
 Any other cell detection system will also work, but with appropriate modifications.
 Here, I have provided an example dataset with the repository - "M26_20180514.mat", located in "../rho-matlab/demos/"
 
