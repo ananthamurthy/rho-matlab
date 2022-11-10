@@ -73,9 +73,6 @@ As a demo for the synthetic generation code, run "syntheticData_live.mlx" locate
 
 NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis).
 
-## _Table of Important MATLAB Scripts_
-[Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
-
 ### 1) Synthesis
 The first step is the get a good quality recording ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) or generate realistic time series waveforms. Next, these waveforms (real or synthesized) will be carefuly curated and used to create synthetic cells and datasets, as cells, trials and frames, by rearranging events based on pre-configured parameters (see below). A batch of such test standard datsets is then used to compare the various analysis algorithms.
 
@@ -84,6 +81,9 @@ For Figure 1 in the paper ([_BioRxiv version_](https://www.biorxiv.org/content/1
 **Paper Figure 1: Example Synthetic Datasets**<br>
 
 ![Figure 1: Example synthetic datasets](https://github.com/ananthamurthy/rho-matlab/blob/master/1-Examples.png)
+
+## **Table of Important Synthesis-related Scripts**
+[Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
@@ -115,12 +115,14 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 <br>
 
 ### 3) Subsequent Comparative Analysis and Paper Figures
+## **Table of Important Paper Figure Scripts**
+[Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
+
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
 |paperFiguresSplits.m|For diagnostics.<br>Plots all figures estimating algorithm performance over all the regimes (Unphysiological, Canonical, and Physiological.|rho-matlab/src|
-|paperFiguresSynth.m|Plots all figures estimating algorithm performance for Synthetic Data analysis (Paper Fig. 4, Fig. 5, Fig. 6).|rho-matlab/paperFigures|
+|paperFiguresSynth.m|Plots all figures estimating algorithm performance for Synthetic Data analysis (Paper Fig. 4, Fig. 5, Fig. 6, and Fig. 8).|rho-matlab/paperFigures|
 |paperFiguresReal.m|Plots all figures estimating algorithm performance for Real Physiology Data analysis (Paper Fig. 7).|rho-matlab/paperFigures|
-|radialPlotSummary.m|Plots a radial plot aka spider plot for algorithm dependence analysis (Paper Fig. 8), to be used only with Synthetic Data Analysis Outputs|rho-matlab/paperFigures|
 
 **Figure 4: Scores (Synthetic Data)**<br>
 
@@ -146,13 +148,15 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 ![Figure 7](https://github.com/ananthamurthy/rho-matlab/blob/master/7-RealPhysiology.png)
 
 **Figure 8: Spider Plot Summary**<br>
-![Figure 8](https://github.com/ananthamurthy/rho-matlab/blob/master/8-Summary.png)
+![Figure 8](https://github.com/ananthamurthy/rho-matlab/blob/master/8-Summary-cropped.png)
 <br>
-
 ### [Legacy] Analysis (using MATLAB implementations)
 **Legacy: Paper Figure 3 - MATLAB based algorithm implementations**<br>
 
 ![Legacy | Figure 3 - MATLAB based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-1stSub.png)
+
+## **Table of Legacy Analysis-related Scripts**
+[Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
