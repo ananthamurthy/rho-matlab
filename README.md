@@ -8,12 +8,39 @@ The signal considered for each of the cells is calcium activity, though the synt
 
 <br>
 
-### MATLAB Compatibility
+### Software Compatibility
 The code base has been tested and verified (Mac or Linux) for
 - MATLAB 2017
 - MATLAB 2020
 - MATLAB 2021
 - MATLAB 2022
+
+<br>
+
+### Hardware Compatibility
+The synthesis of the main benchmarking datasets (N = 567 datasets or 76545 total cells; setupSyntheticDataParams9) required a powerful analysis machine, running a 
+- 6 core AMD Ryzen 5 3600, with
+- 32GB of DDR4 RAM
+
+*Benchmarks - Analysis Machine (Server ID: 2)*
+- Memory usage: ~30 MB/dataset
+- Run Time: ~1 sec/dataset
+- Software: MATLAB R2021a | OS: Ubuntu 20.04.
+
+Dataset batches up to ~30 datasets (N = 40500 cells @ 135 cells/dataset) can be easily handled by a less powerful laptop.
+
+We also ran the memory usage and runtime experiments on a gaming laptop (Lenovo Ideapad 3 Gaming) with a
+- 6 core AMD Ryzen 5 4600H, and
+- 16 GB DDR4 RAM (3200 MHz)
+- Software: MATLAB R2021a | OS: Ubuntu 20.04.
+
+Note, however, that we have implemented all the time-cell algorithms in serial and these do not use the additional cores.
+
+*Benchmarks (cont.) - Laptop (Server ID: 0)*
+- Memory usage: ~15 MB/dataset
+- Run Time: ~1-4 sec/dataset (135 cells/dataset).
+
+> NOTE: @ 67 cells/dataset, the memory requirement and runtimes are approximately halved ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)), suggesting that computational costs in memory and time were roughly linear with dataset size. The analysis algorithms work independently for each cell. Thus in principle the analysis could be run in an embarrassingly parallel manner and should scale well on multi-core architectures.
 
 <br>
 
@@ -47,7 +74,7 @@ NOTE: The analysis algorithms implemented in MATLAB (found here), have since bee
 [Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 ### 1) Synthesis
-The first step is the get a good quality recording ([_BioRxiv_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) or generate realistic time series waveforms. Next, these waveforms (real or synthesized) will be carefuly curated and used to create synthetic cells and datasets, as cells, trials and frames, by rearranging events based on pre-configured parameters (see below). A batch of such test standard datsets is then used to compare the various analysis algorithms.
+The first step is the get a good quality recording ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) or generate realistic time series waveforms. Next, these waveforms (real or synthesized) will be carefuly curated and used to create synthetic cells and datasets, as cells, trials and frames, by rearranging events based on pre-configured parameters (see below). A batch of such test standard datsets is then used to compare the various analysis algorithms.
 
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
@@ -64,6 +91,9 @@ The first step is the get a good quality recording ([_BioRxiv_](https://www.bior
 
 ### 2) Independent Algorithm-wise Analysis (using Python/C++)
 Once the batch of synthetic data is configured, generated, and saved (see generateSyntheticData.m), the batch is analyzed using the [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis), instead of the legacy MATLAB implementations. This results in the analysis output as .csv files for each of the main algorithm blocks: _r2b_, _ti_, and _peq_. These .csv files are then easily parsed and used for subsequent analysis and paper figure generation.
+
+![Python/C++ based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-Resub-min.png)
+
 <br>
 <br>
 
@@ -77,6 +107,12 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 <br>
 
 ### [Legacy] Analysis (using MATLAB implementations)
+<p align="center">
+  <img src="https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-1stSub.png">
+</p>
+
+![Legacy: MATLAB based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-1stSub.png)
+
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
 |runMehrabR2BAnalysis2.m|Function that runs the Ridge-to-Background Analysis on a dataset based on Modi et al., 2014.<br>INPUT:<br>1. DATA   ... [dataset to be analyzed as a 3D matrix - cells, trials, frames]<br>2. mAInput    ... [structure; stores configuration parameters of analysis]<br>3. trialDetails   ... [structure; stores meta-data concerning behaviour and/or imaging trials]<br>OUTPUT:<br>1. mAOutput   ... [structure; stores all output for analysis including quality values, classification results, etc..]|rho-matlab/CustomFunctions|
