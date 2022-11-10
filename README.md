@@ -78,7 +78,9 @@ The first step is the get a good quality recording ([_BioRxiv version_](https://
 
 For Figure 1 in the paper ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) we generate the following example datasets (see "generateSyntheticDataExample.m"):
 <br>
-![Figure 1: Example synthetic datasets]()
+**Paper Figure 1: Example Synthetic Datasets**<br>
+
+![Figure 1: Example synthetic datasets](https://github.com/ananthamurthy/rho-matlab/blob/master/1-Examples.png)
 
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
@@ -93,12 +95,16 @@ For Figure 1 in the paper ([_BioRxiv version_](https://www.biorxiv.org/content/1
 |setupSynthDataParams4Demo.m|Configuration options used by synthesisDemo.m or syntheticData_live.mlx|rho-matlab/demos|
 |generateSyntheticDataExample.m|Script to generate example schematics for Figure 1|rho-matlab/src|
 
+**Paper Figure 1-1: All modulations**<br>
+
 For the paper, here is the full list of modulations tested (see setupSyntheticDataParams9.m):
-![Figure 1-1](https://github.com/ananthamurthy/rho-matlab/blob/master/Figure%201-1.png)
+![Paper Figure 1-1 (Sup.)](https://github.com/ananthamurthy/rho-matlab/blob/master/Figure%201-1.png)
 <br>
 
 ### 2) Independent Algorithm-wise Analysis (using Python/C++)
 Once the batch of synthetic data is configured, generated, and saved (see generateSyntheticData.m), the batch is analyzed using the [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis), instead of the legacy MATLAB implementations. This results in the analysis output as .csv files for each of the main algorithm blocks: _r2b_, _ti_, and _peq_. These .csv files are then easily parsed and used for subsequent analysis and paper figure generation.
+
+**Paper Figure 3: Python/C++ based Algorithms**<br>
 
 ![Figure 3: Python/C++ based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-Resub-min.png)
 
@@ -113,21 +119,35 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 |paperFiguresReal.m|Plots all figures estimating algorithm performance for Real Physiology Data analysis (Paper Fig. 7).|rho-matlab/paperFigures|
 |radialPlotSummary.m|Plots a radial plot aka spider plot for algorithm dependence analysis (Paper Fig. 8), to be used only with Synthetic Data Analysis Outputs|rho-matlab/paperFigures|
 
+**Figure 4: Scores (Synthetic Data)**<br>
+
 ![Figure 4](https://github.com/ananthamurthy/rho-matlab/blob/master/4-SynthScores.png)
+
+**Figure 5: Predictions (Synthetic Data)**<br>
 
 ![Figure 5](https://github.com/ananthamurthy/rho-matlab/blob/master/5-SynthPredictions.png)
 
+**Figure 6: Physiological Regime (Synthetic Data)**<br>
+
 ![Figure 6](https://github.com/ananthamurthy/rho-matlab/blob/master/6-SynthPhysiology.png)
-### Supplementary to Figure 6
+
+**Supplementary to Figure 6: Mean + SEM**<br>
+
 ![Figure 6-1](https://github.com/ananthamurthy/rho-matlab/blob/master/Figure%206-1.png)
+
+**Supplementary to Figure 6: Linear Fits**<br>
+
 ![Figure 6-2](https://github.com/ananthamurthy/rho-matlab/blob/master/Figure%206-2.png)
 
+**Figure 7: Real/Recorded Physiology**<br>
 ![Figure 7](https://github.com/ananthamurthy/rho-matlab/blob/master/7-RealPhysiology.png)
 
+**Figure 8: Spider Plot Summary**<br>
 ![Figure 8](https://github.com/ananthamurthy/rho-matlab/blob/master/8-Summary.png)
 <br>
 
 ### [Legacy] Analysis (using MATLAB implementations)
+**Legacy: Paper Figure 3 - MATLAB based algorithm implementations**<br>
 
 ![Legacy | Figure 3 - MATLAB based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-1stSub.png)
 
