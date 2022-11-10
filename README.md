@@ -2,7 +2,7 @@
 The code base is to use pre-existing physiology data from calcium imaging to generate ground-truth labelled, categorically defined synthetic data, and analyse for Time Cells using various implemented analysis algorithms. The idea is to identify the best use cases for each of the analysis algorithms.
 The synthetic datasets are a resource in themselves, and can be generated quickly. Large batch sizes can be preconfigured and saved limited only by system RAM.
 
-The analysis algorithms have since been updated to much faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis). Here, we look at how to synthesi ze dF/F datasets (as cells, trials, frames). The last section will look at legacy MATLAB based implementations for Time Cell Analysis.
+The analysis algorithms have since been updated to much faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis). Here, we look at how to synthesize dF/F datasets (as cells, trials, frames). The last section will look at legacy MATLAB based implementations for Time Cell Analysis.
 
 The signal considered for each of the cells is calcium activity, though the synthesis algorithm should work with any time-varying signal profile.
 
@@ -20,12 +20,12 @@ The code base has been tested and verified (Mac or Linux) for
 ### Hardware Compatibility
 The synthesis of the main benchmarking datasets (N = 567 datasets or 76545 total cells; setupSyntheticDataParams9) required a powerful analysis machine, running a 
 - 6 core AMD Ryzen 5 3600, with
-- 32GB of DDR4 RAM
+- 32 GB of DDR4 RAM
+- Software: MATLAB R2021a | OS: Ubuntu 20.04.
 
 *Benchmarks - Analysis Machine (Server ID: 2)*
 - Memory usage: ~30 MB/dataset
 - Run Time: ~1 sec/dataset
-- Software: MATLAB R2021a | OS: Ubuntu 20.04.
 
 Dataset batches up to ~30 datasets (N = 40500 cells @ 135 cells/dataset) can be easily handled by a less powerful laptop.
 
@@ -67,6 +67,9 @@ The freshly synthesized dataset "synthData-demo.mat" along with support figures 
 As a demo for the synthetic generation code, run "syntheticData_live.mlx" located as "../rho-matlab/demos/syntheticData_live.mlx", which uses the configuration file (may be edited) "setupSyntheticDataParametersSingle.m", located as "../rho-matlab/localCopies/setupSyntheticDataParametersSingle.m". This demo uses the configuration parameters to generate synthetic data and profile the data with supplementary figures. The idea here is to also get the user familiar with the typical locations for different files used during the run, for users familiar with MATLAB wishing to understand how the synthesis algorithm script works.
 
 ## **Using the full synthesis and analysis repository (rho-matlab) - in Steps**
+1. Generate Synthetic Data Batch (ground-truth labelled)
+2. Analyze for Time Cells using different algorithms
+3. Comparative Analysis and paper figures.
 
 NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis).
 
