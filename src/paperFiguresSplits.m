@@ -15,7 +15,7 @@ input.nCells = 135;
 input.nAlgos = 14; %detection algorithms
 input.nMethods = 8; %scoring methods
 
-workingOnServer = 2; %Current
+workingOnServer = 0; %Current
 % Directory config
 if workingOnServer == 1
     HOME_DIR = '/home/bhalla/ananthamurthy/';

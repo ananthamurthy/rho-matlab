@@ -120,7 +120,7 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 
 |**Name**|**Description**|**File Location**|
 |---|--------------------------|-------------------------|
-|paperFiguresSplits.m|For diagnostics.<br>Plots all figures estimating algorithm performance over all the regimes (Unphysiological, Canonical, and Physiological.|rho-matlab/src|
+|paperFiguresSplits.m|For diagnostics.<br>Plots all figures estimating algorithm performance over all the regimes (Unphysiological, Canonical, and Physiological).|rho-matlab/src|
 |paperFiguresSynth.m|Plots all figures estimating algorithm performance for Synthetic Data analysis (Paper Fig. 4, Fig. 5, Fig. 6, and Fig. 8).|rho-matlab/paperFigures|
 |paperFiguresReal.m|Plots all figures estimating algorithm performance for Real Physiology Data analysis (Paper Fig. 7).|rho-matlab/paperFigures|
 
@@ -150,6 +150,7 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 **Figure 8: Spider Plot Summary**<br>
 ![Figure 8](https://github.com/ananthamurthy/rho-matlab/blob/master/8-Summary-cropped.png)
 <br>
+
 ### [Legacy] Analysis (using MATLAB implementations)
 **Legacy: Paper Figure 3 - MATLAB based algorithm implementations**<br>
 
