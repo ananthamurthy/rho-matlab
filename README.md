@@ -73,7 +73,7 @@ As a demo for the synthetic generation code, run "syntheticData_live.mlx" locate
 
 NOTE: The analysis algorithms implemented in MATLAB (found here), have since been updated to faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis).
 
-### 1) Synthesis
+## 1) Synthesis
 The first step is the get a good quality recording ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) or generate realistic time series waveforms. Next, these waveforms (real or synthesized) will be carefuly curated and used to create synthetic cells and datasets, as cells, trials and frames, by rearranging events based on pre-configured parameters (see below). A batch of such test standard datsets is then used to compare the various analysis algorithms.
 
 For Figure 1 in the paper ([_BioRxiv version_](https://www.biorxiv.org/content/10.1101/2022.01.01.474717v2)) we generate the following example datasets (see "generateSyntheticDataExample.m"):
@@ -82,7 +82,7 @@ For Figure 1 in the paper ([_BioRxiv version_](https://www.biorxiv.org/content/1
 
 ![Figure 1: Example synthetic datasets](https://github.com/ananthamurthy/rho-matlab/blob/master/1-Examples.png)
 
-## **Table of Important Synthesis-related Scripts**
+### **Table of Important Synthesis-related Scripts**
 [Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 |**Name**|**Description**|**File Location**|
@@ -104,7 +104,7 @@ For the paper, here is the full list of modulations tested (see setupSyntheticDa
 ![Paper Figure 1-1 (Sup.)](https://github.com/ananthamurthy/rho-matlab/blob/master/Figure%201-1.png)
 <br>
 
-### 2) Independent Algorithm-wise Analysis (using Python/C++)
+## 2) Independent Algorithm-wise Analysis (using Python/C++)
 Once the batch of synthetic data is configured, generated, and saved (see generateSyntheticData.m), the batch is analyzed using the [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis), instead of the legacy MATLAB implementations. This results in the analysis output as .csv files for each of the main algorithm blocks: _r2b_, _ti_, and _peq_. These .csv files are then easily parsed and used for subsequent analysis and paper figure generation.
 
 **Paper Figure 3: Python/C++ based Algorithms**<br>
@@ -114,8 +114,8 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 <br>
 <br>
 
-### 3) Subsequent Comparative Analysis and Paper Figures
-## **Table of Important Paper Figure Scripts**
+## 3) Subsequent Comparative Analysis and Paper Figures
+### **Table of Important Paper Figure Scripts**
 [Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 |**Name**|**Description**|**File Location**|
@@ -151,12 +151,12 @@ Once the batch of synthetic data is configured, generated, and saved (see genera
 ![Figure 8](https://github.com/ananthamurthy/rho-matlab/blob/master/8-Summary-cropped.png)
 <br>
 
-### [Legacy] Analysis (using MATLAB implementations)
+## [Legacy] Analysis (using MATLAB implementations)
 **Legacy: Paper Figure 3 - MATLAB based algorithm implementations**<br>
 
 ![Legacy | Figure 3 - MATLAB based implementations](https://github.com/ananthamurthy/rho-matlab/blob/master/algoSchematic-1stSub.png)
 
-## **Table of Legacy Analysis-related Scripts**
+### **Table of Legacy Analysis-related Scripts**
 [Original lab note on this.](https://labnotes.ncbs.res.in/bhalla/key-table-important-function-and-configuration-scripts-rho-matlab)
 
 |**Name**|**Description**|**File Location**|
