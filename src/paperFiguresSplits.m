@@ -12,8 +12,8 @@ tic
 
 doPolarPlots = 0; %0: off, 1: on
 input.nCells = 135;
-input.nAlgos = 14; %detection algorithms
-input.nMethods = 8; %scoring methods
+input.nAlgos = 10; %detection algorithms
+input.nMethods = 4; %scoring methods
 
 workingOnServer = 0; %Current
 % Directory config
@@ -40,16 +40,16 @@ make_db
 
 saveFolder = strcat(saveDirec, db.mouseName, '/', db.date, '/');
 
-datasetCatalog = 1; %Only to select the batch for datasets
+datasetCatalog = 0; %Only to select the batch for datasets
 if datasetCatalog == 0
     %Synthetic Dataset Details
-    input.gDate = 20220307; %generation date
+    input.gDate = 20220618; %generation date
     input.gRun = 1; %generation run number
-    input.nDatasets = 60;
+    input.nDatasets = 567;
 
     % Consolidated Analysis Details
-    input.cDate = 20220303; %consolidation date - vs 20220226
-    input.cRun = 1; %consoildation run number
+    %input.cDate = 20220618; %consolidation date
+    %input.cRun = 1; %consoildation run number
 
 elseif datasetCatalog == 1
     % Synthetic Dataset Details
@@ -58,8 +58,20 @@ elseif datasetCatalog == 1
     input.nDatasets = 537;
 
     % Consolidated Analysis Details
-    input.cDate = 20220308; %consolidation date
-    input.cRun = 1; %consolidation run number
+    %input.cDate = 20220308; %consolidation date
+    %input.cRun = 1; %consolidation run number
+end
+
+if datasetCatalog == 0
+    %Synthetic Dataset Details
+    input.gDate = 20220618; %generation date; int
+    input.gRun = 1; %generation run number; int
+    input.nDatasets = 567; %int
+elseif datasetCatalog == 1
+    % Synthetic Dataset Details
+    input.gDate = 20220308; %generation date
+    input.gRun = 1; %generation run number
+    input.nDatasets = 537;
 end
 
 diaryOn = 0;
