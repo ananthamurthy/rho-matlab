@@ -1,5 +1,5 @@
 # rho-matlab
-The code base is to use pre-existing physiology data from calcium imaging to generate ground-truth labelled, categorically defined synthetic data, and analyse for Time Cells using various implemented analysis algorithms. The idea is to identify the best use cases for each of the analysis algorithms.
+The code base uses pre-existing physiology data from calcium imaging to generate ground-truth labelled, categorically defined synthetic data, and analyse for Time Cells using various implemented analysis algorithms. The idea is to identify the best use cases for each of the analysis algorithms.
 The synthetic datasets are a resource in themselves, and can be generated quickly. Large batch sizes can be preconfigured and saved limited only by system RAM.
 
 The analysis algorithms have since been updated to much faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis). Here, we look at how to synthesize dF/F datasets (as cells, trials, frames). The last section will look at legacy MATLAB based implementations for Time Cell Analysis.
