@@ -4,6 +4,8 @@ The synthetic datasets are a resource in themselves, and can be generated quickl
 
 The analysis algorithms have since been updated to much faster and better performing [Python/C++ implementations](https://github.com/BhallaLab/TimeCellAnalysis). Here, we look at how to synthesize dF/F datasets (as cells, trials, frames). The last section will look at legacy MATLAB based implementations for Time Cell Analysis.
 
+[Ananthamurthy & Bhalla, 2023. "Synthetic Data Resource and Benchmarks for Time Cell Analysis and Detection Algorithms". _eNeuro_ DOI: https://doi.org/10.1523/ENEURO.0007-22.2023](https://doi.org/10.1523/ENEURO.0007-22.2023).
+
 The signal considered for each of the cells is calcium activity, though the synthesis algorithm should work with any time-varying signal profile.
 
 <br>
