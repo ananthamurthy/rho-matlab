@@ -7,7 +7,6 @@ The analysis algorithms have since been updated to much faster and better perfor
 The signal considered for each of the cells is calcium activity, though the synthesis algorithm should work with any time-varying signal profile.
 
 [Ananthamurthy & Bhalla, 2023. "Synthetic Data Resource and Benchmarks for Time Cell Analysis and Detection Algorithms". _eNeuro_ DOI: https://doi.org/10.1523/ENEURO.0007-22.2023](https://doi.org/10.1523/ENEURO.0007-22.2023).
-
 <br>
 
 ### Software Compatibility
